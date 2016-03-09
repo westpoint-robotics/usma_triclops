@@ -4,10 +4,8 @@
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include "triclops_vision/common.h"
-
 #include <image_transport/image_transport.h>
-
+#include "triclops_vision/common.h"
 
 /**
  * @brief The ImagePublisher class. More details coming soon!

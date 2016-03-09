@@ -23,20 +23,10 @@ catkin_package(
 )
 
 
-# set(HEADER_FILES   "include/triclops_vision/triclops_camera.h"
-#                    "include/triclops_vision/triclops_opencv.h"
-#                    "include/triclops_vision/typedefs.h"
-#                    "include/triclops_vision/common.h"
-#                    "include/triclops_vision/vision_3d.h"
-#                    "include/triclops_vision/line_filter.h"
-#                    "include/triclops_vision/images_into_triclops.h")
-
 FILE(GLOB_RECURSE HEADER_FILES "include/triclops_vision/*.h")
-#message("DDDDDDDDDDDDDDDDDDDDHeaders: " ${HEADER_FILES})
 ###########
 ## Build ##
 ###########
-# LIBS    += -ltriclops  -lpnmutils  -lflycapture  -lflycapture2bridge  -lpthread -ldl -lm
 find_library(TRICLOPS_LIB triclops)
 find_library(PNMUTILS_LIB pnmutils)
 find_library(FLYCAPTURE_LIB flycapture)
@@ -57,18 +47,8 @@ include_directories(include
   ${OpenCV_INCLUDE_DIRS}
 )
 
-#message(">>>>>>>>> Inlcude directories:  " ${catkin_INCLUDE_DIRS})
-#>>>>>>>>> Inlcude directories:  /opt/ros/indigo/include/usr/include/usr/include/eigen3/usr/include/pcl-1.7/usr/include/ni/usr/include/vtk-5.8/usr/include/opencv
-
-## Declare a cpp library
-# add_library(triclops_vision
-#   src/${PROJECT_NAME}/triclops_vision.cpp
-# )
-
 ## Declare a cpp executable
 add_executable(triclops_camera_driver ${HEADER_FILES} src/image_publisher.cpp src/line_filter.cpp src/camera_system.cpp src/runme.cpp src/vision_3d.cpp)
-#Removed:  src/test_triclops_camera.cpp src/vision_3d.cpp src/triclops_opencv.cpp src/line_filter.cpp
-
 add_executable(triclops_image_process src/images_into_triclops.cpp ${HEADER_FILESs})
 
 ## Add cmake target dependencies of the executable/library
