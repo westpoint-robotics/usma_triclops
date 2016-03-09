@@ -18,12 +18,6 @@ class CameraSystem {
         CameraSystem(int argc, char** argv);
         // configue camera to capture image
         void run();
-        int configureCamera( FC2::Camera &camera );
-        // generate Triclops context from connected camera
-        int generateTriclopsContext( FC2::Camera     & camera,
-                                     TriclopsContext & triclops );
-        // capture image from connected camera
-        int grabImage ( FC2::Camera & camera, FC2::Image & grabbedImage );
         // convert image to BRGU
         int convertToBGRU( FC2::Image & image, FC2::Image & convertedImage );
         // convert image to BRG
@@ -41,24 +35,15 @@ class CameraSystem {
         int doStereo( TriclopsContext const & triclops,
                        TriclopsInput  const & stereoData,
                        TriclopsImage16      & depthImage );
-        // save 3d points generated from stereo processing
-        int save3dPoints( FC2::Image      const & grabbedImage,
-                          TriclopsContext const & triclops,
-                          TriclopsImage16 const & disparityImage16,
-                          TriclopsInput   const & colorData );
-        // save 3d points generated from stereo processing
-        int get3dPoints(  PointCloud       & returnPoints,
-                          FC2::Image      const & grabbedImage,
-                          TriclopsContext const & triclops,
-                          TriclopsImage16 const & disparityImage16,
-                          TriclopsInput   const & colorData);
-
-        // color process the image and convert to monochrome
-        int convertColorToMonoImage( FC2::Image & colorImage,
-                                     FC2::Image & monoImage );
         TriclopsContext triclops;
         
         private:
+        // generate Triclops context from connected camera
+        int generateTriclopsContext( FC2::Camera     & camera,
+                                     TriclopsContext & triclops );
+        // capture image from connected camera
+        int grabImage ( FC2::Camera & camera, FC2::Image & grabbedImage );
+            int configureCamera( FC2::Camera &camera );
             FC2::Camera camera;
             FC2::Image grabbedImage;
             TriclopsInput color;

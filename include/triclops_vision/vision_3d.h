@@ -59,12 +59,6 @@ class Vision3D
                   cv::Mat const &maskImage,
                   PointCloud      & returnedPoints);
 
-        // save 3d points generated from stereo processing
-        int save3dPoints( FC2::Image      const & grabbedImage, 
-                  TriclopsContext const & triclops, 
-                  TriclopsImage16 const & disparityImage16, 
-                  TriclopsInput   const & colorData );
-
         void visionCallBackDisparity(const sensor_msgs::ImageConstPtr& msg);
         void visionCallBackFilteredRight(const sensor_msgs::ImageConstPtr& msg);
         void visionCallBackFilteredLeft(const sensor_msgs::ImageConstPtr& msg);

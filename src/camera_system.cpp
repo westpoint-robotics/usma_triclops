@@ -67,10 +67,10 @@ CameraSystem::CameraSystem(int argc, char** argv) {
       std::cout << "Failed to get camera info from camera" << std::endl;
       exit(-1);
   }
-  /*else
+  else
   {
       ROS_INFO(">>>>> CAMERA INFO  Vendor: %s     Model: %s     Serail#: %d \n", camInfo.vendorName, camInfo.modelName, camInfo.serialNumber);
-  }*/
+  }
 
   ros::init(argc, argv, "camera");
   ros::NodeHandle nh;
@@ -82,6 +82,8 @@ CameraSystem::CameraSystem(int argc, char** argv) {
   this->image_pub_left = it.advertise("/camera/left/rgb", 1);
   this->image_pub_right = it.advertise("/camera/right/rgb", 1);
   this->image_pub_disparity = it.advertise("/camera/disparity", 1);
+  
+  ROS_INFO(">>>>> Completed initialization of camera system");
 }
 
 //Copied over from older files.
@@ -89,7 +91,7 @@ int CameraSystem::configureCamera( FC2::Camera & camera )
 {
     	
     FC2T::ErrorType fc2TriclopsError;	      
-	  FC2T::StereoCameraMode mode = FC2T::TWO_CAMERA;
+	FC2T::StereoCameraMode mode = FC2T::TWO_CAMERA;
     fc2TriclopsError = FC2T::setStereoMode( camera, mode );
     if ( fc2TriclopsError )
     {

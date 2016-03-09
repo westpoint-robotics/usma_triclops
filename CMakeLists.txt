@@ -22,7 +22,6 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
-
 FILE(GLOB_RECURSE HEADER_FILES "include/triclops_vision/*.h")
 ###########
 ## Build ##
