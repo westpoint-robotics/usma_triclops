@@ -40,37 +40,18 @@ class Vision3D
         Vision3D(int argc, char **argv, CameraSystem *camera);
         virtual ~Vision3D();
         void run();
-
         // reference to the outside camera system
         CameraSystem* camerasystem;
 
-        // generate triclops input necessary to carry out stereo processing
-        int generateTriclopsInput( FC2::Image const & grabbedImage, 
-                           ImageContainer   & imageContainer,
-                           TriclopsInput    & colorData,
-                           TriclopsInput    & stereoData );
-
-        // carry out stereo processing pipeline
-        int doStereo( TriclopsContext const & triclops, 
-               TriclopsInput  const & stereoData,
-               TriclopsImage16      & depthImage );
-
-        int producePointCloud( cv::Mat const &disparity,
-                  cv::Mat const &maskImage,
-                  PointCloud      & returnedPoints);
-
+    private:
         void visionCallBackDisparity(const sensor_msgs::ImageConstPtr& msg);
         void visionCallBackFilteredRight(const sensor_msgs::ImageConstPtr& msg);
         void visionCallBackFilteredLeft(const sensor_msgs::ImageConstPtr& msg);
         void visionCallBackRGBRight(const sensor_msgs::ImageConstPtr& msg);
         void visionCallBackRGBLeft(const sensor_msgs::ImageConstPtr& msg);
-        void produceDisparity(cv::Mat left, cv::Mat right, cv::Mat *result);
-
-
-    protected:
-
-
-    private:
+        int producePointCloud( cv::Mat const &disparity,
+                  cv::Mat const &maskImage,
+                  PointCloud      & returnedPoints);
         int numDisp;
         int blockSize;
         cv::Mat filteredLeft;

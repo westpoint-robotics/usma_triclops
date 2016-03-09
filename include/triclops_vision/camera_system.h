@@ -22,6 +22,13 @@ class CameraSystem {
         int convertToBGRU( FC2::Image & image, FC2::Image & convertedImage );
         // convert image to BRG
         int convertToBGR( FC2::Image & image, FC2::Image & convertedImage );
+        TriclopsContext triclops;
+        
+    private:
+        // carry out stereo processing pipeline
+        int doStereo( TriclopsContext const & triclops,
+                       TriclopsInput  const & stereoData,
+                       TriclopsImage16      & depthImage );
         // generate triclops input necessary to carry out stereo processing
         int generateTriclopsInput( FC2::Image const & grabbedImage,
                                    ImageContainer   & imageContainer,
@@ -31,13 +38,6 @@ class CameraSystem {
         int generateTriclopsInput( FC2::Image const & grabbedImage,
                                    ImageContainer   & imageCont,
                                    TriclopsInput    & triclopsInput );
-        // carry out stereo processing pipeline
-        int doStereo( TriclopsContext const & triclops,
-                       TriclopsInput  const & stereoData,
-                       TriclopsImage16      & depthImage );
-        TriclopsContext triclops;
-        
-    private:
         // generate Triclops context from connected camera
         int generateTriclopsContext( FC2::Camera     & camera,
                                      TriclopsContext & triclops );
