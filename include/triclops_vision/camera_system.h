@@ -37,23 +37,22 @@ class CameraSystem {
                        TriclopsImage16      & depthImage );
         TriclopsContext triclops;
         
-        private:
+    private:
         // generate Triclops context from connected camera
         int generateTriclopsContext( FC2::Camera     & camera,
                                      TriclopsContext & triclops );
         // capture image from connected camera
         int grabImage ( FC2::Camera & camera, FC2::Image & grabbedImage );
-            int configureCamera( FC2::Camera &camera );
-            FC2::Camera camera;
-            FC2::Image grabbedImage;
-            TriclopsInput color;
-            TriclopsInput mono;
-            TriclopsImage16 disparityImageTriclops;
-            cv::Mat disparityImageCV;
-            image_transport::Publisher image_pub_left;
-            image_transport::Publisher image_pub_right;
-            image_transport::Publisher image_pub_disparity;
-            
+        int configureCamera( FC2::Camera &camera );
+        FC2::Camera camera;
+        FC2::Image grabbedImage;
+        TriclopsInput color;
+        TriclopsInput mono;
+        TriclopsImage16 disparityImageTriclops;
+        cv::Mat disparityImageCV;
+        image_transport::Publisher image_pub_left;
+        image_transport::Publisher image_pub_right;
+        image_transport::Publisher image_pub_disparity;            
 };
 
 #endif // CAMERA_SYSTEM_H

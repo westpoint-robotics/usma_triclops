@@ -12,7 +12,6 @@
 #include "triclops_vision/image_publisher.h"
 #include "triclops_vision/camera_system.h"
 
-
 //TODO: Move this back to a seperate file
 int convertTriclops2Opencv(TriclopsImage16 & bgrImage,
                            cv::Mat & cvImage){
@@ -69,7 +68,7 @@ CameraSystem::CameraSystem(int argc, char** argv) {
   }
   else
   {
-      ROS_INFO(">>>>> CAMERA INFO  Vendor: %s     Model: %s     Serail#: %d \n", camInfo.vendorName, camInfo.modelName, camInfo.serialNumber);
+      ROS_INFO(">>>>> CAMERA INFO  Vendor: %s     Model: %s     Serail#: %d", camInfo.vendorName, camInfo.modelName, camInfo.serialNumber);
   }
 
   ros::init(argc, argv, "camera");
@@ -330,10 +329,5 @@ void CameraSystem::run() {
 
     sensor_msgs::ImagePtr outmsg = cv_bridge::CvImage(std_msgs::Header(), "mono16", this->disparityImageCV).toImageMsg();
     this->image_pub_disparity.publish(outmsg);
-
     ros::spinOnce();
 }
-
-
-
-

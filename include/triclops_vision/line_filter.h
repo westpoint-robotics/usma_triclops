@@ -19,10 +19,6 @@ class LineFilter
         LineFilter(int argc, char** argv);
         virtual ~LineFilter();
         void run();
-
-        void findLines(const cv::Mat &src_image, cv::Mat &rtrn_image, cv::vector<cv::Vec4i> &lines);
-        void findPointsOnLines(const cv::Mat &cImage, const cv::vector<cv::Vec4i> &lines, std::vector<cv::Point2i> &pixels);
-
         void displayOriginal();
         void displayGrayScale();
         void displayBlurred();
@@ -31,16 +27,12 @@ class LineFilter
         void displayCanny();
         void displayHough();
         void displayCyan();
-
-        void returnCyan(cv::Mat cyanImage)
-        { cyanImage = cyan_image;}
+        
+    private:
         void imageCallbackL(const sensor_msgs::ImageConstPtr& msgL);
         void imageCallbackR(const sensor_msgs::ImageConstPtr& msgR);
-        cv::vector<cv::Vec4i> lines;
-        
-
-    protected:
-    private:
+        void findLines(const cv::Mat &src_image, cv::Mat &rtrn_image, cv::vector<cv::Vec4i> &lines);
+        void findPointsOnLines(const cv::Mat &cImage, const cv::vector<cv::Vec4i> &lines, std::vector<cv::Point2i> &pixels);
         cv::Mat original_image;   // The original source image
         cv::Mat gray_image;       // The image after it is converted to grayscale
         cv::Mat blur_image;       // The image after it a blur effect is applied
@@ -49,7 +41,8 @@ class LineFilter
         cv::Mat canny_image;      // The image after canny edge detection is complete
         cv::Mat hough_image;      // The image with the hugh line transform is applied
         cv::Mat cyan_image;       // The image after all detected white lines are drawn in cyan color
-
+        
+        cv::vector<cv::Vec4i> lines;
         int thresh_val;           // The threshold value used to identify white in the image
         int erosion_size;         // The  size of our kernel to erode the image with
         int h_rho;                // Distance resolution of the accumulator in pixels (hough transform)
