@@ -66,7 +66,6 @@ LineFilter::~LineFilter()
 void LineFilter::run() {
 /*    ros::Rate loop_rate(10);
     while (ros::ok()){ 
-        ros::spinOnce();
         loop_rate.sleep();
     }  */
 }
@@ -85,9 +84,9 @@ void LineFilter::imageCallbackL(const sensor_msgs::ImageConstPtr& msg)
     outmsg->header.frame_id="bumblebee2";
     outmsg->header.stamp = ros::Time::now();
 
-    /*DEBUG
+    /*DEBUG*/
     cv::imshow("Filter Left", filtered_imageL);
-    cv::waitKey(10);*/
+    cv::waitKey(10);
 
     this->image_pub_filtered_left.publish(outmsg);
 }
