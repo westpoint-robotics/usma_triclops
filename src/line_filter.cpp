@@ -24,8 +24,8 @@ cv::Mat filtered_imageR; // The image with detected white lines painted cyan
  */
 LineFilter::LineFilter(int argc, char** argv)
 {
-  this->thresh_val=1; // 225
-  this->erosion_size=1; // 2
+  this->thresh_val=203; // 225
+  this->erosion_size=5; // 2
   this->h_rho=1; // 1
   this->h_theta=180; // 180
   this->h_thresh=30; // 40
@@ -55,8 +55,7 @@ LineFilter::LineFilter(int argc, char** argv)
   this->subcamleft = it.subscribe("/camera/left/rgb", 0, &LineFilter::imageCallbackL, this);
   this->subcamright = it.subscribe("/camera/right/rgb", 0, &LineFilter::imageCallbackR, this); 
 
-  //ROS loop that causes the system to keep moving.
-  
+  //ROS loop that causes the system to keep moving.  
 }
 
 LineFilter::~LineFilter()
@@ -65,7 +64,11 @@ LineFilter::~LineFilter()
 }
 
 void LineFilter::run() {
-    ros::spinOnce();
+    ros::Rate loop_rate(10);
+    while (ros::ok()){ 
+        ros::spinOnce();
+        loop_rate.sleep();
+    }
 }
 
 //Executable for linefilter when called by launch file, will subscribe to camera left and right nodes, and will publish filtered images for each.

@@ -90,13 +90,14 @@ int Vision3D::producePointCloud(  cv::Mat const &disparityImage,
     unsigned char    *disparityRow, disparity;
     unsigned char    *maskRow, mask;
 
-    //printf("[!] Searching through image at %p for obstacles...\n", &maskImage);
+    printf("[!] Searching through image rows,cols %i, %i...\n", disparityImage.rows,disparityImage.cols);
     for ( i = 0; i < disparityImage.rows; i++ )
     {
         disparityRow = disparityImage.data + ( i * disparityImage.step );
         maskRow = maskImage.data + ( i * maskImage.step );
         for ( j = 0; j < disparityImage.cols; j++ )
         {
+            //printf("At ROW: %i and COL: %i\n", i,j);
             disparity = disparityRow[j];
             mask = maskRow[j];
 
@@ -104,7 +105,7 @@ int Vision3D::producePointCloud(  cv::Mat const &disparityImage,
             if ( disparity < 0xFF )
             {
                 //if (mask != 0)
-                //  printf("MASK: %d @ (%i,%i)\n", mask, i, j);        
+                //printf("MASK: %d @ (%i,%i)\n", mask, i, j);        
             
                 // convert the 16 bit disparity value to floating point x,y,z
                 triclopsRCD16ToXYZ( this->camerasystem->triclops, i, j, disparity, &x, &y, &z );
@@ -126,16 +127,26 @@ int Vision3D::producePointCloud(  cv::Mat const &disparityImage,
         }
     }
     
+    
     return 0;
 }
 
 void Vision3D::run()
 {     
+    ros::Rate loop_rate(10);
+    while (ros::ok()){ 
+    printf("VISION#D: Run\n");
     producePointCloud(this->disparityImage, this->filteredLeft, this->cloud);
+    printf("VISION#D: producePoint\n");
     this->cloud.header.frame_id = "map";
+    printf("VISION#D: HeaderID\n");
     this->pointCloudPublisher.publish(this->cloud);
+    printf("VISION#D: PUBlished\n");
     this->cloud.clear();
-    ros::spinOnce();
+    printf("VISION#D: Clear\n");
+        ros::spinOnce();
+        loop_rate.sleep();
+    }
 }
 
 

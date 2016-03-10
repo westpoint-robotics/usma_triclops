@@ -302,7 +302,8 @@ int CameraSystem::doStereo( TriclopsContext const & triclops,
 void CameraSystem::run() {
     FC2::Error fc2Error;
     ImageContainer imageContainer;
-
+        ros::Rate loop_rate(10);
+    while (ros::ok()){ 
     // this image contains both right and left images
     fc2Error = this->camera.RetrieveBuffer(&(this->grabbedImage));
     if (fc2Error != FC2::PGRERROR_OK)
@@ -329,5 +330,8 @@ void CameraSystem::run() {
 
     sensor_msgs::ImagePtr outmsg = cv_bridge::CvImage(std_msgs::Header(), "mono16", this->disparityImageCV).toImageMsg();
     this->image_pub_disparity.publish(outmsg);
-    ros::spinOnce();
+
+        ros::spinOnce();
+        loop_rate.sleep();
+    }
 }
