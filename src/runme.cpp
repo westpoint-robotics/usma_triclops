@@ -10,6 +10,8 @@ int main (int argc, char **argv) {
 	ros::NodeHandle nh;
   	ros::Rate loop_rate(1);
 
+    TriclopsContext triclops;
+
 	CameraSystem camera(argc,argv);
 	LineFilter linefilter(argc,argv);
     Vision3D vision3D(argc, argv, &camera);

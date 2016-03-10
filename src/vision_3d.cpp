@@ -102,7 +102,7 @@ int Vision3D::producePointCloud(  cv::Mat const &disparityImage,
             mask = maskRow[j];
 
             // do not run invalid points
-            if ( disparity < 0xFF )
+            if ( false ) //disparity < 0xFF )
             {
                 //if (mask != 0)
                 //printf("MASK: %d @ (%i,%i)\n", mask, i, j);        
