@@ -64,11 +64,11 @@ LineFilter::~LineFilter()
 }
 
 void LineFilter::run() {
-    ros::Rate loop_rate(10);
+/*    ros::Rate loop_rate(10);
     while (ros::ok()){ 
         ros::spinOnce();
         loop_rate.sleep();
-    }
+    }  */
 }
 
 //Executable for linefilter when called by launch file, will subscribe to camera left and right nodes, and will publish filtered images for each.

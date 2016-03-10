@@ -133,8 +133,8 @@ int Vision3D::producePointCloud(  cv::Mat const &disparityImage,
 
 void Vision3D::run()
 {     
-    ros::Rate loop_rate(10);
-    while (ros::ok()){ 
+    //ros::Rate loop_rate(10);
+    //while (ros::ok()){ 
     printf("VISION#D: Run\n");
     producePointCloud(this->disparityImage, this->filteredLeft, this->cloud);
     printf("VISION#D: producePoint\n");
@@ -144,9 +144,9 @@ void Vision3D::run()
     printf("VISION#D: PUBlished\n");
     this->cloud.clear();
     printf("VISION#D: Clear\n");
-        ros::spinOnce();
-        loop_rate.sleep();
-    }
+    //    ros::spinOnce();
+     //   loop_rate.sleep();
+   // }
 }
 
 

@@ -14,10 +14,10 @@ int main (int argc, char **argv) {
 	LineFilter linefilter(argc,argv);
     Vision3D vision3D(argc, argv, &camera);
 
-	//while (ros::ok()) {
+	while (ros::ok()) {
 		camera.run();
 		linefilter.run();
         vision3D.run();
-	//	loop_rate.sleep();
-	//}	
+		loop_rate.sleep();
+	}	
 }
