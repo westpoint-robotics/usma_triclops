@@ -5,7 +5,7 @@
 // Takes input from a Bumblebee and performs subpixel
 // interpolation to create a 16-bit disparity image, which is saved.
 // The disparity data is then converted to 3-dimensional X/Y/Z
-// coordinates which is written to a file. 
+// coordinates which is written to a file.
 //
 // This point file can be viewed with PGRView under windows.
 //
@@ -35,37 +35,38 @@
 
 class Vision3D
 {
-    public:
-        Vision3D(int argc, char **argv, CameraSystem *camera);
-        virtual ~Vision3D();
-        void run();
-        // reference to the outside camera system
-        CameraSystem* camerasystem;
+public:
+    Vision3D(int argc, char **argv);
+    virtual ~Vision3D();
+    void run();
+    TriclopsContext triclops;
 
-    private:
-        void visionCallBackDisparity(const sensor_msgs::ImageConstPtr& msg);
-        void visionCallBackFilteredRight(const sensor_msgs::ImageConstPtr& msg);
-        void visionCallBackFilteredLeft(const sensor_msgs::ImageConstPtr& msg);
-        void visionCallBackRGBRight(const sensor_msgs::ImageConstPtr& msg);
-        void visionCallBackRGBLeft(const sensor_msgs::ImageConstPtr& msg);
-        int producePointCloud( cv::Mat const &disparity,
-                  cv::Mat const &maskImage,
-                  PointCloud      & returnedPoints);
-        int numDisp;
-        int blockSize;
-        cv::Mat filteredLeft;
-        cv::Mat filteredRight;
-        cv::Mat imageLeft;
-        cv::Mat imageRight;
-        cv::Mat disparityImage;
-        image_transport::Subscriber subcamfilteredright;
-        image_transport::Subscriber subcamfilteredleft;
-        image_transport::Subscriber subcamrgbright;
-        image_transport::Subscriber subcamrgbleft;  
-        image_transport::Subscriber subcamdisp; 
-        ros::Publisher pointCloudPublisher;
-        PointCloud cloud;
+private:
+    void visionCallBackDisparity(const sensor_msgs::ImageConstPtr& msg);
+    void visionCallBackFilteredRight(const sensor_msgs::ImageConstPtr& msg);
+    void visionCallBackFilteredLeft(const sensor_msgs::ImageConstPtr& msg);
+    void visionCallBackRGBRight(const sensor_msgs::ImageConstPtr& msg);
+    void visionCallBackRGBLeft(const sensor_msgs::ImageConstPtr& msg);
+    int producePointCloud( cv::Mat const &disparity,
+                           cv::Mat const &maskImage,
+                           PointCloud      & returnedPoints,
+                           TriclopsContext triclops);
 
+    PointCloud cloud;
+    cv::Mat disparityImage;
+
+    int numDisp;
+    int blockSize;
+    cv::Mat filteredLeft;
+    cv::Mat filteredRight;
+    image_transport::Subscriber subcamfilteredright;
+    image_transport::Subscriber subcamfilteredleft;
+    image_transport::Subscriber subcamdisp;
+    ros::Publisher pointCloudPublisher;
+
+
+    bool hasDisparity;
+    bool hasLeftFiltered;
 };
 
 #endif // VISION_3D_H

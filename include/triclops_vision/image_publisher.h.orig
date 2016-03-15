@@ -12,16 +12,16 @@
  *
  */
 class ImagePublisher
-    //Document this code with UML diagram generator online
-    //Have diagram of desired outcome.
+        //Document this code with UML diagram generator online
+        //Have diagram of desired outcome.
 {
-public:
+    public:
 
-    ImagePublisher(FC2::Image grabbedImage, ImageContainer imageContainer, image_transport::Publisher *image_pub_left, image_transport::Publisher *image_pub_right);
+        ImagePublisher(FC2::Image grabbedImage, ImageContainer imageContainer, image_transport::Publisher *image_pub_left, image_transport::Publisher *image_pub_right);
 
-private:
-    cv::Mat      leftImage;
-    cv::Mat      rightImage;
+    private:
+        cv::Mat      leftImage;
+        cv::Mat      rightImage;
 };
 
 #endif // IMAGE_PUBLISHER_H

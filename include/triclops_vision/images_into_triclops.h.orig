@@ -12,8 +12,8 @@ using namespace cv;
 class ImagesIntoTriclops
 {
 public:
-    //! Constructor.
-    //ImagesIntoTriclops();
+  //! Constructor.
+  //ImagesIntoTriclops();
     ImagesIntoTriclops()
     {
         ROS_INFO("Constructor start");
@@ -25,14 +25,14 @@ public:
         ROS_INFO("Constructor end");
     }
 
-    //! Destructor.
-    //~ImagesIntoTriclops();
+  //! Destructor.
+  //~ImagesIntoTriclops();
 
-    //! Publish the message.
-    void publishMessage(ros::Publisher *pub_message);
+  //! Publish the message.
+  void publishMessage(ros::Publisher *pub_message);
 
-    //! Callback function for subscriber.
-    void imageCallback(const sensor_msgs::ImageConstPtr& msg);
+  //! Callback function for subscriber.
+  void imageCallback(const sensor_msgs::ImageConstPtr& msg);
 
 private:
     cv::Mat combined_image; // original left image from subscriber

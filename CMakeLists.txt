@@ -1,6 +1,18 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(triclops_vision)
 
+#QTCREATOR: Add all files in subdirectories of the project in
+# a dummy_target so qtcreator have access to all files
+FILE(GLOB children ${CMAKE_SOURCE_DIR}/*)
+FOREACH(child ${children})
+  IF(IS_DIRECTORY ${child})
+    file(GLOB_RECURSE dir_files "${child}/*")
+    LIST(APPEND extra_files ${dir_files})
+  ENDIF()
+ENDFOREACH()
+add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
+
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -47,15 +59,32 @@ include_directories(include
 )
 
 ## Declare a cpp executable
-add_executable(triclops_camera_driver ${HEADER_FILES} src/image_publisher.cpp src/line_filter.cpp src/camera_system.cpp src/runme.cpp src/vision_3d.cpp)
-add_executable(triclops_image_process src/images_into_triclops.cpp ${HEADER_FILESs})
+add_executable(camera_system ${HEADER_FILES} src/image_publisher.cpp src/camera_system.cpp)
+add_executable(line_filter ${HEADER_FILES} src/line_filter.cpp)
+add_executable(vision3d ${HEADER_FILES} src/vision_3d.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(triclops_vision_node triclops_vision_generate_messages_cpp)
 ## Specify libraries to link a library or executable target against
 
-target_link_libraries(triclops_camera_driver
+target_link_libraries(camera_system
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBS}
+   ${TRICLOPS_LIB}
+   ${FLYCAPTURE_LIB}
+   ${FLYCAPTURE2BRIDGE_LIB}
+   ${PNMUTILS_LIB}
+ )
+target_link_libraries(line_filter
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBS}
+   ${TRICLOPS_LIB}
+   ${FLYCAPTURE_LIB}
+   ${FLYCAPTURE2BRIDGE_LIB}
+   ${PNMUTILS_LIB}
+ )
+target_link_libraries(vision3d
    ${catkin_LIBRARIES}
    ${OpenCV_LIBS}
    ${TRICLOPS_LIB}
@@ -64,11 +93,3 @@ target_link_libraries(triclops_camera_driver
    ${PNMUTILS_LIB}
  )
 
-target_link_libraries(triclops_image_process
-   ${catkin_LIBRARIES}
-   ${OpenCV_LIBS}
-   ${TRICLOPS_LIB}
-   ${FLYCAPTURE_LIB}
-   ${FLYCAPTURE2BRIDGE_LIB}
-   ${PNMUTILS_LIB}
- )

@@ -34,7 +34,7 @@ struct ImageContainer
 
 enum IMAGE_SIDE
 {
-    RIGHT = 0, LEFT
+        RIGHT = 0, LEFT
 };
 
 
