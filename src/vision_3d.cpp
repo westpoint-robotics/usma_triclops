@@ -33,7 +33,7 @@ Vision3D::Vision3D(int argc, char **argv)
   this->hasLeftFiltered = false;
 
 
-  char fileName[] = "/home/user1/triclopsContext.txt";
+  char fileName[] = "/home/user1/triclopsContextCurrent.txt";
   ROS_INFO(">>>>> VISION3D GETTING CONTEXT FROM FILE");
   if(triclopsGetDefaultContextFromFile(&this->triclops, fileName))
   {
@@ -59,6 +59,13 @@ Vision3D::Vision3D(int argc, char **argv)
     cv::createTrackbar( "Block Size", "Disparity Control", &(this->blockSize), 253);
     */
   ros::Duration(1).sleep(); // sleep for a second
+  int min = 0;
+  int max = 0;
+  int offset = 0;
+  triclopsGetDisparity(triclops, &min, &max);
+  triclopsGetDisparityOffset(triclops, &offset);
+  ROS_INFO("[][][][][][][ disparity min and max %d,%d, %d\n",min,max,offset);
+
 
 }
 

@@ -86,8 +86,8 @@ void LineFilter::imageCallbackL(const sensor_msgs::ImageConstPtr& msg)
   outmsg->header.stamp = ros::Time::now();
 
   /*DEBUG
-  cv::imshow("Filter Left", filtered_imageL);
-  cv::waitKey(10);*/
+  cv::imshow("Filter Left", filtered_imageL);*/
+  cv::waitKey(10);
 
   this->image_pub_filtered_left.publish(outmsg);
 }

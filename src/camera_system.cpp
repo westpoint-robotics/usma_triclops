@@ -40,12 +40,6 @@ CameraSystem::CameraSystem(int argc, char** argv)
     exit(-1);
   }
 
-  ROS_INFO(">>>>> CAMERA INFO  WRITING CONTEXT TO FILE");
-  char fileName[] = "/home/user1/triclopsContext.txt";
-  if(triclopsWriteDefaultContextToFile(this->triclops, fileName))
-  {
-    exit(-1);
-  }
 
   triclopsSetRectify(this->triclops, true);
   triclopsSetDisparity(this->triclops, 5, 60);
@@ -88,6 +82,14 @@ CameraSystem::CameraSystem(int argc, char** argv)
   this->image_pub_disparity = it.advertise("/camera/disparity", 1);
 
   ROS_INFO(">>>>> Completed initialization of camera system");
+
+
+  ROS_INFO(">>>>> CAMERA INFO  WRITING CONTEXT TO FILE");
+  char fileName[] = "/home/user1/triclopsContextCurrent.txt";
+  if(triclopsWriteCurrentContextToFile(this->triclops, fileName))
+  {
+    exit(-1);
+  }
 }
 
 //Copied over from older files.
