@@ -97,7 +97,12 @@ int Vision3D::producePointCloud(cv::Mat const &disparityImage,
   unsigned short   disparity; // The disparity value of the input pixel.
   unsigned char    *disparityRow;
   unsigned char    *maskRow, mask;
+  int offset = 0;
   //ROS_INFO("<><><><><><><><> Inside Produce Point cloud %d=%d and %d=%d %d\n",int(maskImage.cols),int(disparityImage.cols),int(maskImage.rows),int(disparityImage.rows),int(disparityImage.size));
+
+  triclopsGetDisparityOffset(triclops,&offset );
+
+  std::cout<<&triclops<<" OFFset " << offset <<std::endl; //
 
   //printf("[!] Searching through image rows,cols %i, %i...\n", disparityImage.rows,disparityImage.cols);
   for(int i = 0; i < disparityImage.rows; i++)
@@ -115,9 +120,8 @@ int Vision3D::producePointCloud(cv::Mat const &disparityImage,
       {
         disparity = disparityImage.at<uchar>(i,j);
         //ROS_INFO("[][][][][][][ disparity of %d,%d is %d\n",i,j,disparity);
-        std::cout<<&triclops<<std::endl; //0012FED4,
         // convert the 16 bit disparity value to floating point x,y,z
-        triclopsRCD16ToXYZ(&triclops, i, j, disparity, &x, &y, &z);
+        triclopsRCD16ToXYZ(triclops, i, j, disparity, &x, &y, &z);
         //ROS_INFO("[][][][][][][ after RCD16CALL\n");
         // look at points within a range
         PointT point;
