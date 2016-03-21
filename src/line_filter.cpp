@@ -27,7 +27,7 @@ cv::Mat filtered_imageR; // The image with detected white lines painted cyan
 // Currently it only publishes left image filtered
 LineFilter::LineFilter(int argc, char** argv)
 {
-  this->thresh_val = 203; // 225
+  this->thresh_val = 73; // 203
   this->erosion_size = 5; // 2
   this->h_rho = 1; // 1
   this->h_theta = 180; // 180

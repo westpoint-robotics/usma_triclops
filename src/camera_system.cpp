@@ -40,17 +40,16 @@ CameraSystem::CameraSystem(int argc, char** argv)
     exit(-1);
   }
 
-
-  triclopsSetRectify(this->triclops, true);
-  triclopsSetDisparity(this->triclops, 5, 60);
-  triclopsSetResolution(this->triclops, 480, 640);
+  //triclopsSetRectify(this->triclops, true);
+  //triclopsSetDisparity(this->triclops, 5, 60);
+  //triclopsSetResolution(this->triclops, 480, 640);
   //triclopsSetStereoMask(this->triclops, 13);
-  triclopsSetDisparityMappingOn(this->triclops, true);
+  //triclopsSetDisparityMappingOn(this->triclops, true);
 
   //Use only for visuals?
   //triclopsSetDisparityMapping(this->triclops, 128, 255);
 
-  // Par 1 of 2 for grabImage method
+  // Part 1 of 2 for grabImage method
   FC2::Error fc2Error = this->camera.StartCapture();
   if(fc2Error != FC2::PGRERROR_OK)
   {
@@ -80,11 +79,6 @@ CameraSystem::CameraSystem(int argc, char** argv)
   this->image_pub_left = it.advertise("/camera/left/rgb", 1);
   this->image_pub_right = it.advertise("/camera/right/rgb", 1);
   this->image_pub_disparity = it.advertise("/camera/disparity", 1);
-
-  ROS_INFO(">>>>> Completed initialization of camera system");
-
-
-  ROS_INFO(">>>>> CAMERA INFO  WRITING CONTEXT TO FILE");
   char fileName[] = "/home/user1/triclopsContextCurrent.txt";
   if(triclopsWriteCurrentContextToFile(this->triclops, fileName))
   {
@@ -145,7 +139,7 @@ int CameraSystem::convertToBGR(FC2::Image & image, FC2::Image & convertedImage)
   return 0;
 }
 
-// generate Triclops context from connected camera. Copied over from older files.
+// Checked against PGR Code OK.
 int CameraSystem::generateTriclopsContext(FC2::Camera     & camera,
     TriclopsContext & triclops)
 {
@@ -167,7 +161,7 @@ int CameraSystem::generateTriclopsContext(FC2::Camera     & camera,
   return 0;
 }
 
-//Copied over from older files.
+// Checked against PGR Code OK.
 int CameraSystem::generateTriclopsInput(FC2::Image const & grabbedImage,
                                         ImageContainer  & imageContainer,
                                         TriclopsInput   & triclopsColorInput,
@@ -278,6 +272,7 @@ int CameraSystem::generateTriclopsInput(FC2::Image const & grabbedImage,
   return 0;
 }
 
+// Checked against PGR Code OK.
 int CameraSystem::doStereo(TriclopsContext const & triclops,
                            TriclopsInput  const & stereoData,
                            TriclopsImage16      & depthImage)
@@ -302,6 +297,7 @@ int CameraSystem::doStereo(TriclopsContext const & triclops,
                           TriImg16_DISPARITY,
                           TriCam_REFERENCE,
                           &depthImage);
+
   _HANDLE_TRICLOPS_ERROR("triclopsGetImage()", te);
   return 0;
 }
@@ -309,13 +305,13 @@ int CameraSystem::doStereo(TriclopsContext const & triclops,
 void CameraSystem::run()
 {
   FC2::Error fc2Error;
-  ImageContainer imageContainer;
   // this image contains both right and left images
   fc2Error = this->camera.RetrieveBuffer(&(this->grabbedImage));
   if(fc2Error != FC2::PGRERROR_OK)
   {
     exit(FC2T::handleFc2Error(fc2Error));
   }
+  ImageContainer imageContainer;
 
   // generate triclops inputs from grabbed image
   if(this->generateTriclopsInput(this->grabbedImage, imageContainer, this->color, this->mono))
