@@ -39,9 +39,9 @@ Vision3D::Vision3D(int argc, char **argv)
     ROS_INFO(">>>>> FAILED GETTING CONTEXT FROM FILE");
     exit(-1);
   }
-    this->pointCloudPublisher = nh.advertise<sensor_msgs::PointCloud2>("/vision3D/points", 0);
-    this->subcamdisp = it.subscribe("/camera/disparity", 1, &Vision3D::visionCallBackDisparity, this);
-    this->subcamfilteredleft = it.subscribe("/camera/left/linefiltered", 0, &Vision3D::visionCallBackFilteredLeft, this);
+  this->pointCloudPublisher = nh.advertise<sensor_msgs::PointCloud2>("/vision3D/points", 0);
+  this->subcamdisp = it.subscribe("/camera/disparity", 1, &Vision3D::visionCallBackDisparity, this);
+  this->subcamfilteredleft = it.subscribe("/camera/left/linefiltered", 0, &Vision3D::visionCallBackFilteredLeft, this);
   ros::Duration(1).sleep(); // sleep for a second
 }
 
@@ -67,40 +67,42 @@ int Vision3D::producePointCloud(cv::Mat const &disparityImage,
                                 PointCloud      & returnedPoints,
                                 TriclopsContext triclops)
 {
-  int i,j,k;
+  int i, j, k, row;
   float            x = 0.0;
   float            y = 0.0;
   float            z = 0.0;
   unsigned short   disparity; // The disparity value of the input pixel.
   unsigned char    mask;
-  int	             pixelinc ;
-  //printf("[!] Searching through image rows,cols %i, %i...\n", disparityImage.rows,disparityImage.cols);
-    for (i = 0, k = 0; i < disparityImage.nrows; i++ )  {
-    //disparityRow = disparityImage.data + (i * disparityImage.step);
-        row = disparityImage16.data + i * pixelinc;
-        for ( j = 0; j < disparityImage16.ncols; j++, k++ )
+
+  int              pixelinc;//1280;
+  pixelinc = disparityImage.step/2; // == 640
+  printf("[!] Searching through image rows,cols %i, %i..steP;%i\n", disparityImage.rows,disparityImage.cols,pixelinc);
+  for(i = 0, k = 0; i < disparityImage.rows; i++)
+  {
+    //row = &(disparityImage.data) + (i * pixelinc);
+    //row = i * pixelinc;
+    for(j = 0; j < disparityImage.cols; j++, k++)
     {
-      disparity = row[j];
-      //printf("At ROW: %i and COL: %i\n", i,j);
+      disparity = disparityImage.at<short>(cv::Point(i,j));//row[j];
+      //printf("At ROW: %i and COL: %i disp:%d\n", i,j,disparity);
 
       // do not save invalid points
-      if ( disparity < 0xFF00 )
+      if(disparity < 0xFF00)
       {
-         mask = maskImage[i,j];
-      if(mask != 0)
-      {
-        disparity = disparityImage.at<uchar>(i,j);
-        // convert the 16 bit disparity value to floating point x,y,z
-        triclopsRCD16ToXYZ(triclops, i, j, disparity, &x, &y, &z);
-        PointT point;
+        mask = maskImage.at<uchar>(cv::Point(i, j));
+        if(mask != 0)
+        {
+          // convert the 16 bit disparity value to floating point x,y,z
+          triclopsRCD16ToXYZ(triclops, i, j, disparity, &x, &y, &z);
+          PointT point;
           point.x = z;
           point.y = -x;
           point.z = -y;
-          point.r = disparity;
-          point.g = disparity;
-          point.b = disparity;
+          point.r = mask;
+          point.g = mask;
+          point.b = mask;
           returnedPoints.push_back(point);
-      }
+        }
       }
     }
   }
