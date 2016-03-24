@@ -6,8 +6,8 @@
         args="0 0 0.39 0 0.55 0 map bumblebee2 100" />
 
 
-  <node pkg="usma_triclops" type="triclops_camera_driver" name="triclops_camera_driver" output="screen">
-  </node> 
+  <node pkg="usma_triclops" type="camera_system" name="camera_system" output="screen"/>
+  <node pkg="usma_triclops" type="line_filter" name="line_filter" output="screen"/>
   
   <node pkg="image_view" type="image_view" name="Left_line_image" output="screen" args="image:=/camera/left/linefiltered" />
   <node pkg="image_view" type="image_view" name="Left_rgb_image" output="screen" args="image:=/camera/left/rgb" />
