@@ -35,40 +35,40 @@
 
 class Vision3D
 {
-public:
-    Vision3D(int argc, char **argv);
-    virtual ~Vision3D();
-    void run();
-    TriclopsContext triclops;
+    public:
+        Vision3D( int argc, char **argv );
+        virtual ~Vision3D();
+        void run();
+        TriclopsContext triclops;
 
-private:
-    void visionCallBackDisparity(const sensor_msgs::ImageConstPtr& msg);
-    void visionCallBackFilteredRight(const sensor_msgs::ImageConstPtr& msg);
-    void visionCallBackFilteredLeft(const sensor_msgs::ImageConstPtr& msg);
-    void visionCallBackRGBRight(const sensor_msgs::ImageConstPtr& msg);
-    void visionCallBackRGBLeft(const sensor_msgs::ImageConstPtr& msg);
-    int producePointCloud( cv::Mat const &disparity,
-                           cv::Mat const &maskImage,
-                           PointCloud      & returnedPoints,
-                           TriclopsContext triclops);
+    private:
+        void visionCallBackDisparity( const sensor_msgs::ImageConstPtr& msg );
+        void visionCallBackFilteredRight( const sensor_msgs::ImageConstPtr& msg );
+        void visionCallBackFilteredLeft( const sensor_msgs::ImageConstPtr& msg );
+        void visionCallBackRGBRight( const sensor_msgs::ImageConstPtr& msg );
+        void visionCallBackRGBLeft( const sensor_msgs::ImageConstPtr& msg );
+        int producePointCloud( cv::Mat const &disparity,
+                               cv::Mat const &maskImage,
+                               PointCloud      & returnedPoints,
+                               TriclopsContext triclops );
 
-    PointCloud cloud;
-    cv::Mat disparityImage;
+        PointCloud cloud;
+        cv::Mat disparityImage;
 
-    int numDisp;
-    int blockSize;
-    cv::Mat filteredLeft;
-    cv::Mat filteredRight;
-    image_transport::Subscriber subcamfilteredright;
-    image_transport::Subscriber subcamfilteredleft;
-    image_transport::Subscriber subcamdisp;
-    ros::Publisher pointCloudPublisher;
-    ros::NodeHandle nh;
+        int numDisp;
+        int blockSize;
+        cv::Mat filteredLeft;
+        cv::Mat filteredRight;
+        image_transport::Subscriber subcamfilteredright;
+        image_transport::Subscriber subcamfilteredleft;
+        image_transport::Subscriber subcamdisp;
+        ros::Publisher pointCloudPublisher;
+        ros::NodeHandle nh;
 
 
 
-    bool hasDisparity;
-    bool hasLeftFiltered;
+        bool hasDisparity;
+        bool hasLeftFiltered;
 };
 
 #endif // VISION_3D_H

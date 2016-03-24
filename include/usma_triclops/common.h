@@ -4,20 +4,20 @@
 //
 // Macro to check, report on, and handle Triclops API error codes.
 //
-#define _HANDLE_TRICLOPS_ERROR( description, error )	\
-{ \
-   if( error != TriclopsErrorOk ) \
-   { \
-      printf( \
-         "*** Triclops Error '%s' at line %d :\n\t%s\n", \
-         triclopsErrorToString( error ), \
-         __LINE__, \
-         description );	\
-      printf( "Press any key to exit...\n" ); \
-      getchar(); \
-      exit( 1 ); \
-   } \
-}
+#define _HANDLE_TRICLOPS_ERROR( description, error )    \
+    { \
+        if( error != TriclopsErrorOk ) \
+        { \
+            printf( \
+                    "*** Triclops Error '%s' at line %d :\n\t%s\n", \
+                    triclopsErrorToString( error ), \
+                    __LINE__, \
+                    description ); \
+            printf( "Press any key to exit...\n" ); \
+            getchar(); \
+            exit( 1 ); \
+        } \
+    }
 
 // aliases namespaces
 namespace FC2 = FlyCapture2;

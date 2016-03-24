@@ -1,8 +1,41 @@
-# this line is a comment
---style=allman      # this is a line-end comment
-# long options can be written without the preceding '--'
-indent-switches     # cannot do this on the command line
-# short options must have the preceding '-'
--t -p
-# short options can be concatenated together
--M60Ucv
+# AStyle Config File
+# Usage: astyle --options=first.astylerc --recursive *.h *.cpp
+
+# convert all tabs to spaces
+convert-tabs
+
+# indentation with two spaces
+indent=spaces=4
+
+# indent classes and structs
+indent-classes
+
+# indent switch constructs
+indent-switches
+
+# indent case blocks
+indent-cases
+
+# indent namespaces
+indent-namespaces
+
+# indent preprocessor declerations
+indent-preprocessor
+
+# indent one line comments to line up with code
+indent-col1-comments
+
+# add empty lines around blocks
+break-blocks
+
+# add spaces around operators
+pad-oper
+
+# first remove spaces inside and outside of parens
+unpad-paren
+# then add space in header declerations
+pad-header
+# then add spaces inside
+pad-paren-in
+
+-v  # Verbose display mode. 
