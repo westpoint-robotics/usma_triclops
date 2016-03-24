@@ -18,15 +18,13 @@
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include "triclops_vision/typedefs.h"
+#include "usma_triclops/typedefs.h"
 
-#include "triclops_vision/vision_3d.h"
-#include "triclops_vision/line_filter.h"
+#include "usma_triclops/vision_3d.h"
+#include "usma_triclops/line_filter.h"
 
 Vision3D::Vision3D(int argc, char **argv)
 {
-  ros::init(argc, argv, "vision3d");
-  ros::NodeHandle nh;
   image_transport::ImageTransport it(nh);
 
   this->hasDisparity = false;
@@ -76,7 +74,7 @@ int Vision3D::producePointCloud(cv::Mat const &disparityImage,
 
   int              pixelinc;//1280;
   pixelinc = disparityImage.step/2; // == 640
-  printf("[!] Searching through image rows,cols %i, %i..steP;%i\n", disparityImage.rows,disparityImage.cols,pixelinc);
+  printf("[!]rows,cols,channels,elemsize, maskImage: (%d,%d,%d,%d) disparity: (%d,%d,%d,%d)\n", maskImage.rows,maskImage.cols,maskImage.channels(),int(maskImage.elemSize()), disparityImage.rows,disparityImage.cols,disparityImage.channels(),int(disparityImage.elemSize()));
   for(i = 0, k = 0; i < disparityImage.rows; i++)
   {
     //row = &(disparityImage.data) + (i * pixelinc);
@@ -134,12 +132,11 @@ void Vision3D::run()
 // ---------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "vision3d");
-  ros::NodeHandle nh;
-  ros::Rate loop_rate(5);
+    ros::init(argc, argv, "vision3d");
 
   //printf("vision.run()\n");
   Vision3D vision3D(argc, argv);
+  ros::Rate loop_rate(10);
 
   while(ros::ok())
   {

@@ -7,7 +7,7 @@
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
-#include <triclops_vision/typedefs.h>
+#include <usma_triclops/typedefs.h>
 using namespace cv;
 class ImagesIntoTriclops
 {

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(triclops_vision)
+project(usma_triclops)
 
 #QTCREATOR: Add all files in subdirectories of the project in
 # a dummy_target so qtcreator have access to all files
@@ -29,12 +29,12 @@ find_package(catkin REQUIRED COMPONENTS
 # Specify package build info export
 catkin_package(
   INCLUDE_DIRS include # This indicates that the folder "include" within the package folder is where exported headers go.
-#  LIBRARIES triclops_vision
+#  LIBRARIES usma_triclops
   CATKIN_DEPENDS roscpp rospy
 #  DEPENDS system_lib
 )
 
-FILE(GLOB_RECURSE HEADER_FILES "include/triclops_vision/*.h")
+FILE(GLOB_RECURSE HEADER_FILES "include/usma_triclops/*.h")
 ###########
 ## Build ##
 ###########
@@ -65,7 +65,7 @@ add_executable(vision3d ${HEADER_FILES} src/vision_3d.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(triclops_vision_node triclops_vision_generate_messages_cpp)
+# add_dependencies(usma_triclops_node usma_triclops_generate_messages_cpp)
 ## Specify libraries to link a library or executable target against
 
 target_link_libraries(camera_system

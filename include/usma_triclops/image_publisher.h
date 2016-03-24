@@ -5,7 +5,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <image_transport/image_transport.h>
-#include "triclops_vision/common.h"
+#include "usma_triclops/common.h"
 
 /**
  * @brief The ImagePublisher class. More details coming soon!

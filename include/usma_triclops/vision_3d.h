@@ -19,11 +19,11 @@
 #include "triclops/triclops.h"
 #include "triclops/fc2triclops.h"
 #include <pcl_ros/point_cloud.h>
-#include "triclops_vision/typedefs.h"
-#include "triclops_vision/common.h"
-#include "triclops_vision/common.h"
-#include "triclops_vision/line_filter.h"
-#include "triclops_vision/camera_system.h"
+#include "usma_triclops/typedefs.h"
+#include "usma_triclops/common.h"
+#include "usma_triclops/common.h"
+#include "usma_triclops/line_filter.h"
+#include "usma_triclops/camera_system.h"
 #include <pcl_ros/point_cloud.h>
 #include <image_transport/image_transport.h>
 
@@ -63,6 +63,8 @@ private:
     image_transport::Subscriber subcamfilteredleft;
     image_transport::Subscriber subcamdisp;
     ros::Publisher pointCloudPublisher;
+    ros::NodeHandle nh;
+
 
 
     bool hasDisparity;

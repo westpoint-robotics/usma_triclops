@@ -8,9 +8,9 @@
 #include <stdlib.h>
 #include <ros/ros.h>
 #include <sensor_msgs/image_encodings.h>
-#include "triclops_vision/typedefs.h"
-#include "triclops_vision/image_publisher.h"
-#include "triclops_vision/camera_system.h"
+#include "usma_triclops/typedefs.h"
+#include "usma_triclops/image_publisher.h"
+#include "usma_triclops/camera_system.h"
 
 //TODO: Move this back to a seperate file
 int convertTriclops2Opencv(TriclopsImage16 & bgrImage,
@@ -24,6 +24,7 @@ int convertTriclops2Opencv(TriclopsImage16 & bgrImage,
 
 CameraSystem::CameraSystem(int argc, char** argv)
 {
+
   namespace FC2 = FlyCapture2;
   namespace FC2T = Fc2Triclops;
   this->camera.Connect();
@@ -66,12 +67,9 @@ CameraSystem::CameraSystem(int argc, char** argv)
   }
   else
   {
-    ROS_INFO(">>>>> CAMERA INFO  Vendor: %s     Model: %s     Serail#: %d", camInfo.vendorName, camInfo.modelName, camInfo.serialNumber);
+      ROS_INFO(">>>>> CAMERA INFO  Vendor: %s     Model: %s     Serail#: %d  Resolution: %s", camInfo.vendorName, camInfo.modelName, camInfo.serialNumber, camInfo.sensorResolution);
   }
 
-  ros::init(argc, argv, "camera_system");
-  ros::NodeHandle nh;
-  ros::Rate loop_rate(10);
 
   // Container of Images used for processing
   image_transport::ImageTransport it(nh);
@@ -332,6 +330,15 @@ void CameraSystem::run()
 
   sensor_msgs::ImagePtr outmsg = cv_bridge::CvImage(std_msgs::Header(), "mono16", this->disparityImageCV).toImageMsg();
   this->image_pub_disparity.publish(outmsg);
+  if (!(this->color.rowinc == 8192 && this->mono.rowinc == 1024 && int(this->disparityImageCV.elemSize()) == 2 && this->disparityImageCV.cols == 640)){
+      printf(">>>> Possible ERROR: Check camera resolution. Expected resolution of images is 768 x 1024\n <<<<<<<<<<<<<<<<<<<<<");
+  }
+  //printf("[color]rows,cols,rowinc: (%d,%d,%d)\n",this->color.nrows,this->color.ncols,this->color.rowinc);
+  //printf("[mono]rows,cols,rowinc: (%d,%d,%d)\n",this->mono.nrows,this->mono.ncols,this->mono.rowinc);
+  //printf("[disparity]rows,cols,channels,elemsize: (%d,%d,%d,%d)\n",this->disparityImageCV.rows,this->disparityImageCV.cols,this->disparityImageCV.channels(),int(this->disparityImageCV.elemSize()));
+  //[color]rows,cols,rowinc: (768,1024,8192)
+  //[mono]rows,cols,rowinc: (768,1024,1024)
+  //[disparity]rows,cols,channels,elemsize: (480,640,1,2)
 
   ros::spinOnce();
 }
@@ -343,12 +350,11 @@ void CameraSystem::run()
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "camera_system");
-  ros::NodeHandle nh;
-  ros::Rate loop_rate(10);
+    ros::init(argc, argv, "camera_system");
 
   //printf("camera.run()\n");
   CameraSystem camera(argc, argv);
+  ros::Rate loop_rate(10);
   while(ros::ok())
   {
     camera.run();

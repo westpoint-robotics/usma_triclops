@@ -4,9 +4,9 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
-#include "triclops_vision/line_filter.h"
-#include "triclops_vision/triclops_opencv.h"
-#include "triclops_vision/image_publisher.h"
+#include "usma_triclops/line_filter.h"
+#include "usma_triclops/triclops_opencv.h"
+#include "usma_triclops/image_publisher.h"
 
 //Create imagecontainer for moving images
 ImageContainer imageContainerL;
@@ -46,8 +46,6 @@ LineFilter::LineFilter(int argc, char** argv)
   cv::createTrackbar("maxLineGap", "ControlView", &h_maxLineGap, 250);
 
   //Start ROS
-  ros::init(argc, argv, "linefilter");
-  ros::NodeHandle nh;
   image_transport::ImageTransport it(nh);
 
   //Create publishers
@@ -379,12 +377,11 @@ void LineFilter::displayCyan()
 // ---------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "line_filter");
-  ros::NodeHandle nh;
-  ros::Rate loop_rate(10);
+  ros::init(argc, argv, "linefilter");
 
   //printf("line.run()\n");
   LineFilter linefilter(argc, argv);
+  ros::Rate loop_rate(10);
   while(ros::ok())
   {
     linefilter.run();

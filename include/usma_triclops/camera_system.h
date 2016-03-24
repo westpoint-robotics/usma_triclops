@@ -9,9 +9,9 @@
 #include <image_transport/image_transport.h>
 #include <pcl_ros/point_cloud.h>
 
-#include "triclops_vision/typedefs.h"
-#include "triclops_vision/common.h"
-#include "triclops_vision/line_filter.h"
+#include "usma_triclops/typedefs.h"
+#include "usma_triclops/common.h"
+#include "usma_triclops/line_filter.h"
 
 class CameraSystem
 {
@@ -54,6 +54,7 @@ private:
     image_transport::Publisher image_pub_left;
     image_transport::Publisher image_pub_right;
     image_transport::Publisher image_pub_disparity;
+    ros::NodeHandle nh;
 };
 
 #endif // CAMERA_SYSTEM_H

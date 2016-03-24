@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ros/ros.h>
-#include "triclops_vision/vision_3d.h"
-#include "triclops_vision/line_filter.h"
-#include "triclops_vision/camera_system.h"
+#include "usma_triclops/vision_3d.h"
+#include "usma_triclops/line_filter.h"
+#include "usma_triclops/camera_system.h"
 
 int main (int argc, char **argv)
 {
-    ros::init(argc, argv,"triclops_vision");
+    ros::init(argc, argv,"usma_triclops");
     ros::NodeHandle nh;
     ros::Rate loop_rate(10);
 

@@ -3,11 +3,11 @@
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
-#include <triclops_vision/typedefs.h>
+#include <usma_triclops/typedefs.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/core/core.hpp>
-#include <triclops_vision/images_into_triclops.h>
+#include <usma_triclops/images_into_triclops.h>
 
 using namespace cv;
 

@@ -6,19 +6,19 @@
         args="0 0 0.10 0 0 0 map bumblebee2 100" />
 
 
-  <node pkg="triclops_vision" type="camera_system" name="camera_system" output="screen">
+  <node pkg="usma_triclops" type="camera_system" name="camera_system" output="screen">
   </node>
-<node pkg="triclops_vision" type="line_filter" name="line_filter" output="screen">
+<node pkg="usma_triclops" type="line_filter" name="line_filter" output="screen">
 </node>
 
 <node pkg="image_view" name="left_line_image" type="image_view" args="image:=/camera/left/linefiltered"/>
 <node pkg="image_view" name="disparity_image" type="image_view" args="image:=/camera/disparity"/>
 <!--
-  <node pkg="triclops_vision" type="visioin3d" name="vision3d" output="screen">
+  <node pkg="usma_triclops" type="visioin3d" name="vision3d" output="screen">
   </node>
 
  Start an rviz node with a custom configuration  -->
-<node pkg="rviz" type="rviz" output="screen" name="rviz" args="-d $(find triclops_vision)/launch/triclops_camera.rviz"/>
+<node pkg="rviz" type="rviz" output="screen" name="rviz" args="-d $(find usma_triclops)/launch/triclops_camera.rviz"/>
 
 </launch>
 
