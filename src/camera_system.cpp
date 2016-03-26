@@ -3,7 +3,8 @@
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
-
+#include <opencv2/contrib/contrib.hpp>
+#include <opencv2/core/core.hpp>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ros/ros.h>
@@ -27,6 +28,7 @@ CameraSystem::CameraSystem( int argc, char** argv )
 
     namespace FC2 = FlyCapture2;
     namespace FC2T = Fc2Triclops;
+    FC2::Error fc2Error;
     this->camera.Connect();
     // configure camera - Identifies what camera is being used?
 
@@ -34,8 +36,29 @@ CameraSystem::CameraSystem( int argc, char** argv )
     {
         exit( -1 );
     }
+    FC2::Format7ImageSettings formatSettings;
+    unsigned int         packetSize;
+    float                percent ;
 
-    // generate the Triclops context
+    fc2Error = this->camera.GetFormat7Configuration(&formatSettings, &packetSize, &percent);
+    printf("mode,offX,offY,width,height,pixFormat: %d,%d,%d,%d,%d,%x,%f\n",formatSettings.mode,formatSettings.offsetX,formatSettings.offsetY,formatSettings.width,formatSettings.height,formatSettings.pixelFormat,percent);
+
+//    formatSettings.mode = FC2::MODE_3; //To capture two images simultaneously, use Format_7 Mode 3
+//    formatSettings.offsetX =0;
+//    formatSettings.offsetY =0;
+//    formatSettings.width=1024;
+//    formatSettings.height=768;
+//    formatSettings.pixelFormat=FC2::PIXEL_FORMAT_RAW16;
+//    percent=100.0;
+
+//    fc2Error = this->camera.SetFormat7Configuration(&formatSettings, percent);
+//    if ( fc2Error != FC2::PGRERROR_OK )
+//    {
+//        std::cout << "ZZZZZZZZZZZZZZZZZZZZZZZZZZZ     Failed to set camera config" << std::endl;
+
+//        exit( FC2T::handleFc2Error( fc2Error ) );
+//    }
+    // generate the Triclops context   PIXEL_FORMAT_422YUV8
     if ( generateTriclopsContext( this->camera, this->triclops ) )
     {
         exit( -1 );
@@ -43,15 +66,26 @@ CameraSystem::CameraSystem( int argc, char** argv )
 
     //triclopsSetRectify(this->triclops, true);
     //triclopsSetDisparity(this->triclops, 5, 60);
-    triclopsSetResolution( this->triclops, 480, 640 );
     //triclopsSetStereoMask(this->triclops, 13);
     //triclopsSetDisparityMappingOn(this->triclops, true);
 
     //Use only for visuals?
     //triclopsSetDisparityMapping(this->triclops, 128, 255);
 
+    // The max frame rate for our model bb2 camera is 20 frames/second, the api supports 15 but not 20.
+    //FC2::Error fc2Error = this->camera.SetVideoModeAndFrameRate(FC2::VIDEOMODE_640x480RGB,FC2::FRAMERATE_15 );
+
+    FC2::VideoMode videoMode;
+    FC2::FrameRate frameRate;
+    fc2Error = this->camera.GetVideoModeAndFrameRate(&videoMode,&frameRate);
+    if ( fc2Error != FC2::PGRERROR_OK )
+    {
+        exit( FC2T::handleFc2Error( fc2Error ) );
+    }
+    std::cout << "<<>><<>> mode: "<< FC2::VideoMode(videoMode) << " rate: " << FC2::FrameRate(frameRate) << std::endl;
+
     // Part 1 of 2 for grabImage method
-    FC2::Error fc2Error = this->camera.StartCapture();
+    fc2Error = this->camera.StartCapture();
 
     if ( fc2Error != FC2::PGRERROR_OK )
     {
@@ -287,6 +321,19 @@ int CameraSystem::doStereo( TriclopsContext const & triclops,
                             TriclopsImage16      & depthImage )
 {
     TriclopsError te;
+    //printf("stereo size in DOSTEREO: %d,%d\n",stereoData.ncols, stereoData.nrows);
+    if(stereoData.ncols == 1024){
+        triclopsSetResolution( this->triclops, 768, 1024 );
+
+      }
+    else if(stereoData.ncols == 640){
+        triclopsSetResolution( this->triclops, 480, 640 );
+
+      }
+    else{
+        printf("ERROR: The triclops image is not 640x480 or 1024x768. It is %dx%d",stereoData.ncols,stereoData.nrows);
+        exit(-1);
+      }
 
     // Set subpixel interpolation on to use
     // TriclopsImage16 structures when we access and save the disparity image
@@ -330,13 +377,62 @@ void CameraSystem::run()
         exit( EXIT_FAILURE );
     }
 
-    doStereo( this->triclops, this->mono, this->disparityImageTriclops );
+    doStereo( this->triclops, this->color, this->disparityImageTriclops );
 
     convertTriclops2Opencv( this->disparityImageTriclops, this->disparityImageCV );
 
+
+/*    const char * pRectifiedFilename = "disparityIMG.pgm";
+    TriclopsError te = triclopsSaveImage( this->disparityImageTriclops, const_cast<char *>(pRectifiedFilename) );
+    _HANDLE_TRICLOPS_ERROR( "triclopsSaveImage()", te );
+    exit(-2)*/;
+
     // DEBUG
-    //cv::imshow("Disparity", this->disparityImageCV);
-    //cv::waitKey(10);
+    //cv::Mat rgbDisparity;
+//    cv::Mat colorDisparity= cv::Mat::zeros( this->disparityImageCV.cols, this->disparityImageCV.rows, CV_8UC3 );
+//    ushort maxDisp = 0;
+//    ushort minDisp = this->disparityImageCV.at<ushort>( cv::Point( 0, 0 ) );
+//    ushort i,j,disparity;
+//    for ( i = 0; i < this->disparityImageCV.cols; i++ )
+//    {
+//        for ( j = 0; j < this->disparityImageCV.rows; j++)
+//        {
+//            disparity = this->disparityImageCV.at<ushort>( cv::Point( i, j ) );
+//            if (disparity < 65533 and disparity > 0){
+//           //std::cout << disparity << std::endl;
+//            if (disparity > maxDisp)
+//              {maxDisp = disparity;}
+
+//            if (disparity < minDisp)
+//              {minDisp = disparity;}
+//              }
+//          }
+//        //std::cout << std::endl;
+
+//      }
+//    printf("Maxdisparity is:%d %d\n",minDisp,maxDisp);
+
+//    for ( i = 0; i < this->disparityImageCV.cols; i++ )
+//    {
+//        for ( j = 0; j < this->disparityImageCV.rows; j++)
+//        {
+//            disparity = this->disparityImageCV.at<ushort>( cv::Point( i, j ) );
+//            if (disparity < 65533 and disparity > 0){
+//            int pixColor = disparity/maxDisp*255;
+//            //cv::Vec3b dispColor =cv::Vec3b(hue,255,255);
+//            //cv::Vec3b rgbColor;
+//            //cv::cvtColor(dispColor,rgbColor,cv::COLOR_HSV2BGR);
+//            //std::cout <<" HUE = " << pixColor << std::endl;
+//            colorDisparity.at<cv::Vec3b>( cv::Point( i, j ) )=cv::Vec3b(255,255,255);
+//          }
+//          }
+//      }
+
+    //cv::cvtColor(this->disparityImageCV, rgbDisparity, CV_GRAY2RGB);
+    //cv::applyColorMap(colorDisparity,rgbDisparity,cv::COLORMAP_AUTUMN );
+    //this->disparityImageCV.convertTo(colorDisparity, CV_16UC3, -255.0/70,255);
+    cv::imshow("ColorDisparity", colorDisparity);
+    cv::waitKey(3);
 
     // Publish images
     ImagePublisher imagePublisher( this->grabbedImage, imageContainer, &( this->image_pub_left ), &( this->image_pub_right ) );
@@ -355,7 +451,6 @@ void CameraSystem::run()
 
     ros::spinOnce();
 }
-
 
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------

@@ -67,31 +67,30 @@ int Vision3D::producePointCloud( cv::Mat const &disparityImage,
                                  PointCloud      & returnedPoints,
                                  TriclopsContext triclops )
 {
-    int i, j, k, row;
+    int i, j;
     float            x = 0.0;
     float            y = 0.0;
     float            z = 0.0;
     unsigned short   disparity; // The disparity value of the input pixel.
     unsigned char    mask;
 
-    int              pixelinc;//1280;
-    pixelinc = disparityImage.step / 2; // == 640
-    printf( "[!]rows,cols,channels,elemsize, maskImage: (%d,%d,%d,%d) disparity: (%d,%d,%d,%d)\n", maskImage.rows, maskImage.cols, maskImage.channels(), int( maskImage.elemSize() ), disparityImage.rows, disparityImage.cols, disparityImage.channels(), int( disparityImage.elemSize() ) );
+    //cv::resize( this->cyan_image, disImage, cv::Size( 400, 300 ) );
+    cv::imshow( "MASK Image", maskImage );
+    cv::imshow( "DISPARITY Image", disparityImage );
+    cv::waitKey( 3 );
 
-    for ( i = 0, k = 0; i < disparityImage.rows; i++ )
+
+    //printf( "[!!!!!!]rows,cols,channels,elemsize, maskImage: (%d,%d,%d,%d) disparity: (%d,%d,%d,%d)\n", maskImage.rows, maskImage.cols, maskImage.channels(), int( maskImage.elemSize() ), disparityImage.rows, disparityImage.cols, disparityImage.channels(), int( disparityImage.elemSize() ) );
+
+    for ( i = 0; i < disparityImage.cols; i++ )
     {
-        //row = &(disparityImage.data) + (i * pixelinc);
-        //row = i * pixelinc;
-        for ( j = 0; j < disparityImage.cols; j++, k++ )
+        for ( j = 0; j < disparityImage.rows; j++)
         {
             disparity = disparityImage.at<short>( cv::Point( i, j ) ); //row[j];
-            //printf("At ROW: %i and COL: %i disp:%d\n", i,j,disparity);
-
             // do not save invalid points
             if ( disparity < 0xFF00 )
             {
                 mask = maskImage.at<uchar>( cv::Point( i, j ) );
-
                 if ( mask != 0 )
                 {
                     // convert the 16 bit disparity value to floating point x,y,z

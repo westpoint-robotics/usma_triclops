@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(usma_triclops)
 
+set(CMAKE_BUILD_TYPE DEBUG)
+set(CMAKE_C_FLAGS "-O0 -ggdb")
+set(CMAKE_C_FLAGS_DEBUG "-O0 -ggdb")
+set(CMAKE_C_FLAGS_RELEASE "-O0 -ggdb")
+set(CMAKE_CXX_FLAGS "-O0 -ggdb")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
+set(CMAKE_CXX_FLAGS_RELEASE "-O0 -ggdb")
+
 #QTCREATOR: Add all files in subdirectories of the project in
 # a dummy_target so qtcreator have access to all files
 FILE(GLOB children ${CMAKE_SOURCE_DIR}/*)
