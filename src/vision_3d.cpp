@@ -52,7 +52,7 @@ Vision3D::~Vision3D()
 
 void Vision3D::visionCallBackDisparity( const sensor_msgs::ImageConstPtr& msg )
 {
-    this->disparityImage = cv_bridge::toCvCopy( msg, "mono16" )->image;
+    this->disparityImage = cv_bridge::toCvCopy( msg, "mono8" )->image;
     this->hasDisparity = true;
 }
 
@@ -71,7 +71,7 @@ int Vision3D::producePointCloud( cv::Mat const &disparityImage,
     float            x = 0.0;
     float            y = 0.0;
     float            z = 0.0;
-    unsigned short   disparity; // The disparity value of the input pixel.
+    uchar   disparity; // The disparity value of the input pixel.
     unsigned char    mask;
 
     //cv::resize( this->cyan_image, disImage, cv::Size( 400, 300 ) );
@@ -84,17 +84,20 @@ int Vision3D::producePointCloud( cv::Mat const &disparityImage,
 
     for ( i = 0; i < disparityImage.cols; i++ )
     {
-        for ( j = 0; j < disparityImage.rows; j++)
+        for ( j = 0; j < disparityImage.rows; j++ )
         {
-            disparity = disparityImage.at<short>( cv::Point( i, j ) ); //row[j];
+            disparity = disparityImage.at<uchar>( cv::Point( i, j ) ); //row[j];
+            //printf( "disparity, %d\n", disparity );
+
             // do not save invalid points
             if ( disparity < 0xFF00 )
             {
                 mask = maskImage.at<uchar>( cv::Point( i, j ) );
+
                 if ( mask != 0 )
                 {
-                    // convert the 16 bit disparity value to floating point x,y,z
-                    triclopsRCD16ToXYZ( triclops, i, j, disparity, &x, &y, &z );
+                    // convert the 16 bit disparity value to floating point x,y,z in ROS Coordinate Frame
+                    triclopsRCD8ToXYZ( triclops, i, j, disparity, &x, &y, &z );
                     PointT point;
                     point.x = z;
                     point.y = -x;

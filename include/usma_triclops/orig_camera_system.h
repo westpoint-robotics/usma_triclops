@@ -3,8 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "cv.h"
-#include "highgui.h"
+
 #include <triclops/triclops.h>
 #include <triclops/fc2triclops.h>
 #include <image_transport/image_transport.h>
@@ -14,14 +13,10 @@
 #include "usma_triclops/common.h"
 #include "usma_triclops/line_filter.h"
 
-namespace FC2 = FlyCapture2;
-namespace FC2T = Fc2Triclops;
-
 class CameraSystem
 {
     public:
         CameraSystem( int argc, char** argv );
-        ~CameraSystem();
         // configue camera to capture image
         void run();
         // convert image to BRGU
@@ -29,38 +24,12 @@ class CameraSystem
         // convert image to BRG
         int convertToBGR( FC2::Image & image, FC2::Image & convertedImage );
         TriclopsContext triclops;
-        ;
-        std::string getResolution();
-        int shutdown();
-        int setDispMax( int disp ) {
-            disp_max = disp;
-            return 0;
-        }
-        int setDispMin( int disp ) {
-            disp_min = disp;
-            return 0;
-        }
-        int setDispMapMax( int disp ) {
-            disp_map_max = disp;
-            return 0;
-        }
-        int setDispMapMin( int disp ) {
-            disp_map_min = disp;
-            return 0;
-        }
-        int setStereoMask( int mask ) {
-            stereo_mask = mask;
-            return 0;
-        }
-        cv::Mat getDisparityImage() {
-            return disparityImageCV;
-        }
 
     private:
         // carry out stereo processing pipeline
         int doStereo( TriclopsContext const & triclops,
                       TriclopsInput  const & stereoData,
-                      TriclopsImage      & depthImage );
+                      TriclopsImage16      & depthImage );
         // generate triclops input necessary to carry out stereo processing
         int generateTriclopsInput( FC2::Image const & grabbedImage,
                                    ImageContainer   & imageContainer,
@@ -80,19 +49,12 @@ class CameraSystem
         FC2::Image grabbedImage;
         TriclopsInput color;
         TriclopsInput mono;
-        TriclopsImage disparityImageTriclops;
+        TriclopsImage16 disparityImageTriclops;
         cv::Mat disparityImageCV;
         image_transport::Publisher image_pub_left;
         image_transport::Publisher image_pub_right;
         image_transport::Publisher image_pub_disparity;
         ros::NodeHandle nh;
-        FC2::CameraInfo camInfo;
-        int disp_max;
-        int disp_min;
-        int disp_map_max;
-        int disp_map_min;
-        int disp_map_on;
-        int stereo_mask;
 };
 
 #endif // CAMERA_SYSTEM_H

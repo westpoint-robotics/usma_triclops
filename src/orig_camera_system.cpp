@@ -14,25 +14,21 @@
 #include "usma_triclops/camera_system.h"
 
 //TODO: Move this back to a seperate file
-int convertTriclops2Opencv( TriclopsImage & bgrImage,
+int convertTriclops2Opencv( TriclopsImage16 & bgrImage,
                             cv::Mat & cvImage )
 {
-    //printf("triImage row,col,rowinc %d,%d,%d",bgrImage.nrows,bgrImage.ncols,bgrImage.rowinc);
-    cvImage = cv::Mat( bgrImage.nrows, bgrImage.ncols, CV_8UC1, bgrImage.data, bgrImage.rowinc );
-    return 0;
+    cvImage = cv::Mat( bgrImage.nrows, bgrImage.ncols, CV_16UC1, bgrImage.data, bgrImage.rowinc );
+    char numstr[50];
+    sprintf( numstr, "rows: %d cols: %d RowInc: %d", cvImage.rows, cvImage.cols, bgrImage.rowinc );
+    putText( cvImage, numstr, cv::Point( 10, cvImage.rows - 30 ), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar( 100, 100, 250 ), 1, false );
 }
 
 CameraSystem::CameraSystem( int argc, char** argv )
 {
-    disp_min = 0;
-    disp_max = 70;
-    disp_map_max = 255;
-    disp_map_min = 0;
-    disp_map_on = 0;
-    stereo_mask = 11;
 
+    namespace FC2 = FlyCapture2;
+    namespace FC2T = Fc2Triclops;
     FC2::Error fc2Error;
-
     this->camera.Connect();
     // configure camera - Identifies what camera is being used?
 
@@ -48,11 +44,48 @@ CameraSystem::CameraSystem( int argc, char** argv )
     fc2Error = this->camera.GetFormat7Configuration( &formatSettings, &packetSize, &percent );
     printf( "mode,offX,offY,width,height,pixFormat: %d,%d,%d,%d,%d,%x,%f\n", formatSettings.mode, formatSettings.offsetX, formatSettings.offsetY, formatSettings.width, formatSettings.height, formatSettings.pixelFormat, percent );
 
+    //    formatSettings.mode = FC2::MODE_3; //To capture two images simultaneously, use Format_7 Mode 3
+    //    formatSettings.offsetX =0;
+    //    formatSettings.offsetY =0;
+    //    formatSettings.width=1024;
+    //    formatSettings.height=768;
+    //    formatSettings.pixelFormat=FC2::PIXEL_FORMAT_RAW16;
+    //    percent=100.0;
+
+    //    fc2Error = this->camera.SetFormat7Configuration(&formatSettings, percent);
+    //    if ( fc2Error != FC2::PGRERROR_OK )
+    //    {
+    //        std::cout << "ZZZZZZZZZZZZZZZZZZZZZZZZZZZ     Failed to set camera config" << std::endl;
+
+    //        exit( FC2T::handleFc2Error( fc2Error ) );
+    //    }
     // generate the Triclops context   PIXEL_FORMAT_422YUV8
     if ( generateTriclopsContext( this->camera, this->triclops ) )
     {
         exit( -1 );
     }
+
+    //triclopsSetRectify(this->triclops, true);
+    //triclopsSetDisparity(this->triclops, 5, 60);
+    //triclopsSetStereoMask(this->triclops, 13);
+    //triclopsSetDisparityMappingOn(this->triclops, true);
+
+    //Use only for visuals?
+    //triclopsSetDisparityMapping(this->triclops, 128, 255);
+
+    // The max frame rate for our model bb2 camera is 20 frames/second, the api supports 15 but not 20.
+    //FC2::Error fc2Error = this->camera.SetVideoModeAndFrameRate(FC2::VIDEOMODE_640x480RGB,FC2::FRAMERATE_15 );
+
+    FC2::VideoMode videoMode;
+    FC2::FrameRate frameRate;
+    fc2Error = this->camera.GetVideoModeAndFrameRate( &videoMode, &frameRate );
+
+    if ( fc2Error != FC2::PGRERROR_OK )
+    {
+        exit( FC2T::handleFc2Error( fc2Error ) );
+    }
+
+    std::cout << "<<>><<>> mode: " << FC2::VideoMode( videoMode ) << " rate: " << FC2::FrameRate( frameRate ) << std::endl;
 
     // Part 1 of 2 for grabImage method
     fc2Error = this->camera.StartCapture();
@@ -67,12 +100,12 @@ CameraSystem::CameraSystem( int argc, char** argv )
 
     if ( fc2Error != FC2::PGRERROR_OK )
     {
-        printf( "Failed to get camera info from camera\n" );
+        std::cout << "Failed to get camera info from camera" << std::endl;
         exit( -1 );
     }
     else
     {
-        printf( ">>>>> CAMERA INFO  Vendor: %s     Model: %s     Serail#: %d  Resolution: %s", camInfo.vendorName, camInfo.modelName, camInfo.serialNumber, camInfo.sensorResolution );
+        ROS_INFO( ">>>>> CAMERA INFO  Vendor: %s     Model: %s     Serail#: %d  Resolution: %s", camInfo.vendorName, camInfo.modelName, camInfo.serialNumber, camInfo.sensorResolution );
     }
 
 
@@ -88,23 +121,6 @@ CameraSystem::CameraSystem( int argc, char** argv )
     {
         exit( -1 );
     }
-}
-
-CameraSystem::~CameraSystem()
-{
-    this->shutdown();
-}
-
-int CameraSystem::shutdown()
-{
-    this->camera.StopCapture();
-    this->camera.Disconnect();
-    // Destroy the Triclops context
-    TriclopsError     te;
-    te = triclopsDestroyContext( triclops ) ;
-    _HANDLE_TRICLOPS_ERROR( "triclopsDestroyContext()", te );
-    return 0;
-
 }
 
 //Copied over from older files.
@@ -163,11 +179,6 @@ int CameraSystem::convertToBGR( FC2::Image & image, FC2::Image & convertedImage 
     }
 
     return 0;
-}
-
-std::string CameraSystem::getResolution()
-{
-    return this->camInfo.sensorResolution;
 }
 
 // Checked against PGR Code OK.
@@ -309,28 +320,27 @@ int CameraSystem::generateTriclopsInput( FC2::Image const & grabbedImage,
 // Checked against PGR Code OK.
 int CameraSystem::doStereo( TriclopsContext const & triclops,
                             TriclopsInput  const & stereoData,
-                            TriclopsImage      & depthImage )
+                            TriclopsImage16      & depthImage )
 {
     TriclopsError te;
+
     //printf("stereo size in DOSTEREO: %d,%d\n",stereoData.ncols, stereoData.nrows);
-    te = triclopsSetResolution( this->triclops, stereoData.nrows, stereoData.ncols );
-    _HANDLE_TRICLOPS_ERROR( "triclopsSetResolution()", te );
+    if ( stereoData.ncols == 1024 ) {
+        triclopsSetResolution( this->triclops, 768, 1024 );
 
-    te = triclopsSetDisparity( triclops, disp_min, disp_max );
-    _HANDLE_TRICLOPS_ERROR( "triclopsSetDisparity()", te );
+    }
+    else if ( stereoData.ncols == 640 ) {
+        triclopsSetResolution( this->triclops, 480, 640 );
 
-    te = triclopsSetStereoMask( triclops, stereo_mask );
-    _HANDLE_TRICLOPS_ERROR( "triclopsSetStereoMask()", te );
+    }
+    else {
+        printf( "ERROR: The triclops image is not 640x480 or 1024x768. It is %dx%d", stereoData.ncols, stereoData.nrows );
+        exit( -1 );
+    }
 
-    te = triclopsSetDisparityMappingOn( triclops, disp_map_on );
-    _HANDLE_TRICLOPS_ERROR( "triclopsSetDisparityMappingOn()", te );
-
-    te = triclopsSetDisparityMapping( triclops, disp_map_min, disp_map_max );
-    _HANDLE_TRICLOPS_ERROR( "triclopsSetDisparityMapping()", te );
-
-    //     Set subpixel interpolation on to use
-    //    te = triclopsSetSubpixelInterpolation( triclops, 1 );
-    //    _HANDLE_TRICLOPS_ERROR( "triclopsSetSubpixelInterpolation()", te );
+    // Set subpixel interpolation on to use
+    te = triclopsSetSubpixelInterpolation( triclops, 1 );
+    _HANDLE_TRICLOPS_ERROR( "triclopsSetSubpixelInterpolation()", te );
 
     // Rectify the images
     te = triclopsRectify( triclops, const_cast<TriclopsInput *>( &stereoData ) );
@@ -341,15 +351,12 @@ int CameraSystem::doStereo( TriclopsContext const & triclops,
     _HANDLE_TRICLOPS_ERROR( "triclopsStereo()", te );
 
     // Retrieve the interpolated depth image from the context
-    te = triclopsGetImage( triclops,
-                           TriImg_DISPARITY,
-                           TriCam_REFERENCE,
-                           &depthImage );
+    te = triclopsGetImage16( triclops,
+                             TriImg16_DISPARITY,
+                             TriCam_REFERENCE,
+                             &depthImage );
 
-    _HANDLE_TRICLOPS_ERROR( "triclopsGetImagewert()", te );
-    const char * pDisparityFilename = "disparityTest.pgm";
-    te = triclopsSaveImage( &depthImage, const_cast<char *>( pDisparityFilename ) );
-    _HANDLE_TRICLOPS_ERROR( "triclopsSaveImage()", te );
+    _HANDLE_TRICLOPS_ERROR( "triclopsGetImage()", te );
     return 0;
 }
 
@@ -377,8 +384,8 @@ void CameraSystem::run()
 
     // Publish images
     ImagePublisher imagePublisher( this->grabbedImage, imageContainer, &( this->image_pub_left ), &( this->image_pub_right ) );
-    //printf("dispIm B4Pub: r,c,in: %d,%d,%d",disparityImageCV.rows,disparityImageCV.cols,int(disparityImageCV.step));
-    sensor_msgs::ImagePtr outmsg = cv_bridge::CvImage( std_msgs::Header(), "mono8", this->disparityImageCV ).toImageMsg();
+
+    sensor_msgs::ImagePtr outmsg = cv_bridge::CvImage( std_msgs::Header(), "mono16", this->disparityImageCV ).toImageMsg();
     this->image_pub_disparity.publish( outmsg );
     ros::spinOnce();
 }
