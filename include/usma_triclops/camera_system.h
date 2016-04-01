@@ -10,9 +10,9 @@
 #include <image_transport/image_transport.h>
 #include <pcl_ros/point_cloud.h>
 
-#include "usma_triclops/typedefs.h"
-#include "usma_triclops/common.h"
-#include "usma_triclops/line_filter.h"
+#include "typedefs.h"
+#include "common.h"
+#include "line_filter.h"
 
 namespace FC2 = FlyCapture2;
 namespace FC2T = Fc2Triclops;
@@ -29,8 +29,6 @@ class CameraSystem
         // convert image to BRG
         int convertToBGR( FC2::Image & image, FC2::Image & convertedImage );
         TriclopsContext triclops;
-        ;
-        std::string getResolution();
         int shutdown();
         int setDispMax( int disp ) {
             disp_max = disp;
@@ -55,12 +53,17 @@ class CameraSystem
         cv::Mat getDisparityImage() {
             return disparityImageCV;
         }
+        std::string getResolution()
+        {
+            return this->camInfo.sensorResolution;
+        }
+
 
     private:
         // carry out stereo processing pipeline
         int doStereo( TriclopsContext const & triclops,
                       TriclopsInput  const & stereoData,
-                      TriclopsImage      & depthImage );
+                      TriclopsImage16      & depthImage );
         // generate triclops input necessary to carry out stereo processing
         int generateTriclopsInput( FC2::Image const & grabbedImage,
                                    ImageContainer   & imageContainer,
@@ -80,7 +83,7 @@ class CameraSystem
         FC2::Image grabbedImage;
         TriclopsInput color;
         TriclopsInput mono;
-        TriclopsImage disparityImageTriclops;
+        TriclopsImage16 disparityImageTriclops;
         cv::Mat disparityImageCV;
         image_transport::Publisher image_pub_left;
         image_transport::Publisher image_pub_right;

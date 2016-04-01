@@ -9,6 +9,14 @@ set(CMAKE_CXX_FLAGS "-O0 -ggdb")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
 set(CMAKE_CXX_FLAGS_RELEASE "-O0 -ggdb")
 
+#set(CMAKE_BUILD_TYPE DEBUG)
+#set(CMAKE_C_FLAGS "-O3 -ggdb")
+#set(CMAKE_C_FLAGS_DEBUG "-O3 -ggdb")
+#set(CMAKE_C_FLAGS_RELEASE "-O3 -ggdb")
+#set(CMAKE_CXX_FLAGS "-O3 -ggdb")
+#set(CMAKE_CXX_FLAGS_DEBUG "-O3 -ggdb")
+#set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ggdb")
+
 #QTCREATOR: Add all files in subdirectories of the project in
 # a dummy_target so qtcreator have access to all files
 FILE(GLOB children ${CMAKE_SOURCE_DIR}/*)
@@ -19,7 +27,6 @@ FOREACH(child ${children})
   ENDIF()
 ENDFOREACH()
 add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
-
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -36,34 +43,27 @@ find_package(catkin REQUIRED COMPONENTS
 
 # Specify package build info export
 catkin_package(
-  INCLUDE_DIRS include # This indicates that the folder "include" within the package folder is where exported headers go.
+#  INCLUDE_DIRS include # This indicates that the folder "include" within the package folder is where exported headers go.
 #  LIBRARIES usma_triclops
-  CATKIN_DEPENDS roscpp rospy
+#  CATKIN_DEPENDS roscpp rospy
 #  DEPENDS system_lib
 )
 
-FILE(GLOB_RECURSE HEADER_FILES "include/usma_triclops/*.h")
 ###########
 ## Build ##
 ###########
-find_library(TRICLOPS_LIB triclops)
-find_library(PNMUTILS_LIB pnmutils)
-find_library(FLYCAPTURE_LIB flycapture)
-find_library(FLYCAPTURE2BRIDGE_LIB flycapture2bridge)
-
-find_path(TRICLOPS_INCLUDE_DIR triclops.h HINT "/usr/include/triclops")
-find_path(FLYCAPTURE_INCLUDE_DIR FlyCapture2.h HINT "/usr/include/flycapture")
 
 #MESSAGE("=-=-=- cmake ====: ${TRICLOPS_LIB}")
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # The first argument "include" indicates that the include/ directory within the package is also part of the path.
-set(PROJECT_HEADER_DIR ${PWD}"/include")
-include_directories(include 
+include_directories(
   ${catkin_INCLUDE_DIRS}
-  ${TRICLOPS_INCLUDE_DIR}
-  ${FLYCAPTURE_INCLUDE_DIR}
-  ${OpenCV_INCLUDE_DIRS}
+  /usr/include/triclops/
+  /usr/include/flycapture/
+  /usr/include/pcl-1.7/
+  /usr/include/eigen3/
+  include/usma_triclops/
 )
 
 ## Declare a cpp executable
@@ -75,29 +75,19 @@ add_executable(vision3d ${HEADER_FILES} src/vision_3d.cpp)
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(usma_triclops_node usma_triclops_generate_messages_cpp)
 ## Specify libraries to link a library or executable target against
+set (triclops_LIBRARIES triclops pnmutils flycapture flycapture2bridge pthread dl m)
 
 target_link_libraries(camera_system
-   ${catkin_LIBRARIES}
-   ${OpenCV_LIBS}
-   ${TRICLOPS_LIB}
-   ${FLYCAPTURE_LIB}
-   ${FLYCAPTURE2BRIDGE_LIB}
-   ${PNMUTILS_LIB}
- )
+    ${triclops_LIBRARIES}
+      ${catkin_LIBRARIES}
+    )
+
 target_link_libraries(line_filter
-   ${catkin_LIBRARIES}
-   ${OpenCV_LIBS}
-   ${TRICLOPS_LIB}
-   ${FLYCAPTURE_LIB}
-   ${FLYCAPTURE2BRIDGE_LIB}
-   ${PNMUTILS_LIB}
- )
+      ${triclops_LIBRARIES}
+      ${catkin_LIBRARIES}
+    )
 target_link_libraries(vision3d
-   ${catkin_LIBRARIES}
-   ${OpenCV_LIBS}
-   ${TRICLOPS_LIB}
-   ${FLYCAPTURE_LIB}
-   ${FLYCAPTURE2BRIDGE_LIB}
-   ${PNMUTILS_LIB}
- )
+      ${triclops_LIBRARIES}
+      ${catkin_LIBRARIES}
+    )
 

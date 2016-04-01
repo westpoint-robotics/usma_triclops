@@ -4,9 +4,9 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
-#include "usma_triclops/line_filter.h"
-#include "usma_triclops/triclops_opencv.h"
-#include "usma_triclops/image_publisher.h"
+#include "line_filter.h"
+#include "triclops_opencv.h"
+#include "image_publisher.h"
 
 //Create imagecontainer for moving images
 ImageContainer imageContainerL;

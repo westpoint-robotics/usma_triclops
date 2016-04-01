@@ -8,9 +8,9 @@
 #include <stdlib.h>
 #include <ros/ros.h>
 #include <sensor_msgs/image_encodings.h>
-#include "usma_triclops/typedefs.h"
-#include "usma_triclops/triclops_opencv.h"
-#include "usma_triclops/image_publisher.h"
+#include "typedefs.h"
+#include "triclops_opencv.h"
+#include "image_publisher.h"
 #include <image_transport/image_transport.h>
 
 int convertToBGR( FC2::Image & image, FC2::Image & convertedImage )

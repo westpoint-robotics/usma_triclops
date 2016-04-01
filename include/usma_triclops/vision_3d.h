@@ -19,11 +19,11 @@
 #include "triclops/triclops.h"
 #include "triclops/fc2triclops.h"
 #include <pcl_ros/point_cloud.h>
-#include "usma_triclops/typedefs.h"
-#include "usma_triclops/common.h"
-#include "usma_triclops/common.h"
-#include "usma_triclops/line_filter.h"
-#include "usma_triclops/camera_system.h"
+#include "typedefs.h"
+#include "common.h"
+#include "common.h"
+#include "line_filter.h"
+#include "camera_system.h"
 #include <pcl_ros/point_cloud.h>
 #include <image_transport/image_transport.h>
 
@@ -47,10 +47,11 @@ class Vision3D
         void visionCallBackFilteredLeft( const sensor_msgs::ImageConstPtr& msg );
         void visionCallBackRGBRight( const sensor_msgs::ImageConstPtr& msg );
         void visionCallBackRGBLeft( const sensor_msgs::ImageConstPtr& msg );
-        int producePointCloud( cv::Mat const &disparity,
-                               cv::Mat const &maskImage,
-                               PointCloud      & returnedPoints,
-                               TriclopsContext triclops );
+        int producePointCloud( FC2::Image      const & grabbedImage,
+                               TriclopsContext const & triclops,
+                               TriclopsImage16 const & disparityImage16,
+                               TriclopsInput   const & colorData,
+                               PointCloud      & returnedPoints );
 
         PointCloud cloud;
         cv::Mat disparityImage;

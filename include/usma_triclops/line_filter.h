@@ -5,9 +5,9 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <image_transport/image_transport.h>
-#include "usma_triclops/triclops_opencv.h"
-#include "usma_triclops/image_publisher.h"
-#include "usma_triclops/common.h"
+#include "triclops_opencv.h"
+#include "image_publisher.h"
+#include "common.h"
 
 /**
  * @brief The LineFilter class. This class identifies white lines in a OpenCv image

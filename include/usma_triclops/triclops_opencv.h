@@ -8,10 +8,10 @@
 #include <triclops/fc2triclops.h>
 #include <pcl_ros/point_cloud.h>
 
-#include "usma_triclops/typedefs.h"
+#include "typedefs.h"
 
 #include <cv_bridge/cv_bridge.h>
-#include "usma_triclops/common.h"
+#include "common.h"
 
 // convert a triclops color image to opencv mat
 int convertTriclops2Opencv( FC2::Image & bgrImage,
