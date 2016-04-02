@@ -175,172 +175,172 @@ int CameraSystem::convertToBGR( FC2::Image & image, FC2::Image & convertedImage 
 
 // Checked against PGR Code OK.RR
 int CameraSystem::generateTriclopsContext( FC2::Camera     & camera,
-                                           TriclopsContext & triclops )
-              {
-                  FC2::CameraInfo camInfo;
-                  FC2::Error fc2Error = camera.GetCameraInfo( &camInfo );
+        TriclopsContext & triclops )
+{
+    FC2::CameraInfo camInfo;
+    FC2::Error fc2Error = camera.GetCameraInfo( &camInfo );
 
-                  if ( fc2Error != FC2::PGRERROR_OK )
-                  {
-                      return FC2T::handleFc2Error( fc2Error );
-                  }
+    if ( fc2Error != FC2::PGRERROR_OK )
+    {
+        return FC2T::handleFc2Error( fc2Error );
+    }
 
-                  FC2T::ErrorType fc2TriclopsError;
-                  fc2TriclopsError = FC2T::getContextFromCamera( camInfo.serialNumber, &triclops );
+    FC2T::ErrorType fc2TriclopsError;
+    fc2TriclopsError = FC2T::getContextFromCamera( camInfo.serialNumber, &triclops );
 
-                  if ( fc2TriclopsError != FC2T::ERRORTYPE_OK )
-                  {
-                      return FC2T::handleFc2TriclopsError( fc2TriclopsError,
-                                                           "getContextFromCamera" );
-                  }
+    if ( fc2TriclopsError != FC2T::ERRORTYPE_OK )
+    {
+        return FC2T::handleFc2TriclopsError( fc2TriclopsError,
+                                             "getContextFromCamera" );
+    }
 
-                  return 0;
-              }
+    return 0;
+}
 
 // Checked against PGR Code OK. RR
 int CameraSystem::generateTriclopsInput( FC2::Image const & grabbedImage,
-                                         ImageContainer  & imageContainer,
-                                         TriclopsInput   & triclopsColorInput,
-                                         TriclopsInput   & triclopsMonoInput )
-  {
-      FC2::Error fc2Error;
-      FC2T::ErrorType fc2TriclopsError;
-      TriclopsError te;
+        ImageContainer  & imageContainer,
+        TriclopsInput   & triclopsColorInput,
+        TriclopsInput   & triclopsMonoInput )
+{
+    FC2::Error fc2Error;
+    FC2T::ErrorType fc2TriclopsError;
+    TriclopsError te;
 
-      FC2::Image * unprocessedImage = imageContainer.unprocessed;
+    FC2::Image * unprocessedImage = imageContainer.unprocessed;
 
-      fc2TriclopsError = FC2T::unpackUnprocessedRawOrMono16Image(
-                             grabbedImage,
-                             true /*assume little endian*/,
-                             unprocessedImage[RIGHT],
-                             unprocessedImage[LEFT] );
+    fc2TriclopsError = FC2T::unpackUnprocessedRawOrMono16Image(
+                           grabbedImage,
+                           true /*assume little endian*/,
+                           unprocessedImage[RIGHT],
+                           unprocessedImage[LEFT] );
 
-      if ( fc2TriclopsError != FC2T::ERRORTYPE_OK )
-      {
-          return FC2T::handleFc2TriclopsError( fc2TriclopsError,
-                                               "unpackUnprocessedRawOrMono16Image" );
-      }
+    if ( fc2TriclopsError != FC2T::ERRORTYPE_OK )
+    {
+        return FC2T::handleFc2TriclopsError( fc2TriclopsError,
+                                             "unpackUnprocessedRawOrMono16Image" );
+    }
 
-      FC2::Image * monoImage = imageContainer.mono;
+    FC2::Image * monoImage = imageContainer.mono;
 
-      //ROS_INFO( "UnrpocessedImage cols,rows %d,%d", unprocessedImage[RIGHT].GetCols(), unprocessedImage[RIGHT].GetRows() );
+    //ROS_INFO( "UnrpocessedImage cols,rows %d,%d", unprocessedImage[RIGHT].GetCols(), unprocessedImage[RIGHT].GetRows() );
 
-      // check if the unprocessed image is color
-      if ( unprocessedImage[RIGHT].GetBayerTileFormat() != FC2::NONE )
-      {
-          FC2::Image * bgruImage = imageContainer.bgru;
+    // check if the unprocessed image is color
+    if ( unprocessedImage[RIGHT].GetBayerTileFormat() != FC2::NONE )
+    {
+        FC2::Image * bgruImage = imageContainer.bgru;
 
-          for ( int i = 0; i < 2; ++i )
-          {
-              if ( convertToBGRU( unprocessedImage[i], bgruImage[i] ) )
-              {
-                  return 1;
-              }
-          }
+        for ( int i = 0; i < 2; ++i )
+        {
+            if ( convertToBGRU( unprocessedImage[i], bgruImage[i] ) )
+            {
+                return 1;
+            }
+        }
 
-          FC2::Image & packedColorImage = imageContainer.packed;
+        FC2::Image & packedColorImage = imageContainer.packed;
 
-          // pack BGRU right and left image into an image
-          fc2TriclopsError = FC2T::packTwoSideBySideRgbImage( bgruImage[RIGHT],
-                             bgruImage[LEFT],
-                             packedColorImage );
+        // pack BGRU right and left image into an image
+        fc2TriclopsError = FC2T::packTwoSideBySideRgbImage( bgruImage[RIGHT],
+                           bgruImage[LEFT],
+                           packedColorImage );
 
-          if ( fc2TriclopsError != FC2T::ERRORTYPE_OK )
-          {
-              return handleFc2TriclopsError( fc2TriclopsError,
-                                             "packTwoSideBySideRgbImage" );
-          }
+        if ( fc2TriclopsError != FC2T::ERRORTYPE_OK )
+        {
+            return handleFc2TriclopsError( fc2TriclopsError,
+                                           "packTwoSideBySideRgbImage" );
+        }
 
-          // Use the row interleaved images to build up a packed TriclopsInput.
-          // A packed triclops input will contain a single image with 32 bpp.
-          te = triclopsBuildPackedTriclopsInput( grabbedImage.GetCols(),
-                                                 grabbedImage.GetRows(),
-                                                 packedColorImage.GetStride(),
-                                                 ( unsigned long )grabbedImage.GetTimeStamp().seconds,
-                                                 ( unsigned long )grabbedImage.GetTimeStamp().microSeconds,
-                                                 packedColorImage.GetData(),
-                                                 &triclopsColorInput );
+        // Use the row interleaved images to build up a packed TriclopsInput.
+        // A packed triclops input will contain a single image with 32 bpp.
+        te = triclopsBuildPackedTriclopsInput( grabbedImage.GetCols(),
+                                               grabbedImage.GetRows(),
+                                               packedColorImage.GetStride(),
+                                               ( unsigned long )grabbedImage.GetTimeStamp().seconds,
+                                               ( unsigned long )grabbedImage.GetTimeStamp().microSeconds,
+                                               packedColorImage.GetData(),
+                                               &triclopsColorInput );
 
-          _HANDLE_TRICLOPS_ERROR( "triclopsBuildPackedTriclopsInput()", te );
+        _HANDLE_TRICLOPS_ERROR( "triclopsBuildPackedTriclopsInput()", te );
 
 
-          // the following does not change the size of the image
-          // and therefore it PRESERVES the internal buffer!
-          packedColorImage.SetDimensions( packedColorImage.GetRows(),
-                                          packedColorImage.GetCols(),
-                                          packedColorImage.GetStride(),
-                                          packedColorImage.GetPixelFormat(),
-                                          FC2::NONE );
+        // the following does not change the size of the image
+        // and therefore it PRESERVES the internal buffer!
+        packedColorImage.SetDimensions( packedColorImage.GetRows(),
+                                        packedColorImage.GetCols(),
+                                        packedColorImage.GetStride(),
+                                        packedColorImage.GetPixelFormat(),
+                                        FC2::NONE );
 
-          for ( int i = 0; i < 2; ++i )
-          {
-              fc2Error = bgruImage[i].Convert( FlyCapture2::PIXEL_FORMAT_MONO8, &monoImage[i] );
+        for ( int i = 0; i < 2; ++i )
+        {
+            fc2Error = bgruImage[i].Convert( FlyCapture2::PIXEL_FORMAT_MONO8, &monoImage[i] );
 
-              if ( fc2Error != FlyCapture2::PGRERROR_OK )
-              {
-                  return Fc2Triclops::handleFc2Error( fc2Error );
-              }
-          }
-      }
-      else
-      {
-          monoImage[RIGHT] = unprocessedImage[RIGHT];
-          monoImage[LEFT] = unprocessedImage[LEFT];
-      }
+            if ( fc2Error != FlyCapture2::PGRERROR_OK )
+            {
+                return Fc2Triclops::handleFc2Error( fc2Error );
+            }
+        }
+    }
+    else
+    {
+        monoImage[RIGHT] = unprocessedImage[RIGHT];
+        monoImage[LEFT] = unprocessedImage[LEFT];
+    }
 
-      // Use the row interleaved images to build up an RGB TriclopsInput.
-      // An RGB triclops input will contain the 3 raw images (1 from each camera).
-      te = triclopsBuildRGBTriclopsInput( grabbedImage.GetCols(),
-                                          grabbedImage.GetRows(),
-                                          grabbedImage.GetCols(),
-                                          ( unsigned long )grabbedImage.GetTimeStamp().seconds,
-                                          ( unsigned long )grabbedImage.GetTimeStamp().microSeconds,
-                                          monoImage[RIGHT].GetData(),
-                                          monoImage[LEFT].GetData(),
-                                          monoImage[LEFT].GetData(),
-                                          &triclopsMonoInput );
+    // Use the row interleaved images to build up an RGB TriclopsInput.
+    // An RGB triclops input will contain the 3 raw images (1 from each camera).
+    te = triclopsBuildRGBTriclopsInput( grabbedImage.GetCols(),
+                                        grabbedImage.GetRows(),
+                                        grabbedImage.GetCols(),
+                                        ( unsigned long )grabbedImage.GetTimeStamp().seconds,
+                                        ( unsigned long )grabbedImage.GetTimeStamp().microSeconds,
+                                        monoImage[RIGHT].GetData(),
+                                        monoImage[LEFT].GetData(),
+                                        monoImage[LEFT].GetData(),
+                                        &triclopsMonoInput );
 
-      _HANDLE_TRICLOPS_ERROR( "triclopsBuildRGBTriclopsInput()", te );
+    _HANDLE_TRICLOPS_ERROR( "triclopsBuildRGBTriclopsInput()", te );
 
-      return 0;
-  }
+    return 0;
+}
 
 // Checked against PGR Code OK.RR
 int CameraSystem::doStereo( TriclopsContext const & triclops,
                             TriclopsInput  const & stereoData,
                             TriclopsImage16      & depthImage )
-    {
-      TriclopsError te;
+{
+    TriclopsError te;
 
-      // Set subpixel interpolation on to use
-      // TriclopsImage16 structures when we access and save the disparity image
-      te = triclopsSetSubpixelInterpolation( triclops, 1 );
-      _HANDLE_TRICLOPS_ERROR( "triclopsSetSubpixelInterpolation()", te );
+    // Set subpixel interpolation on to use
+    // TriclopsImage16 structures when we access and save the disparity image
+    te = triclopsSetSubpixelInterpolation( triclops, 1 );
+    _HANDLE_TRICLOPS_ERROR( "triclopsSetSubpixelInterpolation()", te );
 
-      te = triclopsSetDisparity( triclops, 0, 70 );
-      _HANDLE_TRICLOPS_ERROR( "triclopsSetSubpixelInterpolation()", te );
+    te = triclopsSetDisparity( triclops, 0, 70 );
+    _HANDLE_TRICLOPS_ERROR( "triclopsSetSubpixelInterpolation()", te );
 
-      //ROS_INFO("stereoData x,y: %d,%d",stereoData.nrows, stereoData.ncols);
-      te = triclopsSetResolution( triclops, stereoData.nrows, stereoData.ncols );
-      _HANDLE_TRICLOPS_ERROR( "triclopsSetResolution()", te );
+    //ROS_INFO("stereoData x,y: %d,%d",stereoData.nrows, stereoData.ncols);
+    te = triclopsSetResolution( triclops, stereoData.nrows, stereoData.ncols );
+    _HANDLE_TRICLOPS_ERROR( "triclopsSetResolution()", te );
 
-      // Rectify the images
-      te = triclopsRectify( triclops, const_cast<TriclopsInput *>( &stereoData ) );
-      _HANDLE_TRICLOPS_ERROR( "triclopsRectify()", te );
+    // Rectify the images
+    te = triclopsRectify( triclops, const_cast<TriclopsInput *>( &stereoData ) );
+    _HANDLE_TRICLOPS_ERROR( "triclopsRectify()", te );
 
-      // Do stereo processing
-      te = triclopsStereo( triclops );
-      _HANDLE_TRICLOPS_ERROR( "triclopsStereo()", te );
+    // Do stereo processing
+    te = triclopsStereo( triclops );
+    _HANDLE_TRICLOPS_ERROR( "triclopsStereo()", te );
 
-      // Retrieve the interpolated depth image from the context
-      te = triclopsGetImage16( triclops,
-                               TriImg16_DISPARITY,
-                               TriCam_REFERENCE,
-                               &depthImage );
-      _HANDLE_TRICLOPS_ERROR( "triclopsGetImage()", te );
+    // Retrieve the interpolated depth image from the context
+    te = triclopsGetImage16( triclops,
+                             TriImg16_DISPARITY,
+                             TriCam_REFERENCE,
+                             &depthImage );
+    _HANDLE_TRICLOPS_ERROR( "triclopsGetImage()", te );
 
-      return 0;
-    }
+    return 0;
+}
 
 void CameraSystem::run()
 {

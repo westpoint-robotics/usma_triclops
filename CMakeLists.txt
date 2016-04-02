@@ -17,7 +17,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O0 -ggdb")
 #set(CMAKE_CXX_FLAGS_DEBUG "-O3 -ggdb")
 #set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ggdb")
 
-#QTCREATOR: Add all files in subdirectories of the project in
+#NEEDED FOR QTCREATOR: Add all files in subdirectories of the project in
 # a dummy_target so qtcreator have access to all files
 FILE(GLOB children ${CMAKE_SOURCE_DIR}/*)
 FOREACH(child ${children})

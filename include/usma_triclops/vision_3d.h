@@ -47,11 +47,16 @@ class Vision3D
         void visionCallBackFilteredLeft( const sensor_msgs::ImageConstPtr& msg );
         void visionCallBackRGBRight( const sensor_msgs::ImageConstPtr& msg );
         void visionCallBackRGBLeft( const sensor_msgs::ImageConstPtr& msg );
-        int producePointCloud( FC2::Image      const & grabbedImage,
-                               TriclopsContext const & triclops,
-                               TriclopsImage16 const & disparityImage16,
-                               TriclopsInput   const & colorData,
-                               PointCloud      & returnedPoints );
+        int doPointCloud( FC2::Image      const & grabbedImage,
+                          TriclopsContext const & triclops,
+                          TriclopsImage16 const & disparityImage16,
+                          TriclopsInput   const & colorData,
+                          PointCloud      & returnedPoints );
+        int maskToPointCloud( cv::Mat const &disparityImage,
+                                         cv::Mat const &maskImage,
+                                         PointCloud      & returnedPoints,
+                                         TriclopsContext triclops );
+
 
         PointCloud cloud;
         cv::Mat disparityImage;
