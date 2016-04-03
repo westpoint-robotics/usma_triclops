@@ -7,10 +7,10 @@ This package uses the Point Grey BumbleBee camera to generate a pointcloud. It i
     - triclops-3.4.0.8-amd64-pkg.tgz
     
 2. Extract Flycapture files and install according to the README that can be found
-once 
+once you have extracted the files.
 
 3. Extract Triclops files and install according to the README that can be found
-once 
+once you have extracted the files. 
 
 4. Clone this package into the catkin_ws.
 
