@@ -10,3 +10,4 @@ __init__.py
 __init__.pyc
 *.user*
 *.orig
+*.autosave

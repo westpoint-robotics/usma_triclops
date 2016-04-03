@@ -303,7 +303,7 @@ int CameraSystem::doStereo( TriclopsContext const & triclops,
 {
     TriclopsError te;
 
-    // Set subpixel interpolation on to use
+    // Set subpixel interpolation oncd sr   cd to use
     // TriclopsImage16 structures when we access and save the disparity image
     te = triclopsSetSubpixelInterpolation( triclops, 1 );
     _HANDLE_TRICLOPS_ERROR( "triclopsSetSubpixelInterpolation()", te );
