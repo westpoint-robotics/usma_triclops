@@ -14,12 +14,12 @@ once you have extracted the files.
 
 4. Clone this package into the catkin_ws.
 
-    -`cd ~/catkin_ws/src`
-    -`git clone https://github.com/westpoint-robotics/usma_triclops.git`
-    -`cd ..`
-    -`catkin_make`
+    - `cd ~/catkin_ws/src`
+    - `git clone https://github.com/westpoint-robotics/usma_triclops.git`
+    - `cd ..`
+    - `catkin_make`
 
-5. Test the code
+5. Test the code.
     
    - `roslaunch usma_triclops triclops_camera2.launch` 
 
