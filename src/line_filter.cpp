@@ -6,7 +6,6 @@
 #include <sensor_msgs/image_encodings.h>
 #include "line_filter.h"
 #include "triclops_opencv.h"
-#include "image_publisher.h"
 
 //Create imagecontainer for moving images
 ImageContainer imageContainerL;
@@ -27,7 +26,7 @@ cv::Mat filtered_imageR; // The image with detected white lines painted cyan
 // Currently it only publishes left image filtered
 LineFilter::LineFilter( int argc, char** argv )
 {
-    this->thresh_val = 203; // 203
+    this->thresh_val = 117; // 203
     this->erosion_size = 5; // 2
     this->h_rho = 1; // 1
     this->h_theta = 180; // 180
@@ -66,6 +65,10 @@ LineFilter::~LineFilter()
 
 void LineFilter::run()
 {
+    cv::Mat img(cv::Mat(5,300, CV_8U));
+    img = cv::Scalar(50);
+    cv::imshow("ControlView",img);
+    cv::waitKey(3);
     ros::spinOnce();
 }
 
@@ -85,7 +88,7 @@ void LineFilter::imageCallbackL( const sensor_msgs::ImageConstPtr& msg )
 
     /*DEBUG
     cv::imshow("Filter Left", filtered_imageL);*/
-    cv::waitKey( 10 );
+    cv::waitKey( 3 );
 
     this->image_pub_filtered_left.publish( outmsg );
 }

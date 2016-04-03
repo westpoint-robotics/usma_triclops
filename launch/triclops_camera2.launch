@@ -3,8 +3,7 @@
 
 
   <node pkg="tf" type="static_transform_publisher" name="map_to_bb2"
-        args="0 0 0.39 0 0.55 0 map bumblebee2 100" />
-
+        args="0 0 0.53 0 0 0 map bumblebee2 100" />
 
   <node pkg="usma_triclops" type="camera_system" name="camera_system" output="screen"/>
   <node pkg="usma_triclops" type="line_filter" name="line_filter" output="screen"/>

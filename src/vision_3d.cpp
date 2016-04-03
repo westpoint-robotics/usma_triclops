@@ -29,6 +29,7 @@ Vision3D::Vision3D( int argc, char **argv )
 
     this->hasDisparity = false;
     this->hasLeftFiltered = false;
+    this->hasrectifiedColor = false;
 
     char fileName[] = "/home/user1/triclopsContextCurrent.txt";
     ROS_INFO( ">>>>> VISION3D GETTING CONTEXT FROM FILE" );
@@ -42,6 +43,7 @@ Vision3D::Vision3D( int argc, char **argv )
     this->pointCloudPublisher = nh.advertise<sensor_msgs::PointCloud2>( "/vision3D/points", 0 );
     this->subcamdisp = it.subscribe( "/camera/disparity", 1, &Vision3D::visionCallBackDisparity, this );
     this->subcamfilteredleft = it.subscribe( "/camera/left/linefiltered", 0, &Vision3D::visionCallBackFilteredLeft, this );
+    this->subRectColor = it.subscribe( "/camera/color_rectified", 0, &Vision3D::visionCallBackRectColor, this );
     ros::Duration( 1 ).sleep(); // sleep for a second
 }
 
@@ -52,52 +54,58 @@ Vision3D::~Vision3D()
 
 void Vision3D::visionCallBackDisparity( const sensor_msgs::ImageConstPtr& msg )
 {
-    this->disparityImage = cv_bridge::toCvCopy( msg, "mono8" )->image;
+    this->disparityImageIn = cv_bridge::toCvCopy( msg, "mono16" )->image;
     this->hasDisparity = true;
+    //ROS_INFO("INSIDE DISP CALLBACCK");
 }
 
 void Vision3D::visionCallBackFilteredLeft( const sensor_msgs::ImageConstPtr& msg )
 {
     this->filteredLeft = cv_bridge::toCvCopy( msg, "mono8" )->image;
     this->hasLeftFiltered = true;
+    //ROS_INFO("INSIDE filtered CALLBACCK");
 }
 
-int Vision3D::maskToPointCloud( cv::Mat const &disparityImage,
+void Vision3D::visionCallBackRectColor( const sensor_msgs::ImageConstPtr& msg )
+{
+    this->rectifiedColor = cv_bridge::toCvCopy( msg, "bgr8" )->image;
+    this->hasrectifiedColor = true;
+    //ROS_INFO("CALLBACK POINTER IS: %p", &rectifiedColor);
+}
+
+int Vision3D::maskToPointCloud( cv::Mat const &disparityImage16,
                                  cv::Mat const &maskImage,
                                  PointCloud      & returnedPoints,
-                                 TriclopsContext triclops )
+                                 TriclopsContext const &triclops )
 {
-    int i, j;
+    int i, j,k;
     float            x = 0.0;
     float            y = 0.0;
     float            z = 0.0;
+    //int              pixelinc ;
+    //unsigned short * row;
     unsigned short   disparity; // The disparity value of the input pixel.
     unsigned char    mask;
 
-    //cv::resize( this->cyan_image, disImage, cv::Size( 400, 300 ) );
-    cv::imshow( "MASK Image", maskImage );
-    cv::imshow( "DISPARITY Image", disparityImage );
-    cv::waitKey( 3 );
+    //ROS_INFO("DisparityData x,y size: %d,%d",disparityImage16.rows, disparityImage16.cols);
 
-
-    //printf( "[!!!!!!]rows,cols,channels,elemsize, maskImage: (%d,%d,%d,%d) disparity: (%d,%d,%d,%d)\n", maskImage.rows, maskImage.cols, maskImage.channels(), int( maskImage.elemSize() ), disparityImage.rows, disparityImage.cols, disparityImage.channels(), int( disparityImage.elemSize() ) );
-
-    for ( i = 0; i < disparityImage.rows; i++ )
+    for ( i = 0, k = 0; i < disparityImage16.rows; i++ )
     {
-        for ( j = 0; j < disparityImage.cols; j++ )
+        //row = disparityImage16.data + i * pixelinc;
+
+        for ( j = 0; j < disparityImage16.cols; j++, k++ )
         {
-            disparity = disparityImage.at<unsigned short>( cv::Point( i, j ) ); //row[j];
-            //printf( "disparity, %d\n", disparity );
+            //disparity = row[j];
+            disparity = disparityImage16.at<unsigned short>(i,j);
+            mask = maskImage.at<uchar>(i,j);
 
             // do not save invalid points
             if ( disparity < 0xFF00 )
             {
-                mask = maskImage.at<unsigned char>( cv::Point( i, j ) );
-
-                if ( mask != 0 )
+                //if ( mask != 0 )
                 {
                     // convert the 16 bit disparity value to floating point x,y,z in ROS Coordinate Frame
-                    triclopsRCD8ToXYZ( triclops, i, j, disparity, &x, &y, &z );
+                    triclopsRCD16ToXYZ( triclops, i, j, disparity, &x, &y, &z );
                     PointT point;
                     point.x = z;
                     point.y = -x;
@@ -114,96 +122,55 @@ int Vision3D::maskToPointCloud( cv::Mat const &disparityImage,
     return 0;
 }
 
-int Vision3D::doPointCloud( FC2::Image      const & grabbedImage,
-                            TriclopsContext const & triclops,
-                            TriclopsImage16 const & disparityImage16,
-                            TriclopsInput   const & colorData,
-                            PointCloud      & returnedPoints )
+int Vision3D::doPointCloud ( cv::Mat const &disparityImage16,
+                                 cv::Mat &colorImage,
+                                 PointCloud      & returnedPoints,
+                                 TriclopsContext const & triclops )
 {
-    TriclopsImage monoImage = {0};
-    TriclopsColorImage colorImage = {0};
-    TriclopsError te;
-
     float            x, y, z;
     int              nPoints = 0;
-    int              pixelinc ;
-    int              i, j, k;
-    unsigned short * row;
+    int              i, j;
     unsigned short   disparity;
     PointT           point3d;
+    cv::Vec3b colorPixel;
 
-    // Rectify the color image if applicable
-    bool isColor = false;
+//     The format for the output file is:
+//     <x> <y> <z> <red> <grn> <blu> <row> <col>
+//     <x> <y> <z> <red> <grn> <blu> <row> <col>
+//     ...
 
-    if ( grabbedImage.GetPixelFormat() == FC2::PIXEL_FORMAT_RAW16 )
+    //ROS_INFO("Disp x,y color x, y: %d,%d,%d  : %d,%d, %d,%d, %d",disparityImage16.rows, disparityImage16.cols,int(disparityImage16.step),colorImage.rows, colorImage.cols, int(colorImage.step),colorImage.channels(),colorImage.type());
+    if (colorImage.type()==CV_8UC3){
+    for ( i = 0; i < colorImage.rows; i++ )
     {
-        isColor = true;
-        te = triclopsRectifyColorImage( triclops,
-                                        TriCam_REFERENCE,
-                                        const_cast<TriclopsInput *>( &colorData ),
-                                        &colorImage );
-        _HANDLE_TRICLOPS_ERROR( "triclopsRectifyColorImage()", te );
-    }
-    else
-    {
-        te = triclopsGetImage( triclops,
-                               TriImg_RECTIFIED,
-                               TriCam_REFERENCE,
-                               &monoImage );
-        _HANDLE_TRICLOPS_ERROR( "triclopsGetImage()", te );
-    }
-
-    // The format for the output file is:
-    // <x> <y> <z> <red> <grn> <blu> <row> <col>
-    // <x> <y> <z> <red> <grn> <blu> <row> <col>
-    // ...
-
-    // Determine the number of pixels spacing per row
-    pixelinc = disparityImage16.rowinc / 2;
-    //ROS_INFO("DisparityData x,y: %d,%d",disparityImage16.nrows, disparityImage16.ncols);
-
-    for ( i = 0, k = 0; i < disparityImage16.nrows; i++ )
-    {
-        row = disparityImage16.data + i * pixelinc;
-
-        for ( j = 0; j < disparityImage16.ncols; j++, k++ )
+        for ( j = 0; j < colorImage.cols; j++)
         {
-            disparity = row[j];
+            disparity = disparityImage16.at<unsigned short>(i,j);
+            colorPixel = colorImage.at<cv::Vec3b>(i,j);
 
             // do not save invalid points
             if ( disparity < 0xFF00 )
             {
                 // convert the 16 bit disparity value to floating point x,y,z
                 triclopsRCD16ToXYZ( triclops, i, j, disparity, &x, &y, &z );
-
                 // look at points within a range
                 if ( z < 5.0 )
                 {
                     point3d.x = z;
                     point3d.y = -x;
                     point3d.z = -y;
-
-                    if ( isColor )
-                    {
-                        point3d.r = ( int )colorImage.red[k];
-                        point3d.g = ( int )colorImage.green[k];
-                        point3d.b = ( int )colorImage.blue[k];
-                    }
-                    else
-                    {
-                        // For mono cameras, we just assign the same value to RGB
-                        point3d.r = ( int )monoImage.data[k];
-                        point3d.g = ( int )monoImage.data[k];
-                        point3d.b = ( int )monoImage.data[k];
-                    }
-
+                    point3d.r = colorPixel[2];
+                    point3d.g = colorPixel[1];
+                    point3d.b = colorPixel[0];
                     returnedPoints.push_back( point3d );
-
-                    //                    fprintf( pPointFile, "%f %f %f %d %d %d %d %d\n", x, y, z, r, g, b, i, j );
                     nPoints++;
                 }
             }
         }
+    }
+    }
+    else{
+        ROS_INFO("IMAGE IS NOT CV_U8C3 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
     }
 
     //ROS_INFO( "Points in file: %d\n", nPoints );
@@ -211,27 +178,76 @@ int Vision3D::doPointCloud( FC2::Image      const & grabbedImage,
 }
 
 
+int Vision3D::producePointCloud(  cv::Mat const &disparityImage,
+                                cv::Mat const &maskImage,
+                                TriclopsContext const & triclops,
+                                PointCloud      & returnedPoints)
+{
+    float            x, y, z;
+    int              i=0, j=0;
+    unsigned short   disparity;
+    unsigned char    mask;
+
+    //printf("[!] Searching through image at %p for obstacles..mask %d,%d,%d,%d,%d and dispar %d,%d,%d,%d,%d\n", &maskImage,maskImage.cols,maskImage.rows,int(maskImage.step),maskImage.channels(),int(maskImage.elemSize()),disparityImage.cols,disparityImage.rows,int(disparityImage.step),disparityImage.channels(),int(disparityImage.elemSize()) );
+    for ( i = 0; i < disparityImage.rows; i++ )
+    {
+        for ( j = 0; j < disparityImage.cols; j++)
+        {
+            disparity = disparityImage.at<unsigned short>(i,j);
+            mask = maskImage.at<unsigned char>(i,j);
+
+            // do not run invalid points
+            if ( disparity < 0xFF00 )
+            {
+                // look at points within a range
+                PointT point;
+                //only fil out for points that are cyan
+                if (mask != 0)
+                {
+                    triclopsRCD16ToXYZ( triclops, i, j, disparity, &x, &y, &z );
+                    point.x = z;
+                    point.y = -x;
+                    point.z = -y;
+                    point.r = 255;
+                    point.g = 255;
+                    point.b = 255;
+                    returnedPoints.push_back(point);
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
 void Vision3D::run()
 {
-    if ( this->hasDisparity && this->hasLeftFiltered )
+    PointCloud cloud;
+
+    if ( this->hasDisparity && this->hasLeftFiltered && this->hasrectifiedColor)
     {
         //TODO FIX THIS METHOD CALL
-        maskToPointCloud( this->disparityImage.clone(),
-                                    this->filteredLeft.clone(),
-                                    this->cloud,
-                                    this->triclops );
+//        maskToPointCloud( this->disparityImageIn.clone(),
+//                                    this->filteredLeft.clone(),
+//                                    cloud,
+//                                    this->triclops );
 
-//        int Vision3D::producePointCloud( grabbedImage,
-//                                         triclops,
-//                                         disparityImage16,
-//                                         colorData,
-//                                         returnedPoints )
+        doPointCloud ( this->disparityImageIn,
+                     this->rectifiedColor,
+                     cloud,
+                       this->triclops );
+
+//     producePointCloud( this->disparityImageIn,
+//                        this->filteredLeft,
+//                        this->triclops,
+//                        cloud);
+
         //ROS_INFO("<><><><><><><><> After has Disparity image and filtered image\n");
 
-        this->cloud.header.frame_id = "bumblebee2";
-        this->cloud.header.stamp = ros::Time::now().toNSec();
-        this->pointCloudPublisher.publish( this->cloud );
-        this->cloud.clear();
+        cloud.header.frame_id = "bumblebee2";
+        cloud.header.stamp = ros::Time::now().toNSec();
+        this->pointCloudPublisher.publish(cloud );
+        cloud.clear();
     }
     else
     {
@@ -259,3 +275,58 @@ int main( int argc, char **argv )
         loop_rate.sleep();
     }
 }
+/*
+user1@ros07:~/catkin_ws$ rostopic echo -n 1 /camera/left/linefiltered
+header:
+  seq: 725
+  stamp:
+    secs: 1459640920
+    nsecs: 465328136
+  frame_id: bumblebee2
+height: 480
+width: 640
+encoding: mono8
+is_bigendian: 0
+step: 640
+
+user1@ros07:~/catkin_ws$ rostopic echo -n 1 /camera/disparity
+header:
+  seq: 230
+  stamp:
+    secs: 1459641315
+    nsecs: 856924595
+  frame_id: bumblebee2
+height: 480
+width: 640
+encoding: mono16
+is_bigendian: 0
+step: 1280
+
+user1@ros07:~/catkin_ws$ rostopic echo -n 1 /camera/color_rectified
+header:
+  seq: 3398
+  stamp:
+    secs: 1459641375
+    nsecs: 645998935
+  frame_id: bumblebee2
+height: 480
+width: 640
+encoding: bgr8
+is_bigendian: 0
+step: 1920
+
+user1@ros07:~$ rostopic echo -n 1 /camera/left/rgb
+header:
+  seq: 196
+  stamp:
+    secs: 1459651779
+    nsecs: 684287520
+  frame_id: bumblebee2
+height: 480
+width: 640
+encoding: bgr8
+is_bigendian: 0
+step: 2560
+
+
+ */

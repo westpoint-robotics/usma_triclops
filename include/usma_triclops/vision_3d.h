@@ -47,27 +47,33 @@ class Vision3D
         void visionCallBackFilteredLeft( const sensor_msgs::ImageConstPtr& msg );
         void visionCallBackRGBRight( const sensor_msgs::ImageConstPtr& msg );
         void visionCallBackRGBLeft( const sensor_msgs::ImageConstPtr& msg );
-        int doPointCloud( FC2::Image      const & grabbedImage,
-                          TriclopsContext const & triclops,
-                          TriclopsImage16 const & disparityImage16,
-                          TriclopsInput   const & colorData,
-                          PointCloud      & returnedPoints );
-        int maskToPointCloud( cv::Mat const &disparityImage,
+        void visionCallBackRectColor( const sensor_msgs::ImageConstPtr& msg );
+        int doPointCloud( cv::Mat const &disparityImage16,
+                          cv::Mat &colorImage,
+                          PointCloud      & returnedPoints,
+                          TriclopsContext const & triclops );
+
+
+        int maskToPointCloud( cv::Mat const &disparityImageIn,
                                          cv::Mat const &maskImage,
                                          PointCloud      & returnedPoints,
-                                         TriclopsContext triclops );
+                                         TriclopsContext const & triclops );
+        int producePointCloud(  cv::Mat const &disparityImage,
+                                        cv::Mat const &maskImage,
+                                        TriclopsContext const & triclops,
+                                        PointCloud      & returnedPoints);
 
-
-        PointCloud cloud;
-        cv::Mat disparityImage;
+        cv::Mat disparityImageIn;
 
         int numDisp;
         int blockSize;
         cv::Mat filteredLeft;
         cv::Mat filteredRight;
+        cv::Mat rectifiedColor;
         image_transport::Subscriber subcamfilteredright;
         image_transport::Subscriber subcamfilteredleft;
         image_transport::Subscriber subcamdisp;
+        image_transport::Subscriber subRectColor;
         ros::Publisher pointCloudPublisher;
         ros::NodeHandle nh;
 
@@ -75,6 +81,7 @@ class Vision3D
 
         bool hasDisparity;
         bool hasLeftFiltered;
+        bool hasrectifiedColor;
 };
 
 #endif // VISION_3D_H

@@ -67,7 +67,7 @@ include_directories(
 )
 
 ## Declare a cpp executable
-add_executable(camera_system ${HEADER_FILES} src/image_publisher.cpp src/camera_system.cpp)
+add_executable(camera_system ${HEADER_FILES} src/camera_system.cpp src/triclops_opencv.cpp)
 add_executable(line_filter ${HEADER_FILES} src/line_filter.cpp)
 add_executable(vision3d ${HEADER_FILES} src/vision_3d.cpp)
 

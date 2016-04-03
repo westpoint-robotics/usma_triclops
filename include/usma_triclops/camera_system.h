@@ -50,9 +50,6 @@ class CameraSystem
             stereo_mask = mask;
             return 0;
         }
-        cv::Mat getDisparityImage() {
-            return disparityImageCV;
-        }
         std::string getResolution()
         {
             return this->camInfo.sensorResolution;
@@ -61,9 +58,11 @@ class CameraSystem
 
     private:
         // carry out stereo processing pipeline
-        int doStereo( TriclopsContext const & triclops,
-                      TriclopsInput  const & stereoData,
-                      TriclopsImage16      & depthImage );
+        int doStereo(TriclopsContext const & triclops,
+                     TriclopsInput  const & stereoData,
+                     TriclopsImage16      & depthImage,
+                     TriclopsColorImage   & colorImage);
+
         // generate triclops input necessary to carry out stereo processing
         int generateTriclopsInput( FC2::Image const & grabbedImage,
                                    ImageContainer   & imageContainer,
@@ -79,15 +78,18 @@ class CameraSystem
         // capture image from connected camera
         int grabImage( FC2::Camera & camera, FC2::Image & grabbedImage );
         int configureCamera( FC2::Camera &camera );
+        int publishImages();
         FC2::Camera camera;
+        ImageContainer imageContainer;
         FC2::Image grabbedImage;
-        TriclopsInput color;
-        TriclopsInput mono;
+        TriclopsInput colorData;
+        TriclopsInput monoData;
         TriclopsImage16 disparityImageTriclops;
-        cv::Mat disparityImageCV;
+        TriclopsColorImage rectifiedColorImage;
         image_transport::Publisher image_pub_left;
         image_transport::Publisher image_pub_right;
         image_transport::Publisher image_pub_disparity;
+        image_transport::Publisher image_pub_rectifiedColor;
         ros::NodeHandle nh;
         FC2::CameraInfo camInfo;
         int disp_max;
