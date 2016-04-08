@@ -47,10 +47,18 @@ LineFilter::~LineFilter()
 
 void LineFilter::run()
 {
+<<<<<<< HEAD
     cv::Mat img(cv::Mat(5,300, CV_8U));
     img = cv::Scalar(50);
     cv::imshow("ControlView",img);
     cv::waitKey(3);
+=======
+    cv::Mat img( cv::Mat( 5, 300, CV_8U ) );
+    img = cv::Scalar( 50 );
+    cv::imshow( "ControlView", img );
+    cv::waitKey( 3 );
+    ros::spinOnce();
+>>>>>>> eef2b706c2870c0824bd674531e5a5ca60e08362
 }
 
 void LineFilter::imageCallbackRectified( const sensor_msgs::ImageConstPtr& msg )

@@ -55,13 +55,13 @@ class Vision3D
 
 
         int maskToPointCloud( cv::Mat const &disparityImageIn,
-                                         cv::Mat const &maskImage,
-                                         PointCloud      & returnedPoints,
-                                         TriclopsContext const & triclops );
-        int producePointCloud(  cv::Mat const &disparityImage,
-                                        cv::Mat const &maskImage,
-                                        TriclopsContext const & triclops,
-                                        PointCloud      & returnedPoints);
+                              cv::Mat const &maskImage,
+                              PointCloud      & returnedPoints,
+                              TriclopsContext const & triclops );
+        int producePointCloud( cv::Mat const &disparityImage,
+                               cv::Mat const &maskImage,
+                               TriclopsContext const & triclops,
+                               PointCloud      & returnedPoints );
 
         cv::Mat disparityImageIn;
 
