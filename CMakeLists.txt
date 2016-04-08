@@ -63,7 +63,7 @@ include_directories(
   /usr/include/flycapture/
   /usr/include/pcl-1.7/
   /usr/include/eigen3/
-  include/usma_triclops/
+  ./include/usma_triclops/
 )
 
 ## Declare a cpp executable
