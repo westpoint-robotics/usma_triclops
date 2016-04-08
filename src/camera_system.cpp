@@ -299,7 +299,7 @@ int CameraSystem::generateTriclopsInput( FC2::Image const & grabbedImage,
 int CameraSystem::doStereo( TriclopsContext const & triclops,
                             TriclopsInput  const & stereoData,
                             TriclopsImage16      & depthImage,
-                            TriclopsColorImage   & colorImage)
+                            TriclopsColorImage   & colorImage )
 {
     TriclopsError te;
 
@@ -311,13 +311,13 @@ int CameraSystem::doStereo( TriclopsContext const & triclops,
     te = triclopsSetDisparity( triclops, disp_min, disp_max );
     _HANDLE_TRICLOPS_ERROR( "triclopsSetSubpixelInterpolation()", te );
 
-    te = triclopsSetDisparityMapping(triclops,disp_map_min,disp_map_max);
+    te = triclopsSetDisparityMapping( triclops, disp_map_min, disp_map_max );
     _HANDLE_TRICLOPS_ERROR( "triclopsSetDisparityMapping()", te );
 
-    te = triclopsSetDisparityMappingOn(triclops, disp_map_on);
+    te = triclopsSetDisparityMappingOn( triclops, disp_map_on );
     _HANDLE_TRICLOPS_ERROR( "triclopsSetDisparityMappingOn()", te );
 
-    te = triclopsSetStereoMask(triclops, stereo_mask);
+    te = triclopsSetStereoMask( triclops, stereo_mask );
     _HANDLE_TRICLOPS_ERROR( "triclopsSetDisparityMappingOn()", te );
 
     //ROS_INFO("stereoData x,y: %d,%d",stereoData.nrows, stereoData.ncols);
@@ -336,7 +336,7 @@ int CameraSystem::doStereo( TriclopsContext const & triclops,
     {
         te = triclopsRectifyColorImage( triclops,
                                         TriCam_REFERENCE,
-                                        &(this->colorData),
+                                        &( this->colorData ),
                                         &colorImage );
         _HANDLE_TRICLOPS_ERROR( "triclopsRectifyColorImage()", te );
     }
@@ -375,8 +375,9 @@ int CameraSystem::publishImages()
     {
         convertToBGR( imageContainer.unprocessed[i], imageContainer.bgr[i] );
     }
+
     convertTriclops2Opencv( imageContainer.bgr[RIGHT], rightImage );
-    convertTriclops2Opencv( imageContainer.bgr[LEFT], leftImage);
+    convertTriclops2Opencv( imageContainer.bgr[LEFT], leftImage );
     convertTriclops2Opencv( this->disparityImageTriclops, disparityImageCV );
     convertTriclops2Opencv( this->rectifiedColorImage, rectifiedColorImageCv );
     //ROS_INFO("ImageBGR BitsperPixel: %d-- %d",imageContainer.bgr[LEFT].GetBitsPerPixel(),leftImage.channels());
@@ -386,15 +387,15 @@ int CameraSystem::publishImages()
     outmsg->header.frame_id = "bumblebee2";
     outmsg->header.stamp = ros::Time::now();
     this->image_pub_right.publish( outmsg );
-    outmsg = cv_bridge::CvImage( std_msgs::Header(), "bgr8", leftImage).toImageMsg();
+    outmsg = cv_bridge::CvImage( std_msgs::Header(), "bgr8", leftImage ).toImageMsg();
     outmsg->header.frame_id = "bumblebee2";
     outmsg->header.stamp = ros::Time::now();
     this->image_pub_left.publish( outmsg );
-    outmsg = cv_bridge::CvImage( std_msgs::Header(), "mono16", disparityImageCV).toImageMsg();
+    outmsg = cv_bridge::CvImage( std_msgs::Header(), "mono16", disparityImageCV ).toImageMsg();
     outmsg->header.frame_id = "bumblebee2";
     outmsg->header.stamp = ros::Time::now();
     this->image_pub_disparity.publish( outmsg );
-    outmsg = cv_bridge::CvImage( std_msgs::Header(), "bgr8", rectifiedColorImageCv).toImageMsg();
+    outmsg = cv_bridge::CvImage( std_msgs::Header(), "bgr8", rectifiedColorImageCv ).toImageMsg();
     outmsg->header.frame_id = "bumblebee2";
     outmsg->header.stamp = ros::Time::now();
     this->image_pub_rectifiedColor.publish( outmsg );
@@ -420,10 +421,10 @@ void CameraSystem::run()
     doStereo( this->triclops, this->colorData, this->disparityImageTriclops, this->rectifiedColorImage );
     publishImages();
 
-    cv::Mat img(cv::Mat(5,300, CV_8U));
-    img = cv::Scalar(50);
-    cv::imshow("DisparityView",img);
-    cv::waitKey(3);
+    cv::Mat img( cv::Mat( 5, 300, CV_8U ) );
+    img = cv::Scalar( 50 );
+    cv::imshow( "DisparityView", img );
+    cv::waitKey( 3 );
     ros::spinOnce();
 }
 

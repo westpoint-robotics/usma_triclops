@@ -58,10 +58,10 @@ class CameraSystem
 
     private:
         // carry out stereo processing pipeline
-        int doStereo(TriclopsContext const & triclops,
-                     TriclopsInput  const & stereoData,
-                     TriclopsImage16      & depthImage,
-                     TriclopsColorImage   & colorImage);
+        int doStereo( TriclopsContext const & triclops,
+                      TriclopsInput  const & stereoData,
+                      TriclopsImage16      & depthImage,
+                      TriclopsColorImage   & colorImage );
 
         // generate triclops input necessary to carry out stereo processing
         int generateTriclopsInput( FC2::Image const & grabbedImage,
