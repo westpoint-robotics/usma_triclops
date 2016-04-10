@@ -9,8 +9,8 @@
 #include <stdlib.h>
 #include <ros/ros.h>
 #include <sensor_msgs/image_encodings.h>
-#include "typedefs.h"
-#include "camera_system.h"
+#include "include/usma_triclops/typedefs.h"
+#include "include/usma_triclops/camera_system.h"
 
 CameraSystem::CameraSystem( int argc, char** argv )
 {
@@ -73,7 +73,6 @@ CameraSystem::CameraSystem( int argc, char** argv )
     {
         ROS_INFO( ">>>>> CAMERA INFO  Vendor: %s     Model: %s     Serail#: %d  Resolution: %s", camInfo.vendorName, camInfo.modelName, camInfo.serialNumber, camInfo.sensorResolution );
     }
-
 
     // Container of Images used for processing
     image_transport::ImageTransport it( nh );

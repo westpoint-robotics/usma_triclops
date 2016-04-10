@@ -6,6 +6,7 @@
 #include <sensor_msgs/image_encodings.h>
 #include "line_filter.h"
 #include "triclops_opencv.h"
+#include ""
 
 //Create imagecontainer for moving images
 ImageContainer imageContainerL;

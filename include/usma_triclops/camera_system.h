@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cv.h"
+#include "opencv/cv.h"
 #include "highgui.h"
 #include <triclops/triclops.h>
 #include <triclops/fc2triclops.h>
