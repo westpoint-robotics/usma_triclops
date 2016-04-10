@@ -21,10 +21,12 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O0 -ggdb")
 # a dummy_target so qtcreator have access to all files
 FILE(GLOB children ${CMAKE_SOURCE_DIR}/*)
 FOREACH(child ${children})
-  IF(IS_DIRECTORY ${child})
-    file(GLOB_RECURSE dir_files "${child}/*")
-    LIST(APPEND extra_files ${dir_files})
-  ENDIF()
+MESSAGE("=-=-=- cmake ====: ${child}")
+IF((IS_DIRECTORY ${child}) AND (NOT "${child}" MATCHES "git"))
+            file(GLOB_RECURSE dir_files "${child}/*")
+            LIST(APPEND extra_files ${dir_files})
+        ENDIF()
+
 ENDFOREACH()
 add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
 
@@ -58,12 +60,12 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # The first argument "include" indicates that the include/ directory within the package is also part of the path.
 include_directories(
+  include/usma_triclops/
   ${catkin_INCLUDE_DIRS}
   /usr/include/triclops/
   /usr/include/flycapture/
   /usr/include/pcl-1.7/
   /usr/include/eigen3/
-  ./include/usma_triclops/
 )
 
 ## Declare a cpp executable
