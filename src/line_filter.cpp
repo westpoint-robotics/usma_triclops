@@ -8,26 +8,14 @@
 #include "triclops_opencv.h"
 #include ""
 
-//Create imagecontainer for moving images
-ImageContainer imageContainerL;
-cv::Mat cImageL; // An OpenCV version of the rectified stereo image from the camera
-cv::Mat filtered_imageL; // The image with detected white lines painted cyan
-
-//Create imagecontainer for moving images
-ImageContainer imageContainerR;
-cv::Mat cImageR; // An OpenCV version of the rectified stereo image from the camera
-cv::Mat filtered_imageR; // The image with detected white lines painted cyan
-
 /**
  * @brief LineFilter::LineFilter Used to find white lines in OpenCv Images.
  *
  */
 
-// TODO have this publish both left and right images with line filtered.
-// Currently it only publishes left image filtered
 LineFilter::LineFilter( int argc, char** argv )
 {
-    this->thresh_val = 117; // 203
+    this->thresh_val = 243; // 203
     this->erosion_size = 5; // 2
     this->h_rho = 1; // 1
     this->h_theta = 180; // 180
@@ -48,15 +36,9 @@ LineFilter::LineFilter( int argc, char** argv )
     //Start ROS
     image_transport::ImageTransport it( nh );
 
-    //Create publishers
-    this->image_pub_filtered_left = it.advertise( "/camera/left/linefiltered", 1 );
-    this->image_pub_filtered_right = it.advertise( "/camera/right/linefiltered", 1 );
-
-    //Creation of Subscribers, which use callback functions to execute transform and republishing upon receipt of data.
-    this->subcamleft = it.subscribe( "/camera/left/rgb", 0, &LineFilter::imageCallbackL, this );
-    this->subcamright = it.subscribe( "/camera/right/rgb", 0, &LineFilter::imageCallbackR, this );
-
-    //ROS loop that causes the system to keep moving.
+    // Setup the publisher and subscribers for the node
+    this->image_pub_filtered_rectified = it.advertise( "/camera/rectified/linefiltered", 1 );
+    this->subrectified = it.subscribe( "/camera/color_rectified", 0, &LineFilter::imageCallbackRectified, this );
 }
 
 LineFilter::~LineFilter()
@@ -66,51 +48,40 @@ LineFilter::~LineFilter()
 
 void LineFilter::run()
 {
+<<<<<<< HEAD
+    cv::Mat img(cv::Mat(5,300, CV_8U));
+    img = cv::Scalar(50);
+    cv::imshow("ControlView",img);
+    cv::waitKey(3);
+=======
     cv::Mat img( cv::Mat( 5, 300, CV_8U ) );
     img = cv::Scalar( 50 );
     cv::imshow( "ControlView", img );
     cv::waitKey( 3 );
     ros::spinOnce();
+>>>>>>> eef2b706c2870c0824bd674531e5a5ca60e08362
 }
 
-//Executable for linefilter when called by launch file, will subscribe to camera left and right nodes, and will publish filtered images for each.
-
-void LineFilter::imageCallbackL( const sensor_msgs::ImageConstPtr& msg )
+void LineFilter::imageCallbackRectified( const sensor_msgs::ImageConstPtr& msg )
 {
-    //Pull subscribed data inside this callback, formatting for linefilter use based on original vision_3d code
-    cImageL = cv_bridge::toCvCopy( msg, "bgr8" )->image;
+    cv::Mat cImageR; // An OpenCV version of the rectified stereo image from the camera
+    cv::Mat filtered_imageR; // The image with detected white lines painted cyan
 
-    //Execute filtration, map to new image filtered image
-    LineFilter::findLines( cImageL, filtered_imageL, this->lines );
-
-    sensor_msgs::ImagePtr outmsg = cv_bridge::CvImage( std_msgs::Header(), "mono8", filtered_imageL ).toImageMsg();
-    outmsg->header.frame_id = "bumblebee2";
-    outmsg->header.stamp = ros::Time::now();
-
-    /*DEBUG
-    cv::imshow("Filter Left", filtered_imageL);*/
-    cv::waitKey( 3 );
-
-    this->image_pub_filtered_left.publish( outmsg );
-}
-
-void LineFilter::imageCallbackR( const sensor_msgs::ImageConstPtr& msg )
-{
-
-    //Pull subscribed data inside this callback, formatting for linefilter use based on original vision_3d code
+    //Pull subscribed data inside this callback, formatting for linefilter
     cImageR = cv_bridge::toCvCopy( msg, "bgr8" )->image;
+
     //Execute filtration, map to new image filtered image
     LineFilter::findLines( cImageR, filtered_imageR, this->lines );
 
+    //Publish the filtered image
     sensor_msgs::ImagePtr outmsg = cv_bridge::CvImage( std_msgs::Header(), "mono8", filtered_imageR ).toImageMsg();
     outmsg->header.frame_id = "bumblebee2";
     outmsg->header.stamp = ros::Time::now();
+    this->image_pub_filtered_rectified.publish( outmsg );
 
     /*DEBUG
     cv::imshow("Filter Right", filtered_imageR);
     cv::waitKey(10);*/
-
-    this->image_pub_filtered_right.publish( outmsg );
 }
 
 /**
@@ -185,7 +156,7 @@ void LineFilter::findLines( const cv::Mat &src_image, cv::Mat &rtrn_image, cv::v
  * @brief LineFilter::findPointsOnLines. Finds the x,y coordinates of each point on line defined by an start and end point.
  * @param cImage The image that lines exist in
  * @param lines A list of lines defined by start and end points
- * @param pixels A list of pixels that are on the lines.
+ * @param pixels returns a list of pixels that are on the lines.
  */
 void LineFilter::findPointsOnLines( const cv::Mat &cImage, const cv::vector<cv::Vec4i> &lines, std::vector<cv::Point2i> &pixels )
 {
@@ -386,15 +357,13 @@ void LineFilter::displayCyan()
 int main( int argc, char **argv )
 {
     ros::init( argc, argv, "linefilter" );
-
-    //printf("line.run()\n");
     LineFilter linefilter( argc, argv );
     ros::Rate loop_rate( 10 );
 
     while ( ros::ok() )
     {
         linefilter.run();
-        //printf("linefilter.run()\n");
+        ros::spinOnce();
         loop_rate.sleep();
     }
 }

@@ -30,6 +30,7 @@ class LineFilter
     private:
         void imageCallbackL( const sensor_msgs::ImageConstPtr& msgL );
         void imageCallbackR( const sensor_msgs::ImageConstPtr& msgR );
+        void imageCallbackRectified( const sensor_msgs::ImageConstPtr& msgR );
         void findLines( const cv::Mat &src_image, cv::Mat &rtrn_image, cv::vector<cv::Vec4i> &lines );
         void findPointsOnLines( const cv::Mat &cImage, const cv::vector<cv::Vec4i> &lines, std::vector<cv::Point2i> &pixels );
         cv::Mat original_image;   // The original source image
@@ -52,8 +53,10 @@ class LineFilter
 
         image_transport::Publisher image_pub_filtered_right;
         image_transport::Publisher image_pub_filtered_left;
+        image_transport::Publisher image_pub_filtered_rectified;
         image_transport::Subscriber subcamright;
         image_transport::Subscriber subcamleft;
+        image_transport::Subscriber subrectified;
         ros::NodeHandle nh;
         cv::Mat blank;
 

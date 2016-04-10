@@ -44,7 +44,7 @@ class Vision3D
     private:
         void visionCallBackDisparity( const sensor_msgs::ImageConstPtr& msg );
         void visionCallBackFilteredRight( const sensor_msgs::ImageConstPtr& msg );
-        void visionCallBackFilteredLeft( const sensor_msgs::ImageConstPtr& msg );
+        void visionCallBackFilteredRectified( const sensor_msgs::ImageConstPtr& msg );
         void visionCallBackRGBRight( const sensor_msgs::ImageConstPtr& msg );
         void visionCallBackRGBLeft( const sensor_msgs::ImageConstPtr& msg );
         void visionCallBackRectColor( const sensor_msgs::ImageConstPtr& msg );
@@ -67,20 +67,20 @@ class Vision3D
 
         int numDisp;
         int blockSize;
-        cv::Mat filteredLeft;
+        cv::Mat filteredRectified;
         cv::Mat filteredRight;
         cv::Mat rectifiedColor;
         image_transport::Subscriber subcamfilteredright;
-        image_transport::Subscriber subcamfilteredleft;
+        image_transport::Subscriber subcamfilteredrectified;
         image_transport::Subscriber subcamdisp;
         image_transport::Subscriber subRectColor;
         ros::Publisher pointCloudPublisher;
         ros::NodeHandle nh;
-
+        int mode;
 
 
         bool hasDisparity;
-        bool hasLeftFiltered;
+        bool hasRectifiedFiltered;
         bool hasrectifiedColor;
 };
 

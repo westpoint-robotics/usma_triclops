@@ -19,16 +19,23 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "typedefs.h"
-
 #include "vision_3d.h"
 #include "line_filter.h"
 
 Vision3D::Vision3D( int argc, char **argv )
 {
     image_transport::ImageTransport it( nh );
-
+    if (nh.hasParam("/vision3d/triclopsMode"))
+    {
+        nh.getParam("/vision3d/triclopsMode", this->mode);
+        ROS_INFO ("This mode is set to %d",this->mode);
+    }
+    else{
+        this->mode = 0;
+        ROS_INFO ("This mode is not found");
+    }
     this->hasDisparity = false;
-    this->hasLeftFiltered = false;
+    this->hasRectifiedFiltered = false;
     this->hasrectifiedColor = false;
 
     char fileName[] = "/home/user1/triclopsContextCurrent.txt";
@@ -42,7 +49,8 @@ Vision3D::Vision3D( int argc, char **argv )
 
     this->pointCloudPublisher = nh.advertise<sensor_msgs::PointCloud2>( "/vision3D/points", 0 );
     this->subcamdisp = it.subscribe( "/camera/disparity", 1, &Vision3D::visionCallBackDisparity, this );
-    this->subcamfilteredleft = it.subscribe( "/camera/left/linefiltered", 0, &Vision3D::visionCallBackFilteredLeft, this );
+    // TODO Stop using left image and use a rectified grayscale image for line filtering.
+    this->subcamfilteredrectified = it.subscribe( "/camera/rectified/linefiltered", 0, &Vision3D::visionCallBackFilteredRectified, this );
     this->subRectColor = it.subscribe( "/camera/color_rectified", 0, &Vision3D::visionCallBackRectColor, this );
     ros::Duration( 1 ).sleep(); // sleep for a second
 }
@@ -59,10 +67,10 @@ void Vision3D::visionCallBackDisparity( const sensor_msgs::ImageConstPtr& msg )
     //ROS_INFO("INSIDE DISP CALLBACCK");
 }
 
-void Vision3D::visionCallBackFilteredLeft( const sensor_msgs::ImageConstPtr& msg )
+void Vision3D::visionCallBackFilteredRectified( const sensor_msgs::ImageConstPtr& msg )
 {
-    this->filteredLeft = cv_bridge::toCvCopy( msg, "mono8" )->image;
-    this->hasLeftFiltered = true;
+    this->filteredRectified = cv_bridge::toCvCopy( msg, "mono8" )->image;
+    this->hasRectifiedFiltered = true;
     //ROS_INFO("INSIDE filtered CALLBACCK");
 }
 
@@ -73,6 +81,8 @@ void Vision3D::visionCallBackRectColor( const sensor_msgs::ImageConstPtr& msg )
     //ROS_INFO("CALLBACK POINTER IS: %p", &rectifiedColor);
 }
 
+// TODO Cobine this with do 3Dpoint and put if statement in the middle based on
+// the triclops vision mode.
 int Vision3D::maskToPointCloud( cv::Mat const &disparityImage16,
                                 cv::Mat const &maskImage,
                                 PointCloud      & returnedPoints,
@@ -226,6 +236,33 @@ void Vision3D::run()
 {
     PointCloud cloud;
 
+<<<<<<< HEAD
+    if ( this->hasDisparity && this->hasRectifiedFiltered && this->hasrectifiedColor)
+    {
+        // TODO check if the mode is being set correctly as a param in ros
+        //TODO move these if statements into the method calls.
+        if (this->mode == 1){
+
+            doPointCloud ( this->disparityImageIn,
+                     this->rectifiedColor,
+                     cloud,
+                       this->triclops );
+        }
+        else if(this->mode == 0)
+        {
+         maskToPointCloud( this->disparityImageIn.clone(),
+                                    this->filteredRectified.clone(),
+                                    cloud,
+                                    this->triclops );
+        }
+            else{
+
+     producePointCloud( this->disparityImageIn,
+                        this->filteredRectified,
+                        this->triclops,
+                        cloud);
+}
+=======
     if ( this->hasDisparity && this->hasLeftFiltered && this->hasrectifiedColor )
     {
         //TODO FIX THIS METHOD CALL
@@ -244,6 +281,7 @@ void Vision3D::run()
         //                        this->triclops,
         //                        cloud);
 
+>>>>>>> eef2b706c2870c0824bd674531e5a5ca60e08362
         //ROS_INFO("<><><><><><><><> After has Disparity image and filtered image\n");
 
         cloud.header.frame_id = "bumblebee2";
