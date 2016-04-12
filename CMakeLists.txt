@@ -30,6 +30,14 @@ IF((IS_DIRECTORY ${child}) AND (NOT "${child}" MATCHES "git"))
 ENDFOREACH()
 add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
 
+set(INC_DIR $ENV{PWD}/catkin_ws/src/usma_triclops/include/usma_triclops)
+set(HEADER_FILES ${INC_DIR}/camera_system.h
+    ${INC_DIR}/common.h
+    ${INC_DIR}/line_filter.h
+    ${INC_DIR}/triclops_opencv.h
+    ${INC_DIR}/typedefs.h
+    ${INC_DIR}/vision_3d.h)
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -67,6 +75,13 @@ include_directories(
   /usr/include/pcl-1.7/
   /usr/include/eigen3/
 )
+
+get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+foreach(dir ${dirs})
+  message("IIIIIIIIIII " STATUS " dir='${dir}'")
+endforeach()
+
+MESSAGE("=-=-=- HEADER_SRC: ${HEADER_FILES}")
 
 ## Declare a cpp executable
 add_executable(camera_system ${HEADER_FILES} src/camera_system.cpp src/triclops_opencv.cpp)
