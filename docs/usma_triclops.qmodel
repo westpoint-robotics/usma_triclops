@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qmt>
+ <project>
+  <uid>{2de5c300-73e0-4920-b1bc-3d82ffaaed05}</uid>
+  <root-package>
+   <instance>
+    <MPackage>
+     <base-MObject>
+      <MObject>
+       <base-MElement>
+        <MElement>
+         <uid>{a8326d79-b093-4c68-bea7-bcddeb516c58}</uid>
+        </MElement>
+       </base-MElement>
+       <name>Usma Triclops</name>
+       <children>
+        <handles>
+         <handles>
+          <qlist>
+           <item>
+            <handle>
+             <uid>{7cd83aac-a307-43b5-a1bf-06852f018463}</uid>
+             <target>
+              <instance type="MCanvasDiagram">
+               <MCanvasDiagram>
+                <base-MDiagram>
+                 <MDiagram>
+                  <base-MObject>
+                   <MObject>
+                    <base-MElement>
+                     <MElement>
+                      <uid>{7cd83aac-a307-43b5-a1bf-06852f018463}</uid>
+                     </MElement>
+                    </base-MElement>
+                    <name>Usma Triclops</name>
+                   </MObject>
+                  </base-MObject>
+                  <elements>
+                   <qlist>
+                    <item>
+                     <instance type="DClass">
+                      <DClass>
+                       <base-DObject>
+                        <DObject>
+                         <base-DElement>
+                          <DElement>
+                           <uid>{bd556526-8598-4e0d-a78e-70f985f1e463}</uid>
+                          </DElement>
+                         </base-DElement>
+                         <object>{6b4bae9b-e0dc-4ef3-b1b5-c7a7e5afe4c7}</object>
+                         <name>LineFilter</name>
+                         <pos>x:170;y:170</pos>
+                         <rect>x:-150;y:-150;w:300;h:300</rect>
+                         <auto-sized>false</auto-sized>
+                         <visual-role>0</visual-role>
+                        </DObject>
+                       </base-DObject>
+                       <show-all-members>true</show-all-members>
+                      </DClass>
+                     </instance>
+                    </item>
+                    <item>
+                     <instance type="DClass">
+                      <DClass>
+                       <base-DObject>
+                        <DObject>
+                         <base-DElement>
+                          <DElement>
+                           <uid>{60c65790-c160-4841-bde4-d5c2bfe5374f}</uid>
+                          </DElement>
+                         </base-DElement>
+                         <object>{9450701f-78d3-483e-9a02-4ce53f923809}</object>
+                         <name>Vision3D</name>
+                         <pos>x:490;y:110</pos>
+                         <rect>x:-140;y:-90;w:280;h:180</rect>
+                         <visual-role>0</visual-role>
+                        </DObject>
+                       </base-DObject>
+                       <show-all-members>true</show-all-members>
+                      </DClass>
+                     </instance>
+                    </item>
+                    <item>
+                     <instance type="DClass">
+                      <DClass>
+                       <base-DObject>
+                        <DObject>
+                         <base-DElement>
+                          <DElement>
+                           <uid>{48b3467b-67fd-46e0-8007-267560e876f3}</uid>
+                          </DElement>
+                         </base-DElement>
+                         <object>{65602067-ad87-4d62-9ebc-27e3885bb211}</object>
+                         <name>CameraSystem</name>
+                         <pos>x:540;y:375</pos>
+                         <rect>x:-190;y:-150;w:380;h:300</rect>
+                         <visual-role>0</visual-role>
+                        </DObject>
+                       </base-DObject>
+                       <show-all-members>true</show-all-members>
+                      </DClass>
+                     </instance>
+                    </item>
+                   </qlist>
+                  </elements>
+                  <last-modified>1460318013674</last-modified>
+                 </MDiagram>
+                </base-MDiagram>
+               </MCanvasDiagram>
+              </instance>
+             </target>
+            </handle>
+           </item>
+           <item>
+            <handle>
+             <uid>{6b4bae9b-e0dc-4ef3-b1b5-c7a7e5afe4c7}</uid>
+             <target>
+              <instance type="MClass">
+               <MClass>
+                <base-MObject>
+                 <MObject>
+                  <base-MElement>
+                   <MElement>
+                    <uid>{6b4bae9b-e0dc-4ef3-b1b5-c7a7e5afe4c7}</uid>
+                   </MElement>
+                  </base-MElement>
+                  <name>LineFilter</name>
+                 </MObject>
+                </base-MObject>
+                <members>
+                 <qlist>
+                  <item>
+                   <MClassMember>
+                    <uid>{87d2428d-7414-40a0-a929-f9d879369fa0}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Publisher image_pub_filtered_right</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{02cb648d-c416-48cd-88de-eec193e3cb46}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Publisher image_pub_filtered_left</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{9f821381-d16f-428e-aead-535bc5a85de5}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Publisher image_pub_filtered_rectified</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{318ecade-80ae-4d5d-a0b3-32ec6f6aeb3b}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Subscriber subcamright</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{b8e0be5c-2bdf-46db-b708-7f0f63abc0da}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Subscriber subcamleft</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{ab58bf19-ee73-4152-80cb-8e774242429e}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Subscriber subrectified</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{f7d06a5a-094d-45aa-8741-1e6eb42c7c1d}</uid>
+                    <type>2</type>
+                    <declaration>LineFilter( int argc, char** argv )</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{6d4cc841-b8d3-41f0-8c4c-3edf6f3f156f}</uid>
+                    <type>2</type>
+                    <properties>1</properties>
+                    <declaration>~LineFilter()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{1e565946-df99-4e8b-a05d-a5512c5fd0f7}</uid>
+                    <type>2</type>
+                    <declaration>void run()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{8fdec22e-69cb-49e5-9f0f-4d58f6a0d3d4}</uid>
+                    <type>2</type>
+                    <declaration>void displayOriginal()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{7b4135cd-791b-4da0-a4de-6357ad5b1252}</uid>
+                    <type>2</type>
+                    <declaration>void displayGrayScale()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{9eb7f3c9-3d70-47fe-933a-8fdb7fb0b0ef}</uid>
+                    <type>2</type>
+                    <declaration>void displayBlurred()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{31167a70-ac5b-41fa-8e6f-1dbf71980485}</uid>
+                    <type>2</type>
+                    <declaration>void displayThreshold()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{099923c9-be71-4ba9-b308-bf1a9afb247e}</uid>
+                    <type>2</type>
+                    <declaration>void displayEroded()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{a1345004-e502-4a79-b130-a590e670a307}</uid>
+                    <type>2</type>
+                    <declaration>void displayCanny()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{1a6a9dc8-8f6d-4b46-b4c0-4c84ec5f3aff}</uid>
+                    <type>2</type>
+                    <declaration>void displayHough()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{c693652e-86e7-4486-8cea-e3f4e0373f24}</uid>
+                    <type>2</type>
+                    <declaration>void displayCyan()</declaration>
+                   </MClassMember>
+                  </item>
+                 </qlist>
+                </members>
+               </MClass>
+              </instance>
+             </target>
+            </handle>
+           </item>
+           <item>
+            <handle>
+             <uid>{9450701f-78d3-483e-9a02-4ce53f923809}</uid>
+             <target>
+              <instance type="MClass">
+               <MClass>
+                <base-MObject>
+                 <MObject>
+                  <base-MElement>
+                   <MElement>
+                    <uid>{9450701f-78d3-483e-9a02-4ce53f923809}</uid>
+                   </MElement>
+                  </base-MElement>
+                  <name>Vision3D</name>
+                 </MObject>
+                </base-MObject>
+                <members>
+                 <qlist>
+                  <item>
+                   <MClassMember>
+                    <uid>{1a0d6ed7-b91f-4f20-9088-35849dfea960}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Subscriber subcamfilteredright</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{5c4de03a-4e4c-4ff5-b414-8a375ecf0e61}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Subscriber subcamfilteredrectified</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{53e6e813-3a82-46b0-b9aa-7cc27ab75114}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Subscriber subcamdisp</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{4df53942-3465-4497-b678-5e26fa56976a}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Subscriber subRectColor</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{62bf72b9-5562-4103-9cfc-fb1760fe7c7d}</uid>
+                    <type>1</type>
+                    <declaration>ros::Publisher pointCloudPublisher</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{aea0ea10-5d2f-4571-9c13-606ca7a8d1ec}</uid>
+                    <type>2</type>
+                    <declaration>Vision3D( int argc, char **argv )</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{73a1b059-fbf2-4969-8a6d-ca3452c915e0}</uid>
+                    <type>2</type>
+                    <properties>1</properties>
+                    <declaration>~Vision3D()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{d585a73d-5196-457f-ae98-20380946ddb9}</uid>
+                    <type>2</type>
+                    <declaration>void run()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{52cf1504-99f6-426d-baaf-97e48eac2d89}</uid>
+                    <type>1</type>
+                    <declaration>TriclopsContext triclops</declaration>
+                   </MClassMember>
+                  </item>
+                 </qlist>
+                </members>
+               </MClass>
+              </instance>
+             </target>
+            </handle>
+           </item>
+           <item>
+            <handle>
+             <uid>{65602067-ad87-4d62-9ebc-27e3885bb211}</uid>
+             <target>
+              <instance type="MClass">
+               <MClass>
+                <base-MObject>
+                 <MObject>
+                  <base-MElement>
+                   <MElement>
+                    <uid>{65602067-ad87-4d62-9ebc-27e3885bb211}</uid>
+                   </MElement>
+                  </base-MElement>
+                  <name>CameraSystem</name>
+                 </MObject>
+                </base-MObject>
+                <members>
+                 <qlist>
+                  <item>
+                   <MClassMember>
+                    <uid>{3e031127-2e81-4b87-be0b-2c2d3e9a29b8}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Publisher image_pub_left</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{2765d675-1963-4cdf-ba40-6fc7c1ad80b3}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Publisher image_pub_right</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{2c9c8fc2-c84d-4946-826b-4834674cf0b7}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Publisher image_pub_disparity</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{fcfa4def-db20-4e03-ac0d-b41b9d450f37}</uid>
+                    <type>1</type>
+                    <declaration>image_transport::Publisher image_pub_rectifiedColor</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{5cab5fc3-1342-4c5f-b720-83499bce26d4}</uid>
+                    <type>2</type>
+                    <declaration>CameraSystem( int argc, char** argv )</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{c1df46c4-4cef-4e3d-a4ce-8fcdb9d3abdc}</uid>
+                    <type>2</type>
+                    <declaration>~CameraSystem()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{ed5cc245-5e05-43d1-921a-3ccd09bf6866}</uid>
+                    <type>2</type>
+                    <declaration>void run()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{ab4156ef-de6e-4b1b-b62d-22aaf278f161}</uid>
+                    <type>2</type>
+                    <declaration>int convertToBGRU( FC2::Image &amp; image, FC2::Image &amp; convertedImage )</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{baf34ddd-ded2-40c0-8fb0-227e7c905455}</uid>
+                    <type>2</type>
+                    <declaration>int convertToBGR( FC2::Image &amp; image, FC2::Image &amp; convertedImage )</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{314662db-9b7d-40ad-800a-7f57c636aa09}</uid>
+                    <type>1</type>
+                    <declaration>TriclopsContext triclops</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{b02ecb1e-23d5-41d8-a630-e63b4425ed1b}</uid>
+                    <type>2</type>
+                    <declaration>int shutdown()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{94cf10af-0f7b-49d5-b7f4-9ea088892553}</uid>
+                    <type>2</type>
+                    <declaration>int setDispMax( int disp )</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{3ea62590-f513-4c89-be63-62c324f0f435}</uid>
+                    <type>2</type>
+                    <declaration>int setDispMin( int disp )</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{863f790d-1f62-4035-8feb-6d9a906f82a9}</uid>
+                    <type>2</type>
+                    <declaration>int setDispMapMax( int disp )</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{99bcca75-a35b-4360-a848-be9161e149af}</uid>
+                    <type>2</type>
+                    <declaration>int setDispMapMin( int disp )</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{948c4d9f-8572-4957-8aef-acf1751222f0}</uid>
+                    <type>2</type>
+                    <declaration>int setStereoMask( int mask )</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{27dc449d-9b51-4128-9c08-91d5755886fb}</uid>
+                    <type>2</type>
+                    <declaration>std::string getResolution()</declaration>
+                   </MClassMember>
+                  </item>
+                 </qlist>
+                </members>
+               </MClass>
+              </instance>
+             </target>
+            </handle>
+           </item>
+          </qlist>
+         </handles>
+        </handles>
+       </children>
+      </MObject>
+     </base-MObject>
+    </MPackage>
+   </instance>
+  </root-package>
+ </project>
+</qmt>
