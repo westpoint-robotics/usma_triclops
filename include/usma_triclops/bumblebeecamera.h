@@ -18,8 +18,14 @@ private:
     FC2T::TriclopsColorInput rectifiedColorImage;
     FC2::Camera camera;
     int configureCamera( FC2::Camera &camera );
+    TriclopsContext triclops;
+    int startCamera();
+    FC2::Format7ImageSettings retreiveImageFormat();
 
 
+
+    int shutdown();
+    TriclopsContext generateTriclopsContext();
 public:
     BumbleBeeCamera();
     ~BumbleBeeCamera();
