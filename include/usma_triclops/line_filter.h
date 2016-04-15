@@ -18,7 +18,7 @@ class LineFilter
         LineFilter( int argc, char** argv );
         virtual ~LineFilter();
         void run();
-        void displayOriginal();
+
         void displayGrayScale();
         void displayBlurred();
         void displayThreshold();

@@ -9,8 +9,8 @@
 #include <stdlib.h>
 #include <ros/ros.h>
 #include <sensor_msgs/image_encodings.h>
-#include "typedefs.h"
-#include "camera_system.h"
+#include "usma_triclops/typedefs.h"
+#include "usma_triclops/camera_system.h"
 
 CameraSystem::CameraSystem(int argc, char** argv)
 {

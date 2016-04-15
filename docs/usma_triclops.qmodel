@@ -48,8 +48,8 @@
                           </DElement>
                          </base-DElement>
                          <object>{6b4bae9b-e0dc-4ef3-b1b5-c7a7e5afe4c7}</object>
-                         <name>LineFilter</name>
-                         <pos>x:170;y:170</pos>
+                         <name>LineFilter23</name>
+                         <pos>x:345;y:450</pos>
                          <rect>x:-150;y:-150;w:300;h:300</rect>
                          <auto-sized>false</auto-sized>
                          <visual-role>0</visual-role>
@@ -71,8 +71,8 @@
                          </base-DElement>
                          <object>{9450701f-78d3-483e-9a02-4ce53f923809}</object>
                          <name>Vision3D</name>
-                         <pos>x:490;y:110</pos>
-                         <rect>x:-140;y:-90;w:280;h:180</rect>
+                         <pos>x:800;y:395</pos>
+                         <rect>x:-140;y:-95;w:280;h:190</rect>
                          <visual-role>0</visual-role>
                         </DObject>
                        </base-DObject>
@@ -92,8 +92,54 @@
                          </base-DElement>
                          <object>{65602067-ad87-4d62-9ebc-27e3885bb211}</object>
                          <name>CameraSystem</name>
-                         <pos>x:540;y:375</pos>
+                         <pos>x:645;y:150</pos>
                          <rect>x:-190;y:-150;w:380;h:300</rect>
+                         <visual-role>0</visual-role>
+                        </DObject>
+                       </base-DObject>
+                       <show-all-members>true</show-all-members>
+                      </DClass>
+                     </instance>
+                    </item>
+                    <item>
+                     <instance type="DClass">
+                      <DClass>
+                       <base-DObject>
+                        <DObject>
+                         <base-DElement>
+                          <DElement>
+                           <uid>{503607e2-ad1f-4b99-8e31-de950acc013f}</uid>
+                          </DElement>
+                         </base-DElement>
+                         <object>{085f17b6-a5a6-4724-8a3d-43de87e7b3fb}</object>
+                         <name>BumblebeeCamera</name>
+                         <pos>x:235;y:180</pos>
+                         <rect>x:-120;y:-105;w:240;h:210</rect>
+                         <visual-role>6</visual-role>
+                         <visual-role2>2</visual-role2>
+                         <visual-emphasized>true</visual-emphasized>
+                         <stereotype-display>1</stereotype-display>
+                        </DObject>
+                       </base-DObject>
+                       <show-all-members>true</show-all-members>
+                      </DClass>
+                     </instance>
+                    </item>
+                    <item>
+                     <instance type="DClass">
+                      <DClass>
+                       <base-DObject>
+                        <DObject>
+                         <base-DElement>
+                          <DElement>
+                           <uid>{8149e59f-afe3-45e4-8fdb-717e47a1e2df}</uid>
+                          </DElement>
+                         </base-DElement>
+                         <object>{9b92e91d-fd60-454b-8530-9e6057c9f26c}</object>
+                         <context>Usma Triclops</context>
+                         <name>LineFilter</name>
+                         <pos>x:220;y:15</pos>
+                         <rect>x:-65;y:-40;w:130;h:80</rect>
                          <visual-role>0</visual-role>
                         </DObject>
                        </base-DObject>
@@ -103,7 +149,8 @@
                     </item>
                    </qlist>
                   </elements>
-                  <last-modified>1460318013674</last-modified>
+                  <last-modified>1460513870406</last-modified>
+                  <toolbarid>Activities</toolbarid>
                  </MDiagram>
                 </base-MDiagram>
                </MCanvasDiagram>
@@ -124,63 +171,63 @@
                     <uid>{6b4bae9b-e0dc-4ef3-b1b5-c7a7e5afe4c7}</uid>
                    </MElement>
                   </base-MElement>
-                  <name>LineFilter</name>
+                  <name>LineFilter23</name>
                  </MObject>
                 </base-MObject>
                 <members>
                  <qlist>
                   <item>
                    <MClassMember>
-                    <uid>{87d2428d-7414-40a0-a929-f9d879369fa0}</uid>
+                    <uid>{a2001e15-d53d-40c4-bfbc-490af0df8a9d}</uid>
                     <type>1</type>
                     <declaration>image_transport::Publisher image_pub_filtered_right</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{02cb648d-c416-48cd-88de-eec193e3cb46}</uid>
+                    <uid>{eec62cd0-8a4d-411f-a700-f038622adf2e}</uid>
                     <type>1</type>
                     <declaration>image_transport::Publisher image_pub_filtered_left</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{9f821381-d16f-428e-aead-535bc5a85de5}</uid>
+                    <uid>{59d1e7ba-8073-4f69-8233-a9c978f98d91}</uid>
                     <type>1</type>
                     <declaration>image_transport::Publisher image_pub_filtered_rectified</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{318ecade-80ae-4d5d-a0b3-32ec6f6aeb3b}</uid>
+                    <uid>{53bcc6ef-fa47-4927-8f60-19e4f6493dc1}</uid>
                     <type>1</type>
                     <declaration>image_transport::Subscriber subcamright</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{b8e0be5c-2bdf-46db-b708-7f0f63abc0da}</uid>
+                    <uid>{49b393b2-d145-4781-a1d2-6ae43a438345}</uid>
                     <type>1</type>
                     <declaration>image_transport::Subscriber subcamleft</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{ab58bf19-ee73-4152-80cb-8e774242429e}</uid>
+                    <uid>{0d052c27-2fc7-4c9d-90fc-7afadf3649b3}</uid>
                     <type>1</type>
                     <declaration>image_transport::Subscriber subrectified</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{f7d06a5a-094d-45aa-8741-1e6eb42c7c1d}</uid>
+                    <uid>{78fdf7ae-e156-4d7c-820f-2c01fd6f3784}</uid>
                     <type>2</type>
                     <declaration>LineFilter( int argc, char** argv )</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{6d4cc841-b8d3-41f0-8c4c-3edf6f3f156f}</uid>
+                    <uid>{0a9e9c87-2750-4a19-a65e-bfe115fe6a2e}</uid>
                     <type>2</type>
                     <properties>1</properties>
                     <declaration>~LineFilter()</declaration>
@@ -188,63 +235,63 @@
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{1e565946-df99-4e8b-a05d-a5512c5fd0f7}</uid>
+                    <uid>{17865f18-5975-4472-821d-3aa307f893c8}</uid>
                     <type>2</type>
                     <declaration>void run()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{8fdec22e-69cb-49e5-9f0f-4d58f6a0d3d4}</uid>
+                    <uid>{4e5a2720-c6fa-447e-9050-86167e4d40c7}</uid>
                     <type>2</type>
                     <declaration>void displayOriginal()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{7b4135cd-791b-4da0-a4de-6357ad5b1252}</uid>
+                    <uid>{b55e4a6e-6ad3-4401-9c47-3858f4278890}</uid>
                     <type>2</type>
                     <declaration>void displayGrayScale()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{9eb7f3c9-3d70-47fe-933a-8fdb7fb0b0ef}</uid>
+                    <uid>{58d26191-db35-4c06-8b71-2ca6044c850b}</uid>
                     <type>2</type>
                     <declaration>void displayBlurred()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{31167a70-ac5b-41fa-8e6f-1dbf71980485}</uid>
+                    <uid>{9ee76c2e-7965-445e-89d5-9ba9eba85f01}</uid>
                     <type>2</type>
                     <declaration>void displayThreshold()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{099923c9-be71-4ba9-b308-bf1a9afb247e}</uid>
+                    <uid>{f6421078-d7a3-4982-b86f-21e62c2eb806}</uid>
                     <type>2</type>
                     <declaration>void displayEroded()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{a1345004-e502-4a79-b130-a590e670a307}</uid>
+                    <uid>{5180263a-a962-4b0f-a06e-88888f35ce22}</uid>
                     <type>2</type>
                     <declaration>void displayCanny()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{1a6a9dc8-8f6d-4b46-b4c0-4c84ec5f3aff}</uid>
+                    <uid>{f60c6757-8586-400b-b911-11d9553e05c8}</uid>
                     <type>2</type>
                     <declaration>void displayHough()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{c693652e-86e7-4486-8cea-e3f4e0373f24}</uid>
+                    <uid>{6d2735cf-cfbe-4e49-885a-49b3b509293d}</uid>
                     <type>2</type>
                     <declaration>void displayCyan()</declaration>
                    </MClassMember>
@@ -276,49 +323,49 @@
                  <qlist>
                   <item>
                    <MClassMember>
-                    <uid>{1a0d6ed7-b91f-4f20-9088-35849dfea960}</uid>
+                    <uid>{05cee991-ea6b-4fb8-8b0c-563bf81b24dd}</uid>
                     <type>1</type>
                     <declaration>image_transport::Subscriber subcamfilteredright</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{5c4de03a-4e4c-4ff5-b414-8a375ecf0e61}</uid>
+                    <uid>{88aeea0c-f191-4b8c-9d41-6a837ffa07fe}</uid>
                     <type>1</type>
                     <declaration>image_transport::Subscriber subcamfilteredrectified</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{53e6e813-3a82-46b0-b9aa-7cc27ab75114}</uid>
+                    <uid>{d623a844-0a74-49f2-8544-c07e9bb6b7c4}</uid>
                     <type>1</type>
                     <declaration>image_transport::Subscriber subcamdisp</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{4df53942-3465-4497-b678-5e26fa56976a}</uid>
+                    <uid>{7113cd2b-8772-48d4-802c-bed0c5ca592c}</uid>
                     <type>1</type>
                     <declaration>image_transport::Subscriber subRectColor</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{62bf72b9-5562-4103-9cfc-fb1760fe7c7d}</uid>
+                    <uid>{3206e832-9367-4c80-88e6-6ee1a0feecc2}</uid>
                     <type>1</type>
                     <declaration>ros::Publisher pointCloudPublisher</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{aea0ea10-5d2f-4571-9c13-606ca7a8d1ec}</uid>
+                    <uid>{45aa3a57-6996-4e42-b5a1-0200e9b77723}</uid>
                     <type>2</type>
                     <declaration>Vision3D( int argc, char **argv )</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{73a1b059-fbf2-4969-8a6d-ca3452c915e0}</uid>
+                    <uid>{3f9e650c-0afd-42fb-a277-ec768a0577bd}</uid>
                     <type>2</type>
                     <properties>1</properties>
                     <declaration>~Vision3D()</declaration>
@@ -326,14 +373,14 @@
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{d585a73d-5196-457f-ae98-20380946ddb9}</uid>
+                    <uid>{b9e8915c-5dc4-4442-a913-34758ddd9b66}</uid>
                     <type>2</type>
                     <declaration>void run()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{52cf1504-99f6-426d-baaf-97e48eac2d89}</uid>
+                    <uid>{ccd9bd73-457c-4449-a2f6-0d388a5301b3}</uid>
                     <type>1</type>
                     <declaration>TriclopsContext triclops</declaration>
                    </MClassMember>
@@ -365,119 +412,119 @@
                  <qlist>
                   <item>
                    <MClassMember>
-                    <uid>{3e031127-2e81-4b87-be0b-2c2d3e9a29b8}</uid>
+                    <uid>{08e5cc78-81ec-4324-90b9-4ecae6e3d0dc}</uid>
                     <type>1</type>
                     <declaration>image_transport::Publisher image_pub_left</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{2765d675-1963-4cdf-ba40-6fc7c1ad80b3}</uid>
+                    <uid>{189cf48a-b10f-46bf-a4bc-95aca785b92f}</uid>
                     <type>1</type>
                     <declaration>image_transport::Publisher image_pub_right</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{2c9c8fc2-c84d-4946-826b-4834674cf0b7}</uid>
+                    <uid>{f736ae6b-1ee6-4b51-82d8-3e9a7275c0c6}</uid>
                     <type>1</type>
                     <declaration>image_transport::Publisher image_pub_disparity</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{fcfa4def-db20-4e03-ac0d-b41b9d450f37}</uid>
+                    <uid>{783207ca-bd63-4341-b497-eab07f082e5b}</uid>
                     <type>1</type>
                     <declaration>image_transport::Publisher image_pub_rectifiedColor</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{5cab5fc3-1342-4c5f-b720-83499bce26d4}</uid>
+                    <uid>{57a64150-1d3a-4567-b6b5-1ab41d55f8de}</uid>
                     <type>2</type>
                     <declaration>CameraSystem( int argc, char** argv )</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{c1df46c4-4cef-4e3d-a4ce-8fcdb9d3abdc}</uid>
+                    <uid>{14ec4b65-6637-4f8d-9d60-5dd90c735f5e}</uid>
                     <type>2</type>
                     <declaration>~CameraSystem()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{ed5cc245-5e05-43d1-921a-3ccd09bf6866}</uid>
+                    <uid>{7db63d49-d1bb-45e0-9416-1ac560a42ea0}</uid>
                     <type>2</type>
                     <declaration>void run()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{ab4156ef-de6e-4b1b-b62d-22aaf278f161}</uid>
+                    <uid>{4faa4fc1-70b1-4e6e-9442-f34389137529}</uid>
                     <type>2</type>
                     <declaration>int convertToBGRU( FC2::Image &amp; image, FC2::Image &amp; convertedImage )</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{baf34ddd-ded2-40c0-8fb0-227e7c905455}</uid>
+                    <uid>{4fd9bd4d-3cd9-4f0f-82e7-9c9a87c4ac83}</uid>
                     <type>2</type>
                     <declaration>int convertToBGR( FC2::Image &amp; image, FC2::Image &amp; convertedImage )</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{314662db-9b7d-40ad-800a-7f57c636aa09}</uid>
+                    <uid>{e97a5b4b-e3d9-4f23-bb66-b704ebc4bc1c}</uid>
                     <type>1</type>
                     <declaration>TriclopsContext triclops</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{b02ecb1e-23d5-41d8-a630-e63b4425ed1b}</uid>
+                    <uid>{daa32bc1-84be-4b54-aa16-6e13d86bdb69}</uid>
                     <type>2</type>
                     <declaration>int shutdown()</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{94cf10af-0f7b-49d5-b7f4-9ea088892553}</uid>
+                    <uid>{d1ffecc3-1e0d-4b36-a939-dad6363d1d75}</uid>
                     <type>2</type>
                     <declaration>int setDispMax( int disp )</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{3ea62590-f513-4c89-be63-62c324f0f435}</uid>
+                    <uid>{efe61282-953e-410e-938c-53817e50ab32}</uid>
                     <type>2</type>
                     <declaration>int setDispMin( int disp )</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{863f790d-1f62-4035-8feb-6d9a906f82a9}</uid>
+                    <uid>{0a57729c-def8-488f-9cce-bf50ae653537}</uid>
                     <type>2</type>
                     <declaration>int setDispMapMax( int disp )</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{99bcca75-a35b-4360-a848-be9161e149af}</uid>
+                    <uid>{6bfa4f79-0cbb-461b-a13f-049b34b43fa8}</uid>
                     <type>2</type>
                     <declaration>int setDispMapMin( int disp )</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{948c4d9f-8572-4957-8aef-acf1751222f0}</uid>
+                    <uid>{d78b9182-18ad-48ed-9670-240a2e835f3a}</uid>
                     <type>2</type>
                     <declaration>int setStereoMask( int mask )</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{27dc449d-9b51-4128-9c08-91d5755886fb}</uid>
+                    <uid>{6ec84cc2-4205-487a-8637-018af52aada3}</uid>
                     <type>2</type>
                     <declaration>std::string getResolution()</declaration>
                    </MClassMember>
@@ -485,6 +532,194 @@
                  </qlist>
                 </members>
                </MClass>
+              </instance>
+             </target>
+            </handle>
+           </item>
+           <item>
+            <handle>
+             <uid>{085f17b6-a5a6-4724-8a3d-43de87e7b3fb}</uid>
+             <target>
+              <instance type="MClass">
+               <MClass>
+                <base-MObject>
+                 <MObject>
+                  <base-MElement>
+                   <MElement>
+                    <uid>{085f17b6-a5a6-4724-8a3d-43de87e7b3fb}</uid>
+                   </MElement>
+                  </base-MElement>
+                  <name>BumblebeeCamera</name>
+                 </MObject>
+                </base-MObject>
+                <members>
+                 <qlist>
+                  <item>
+                   <MClassMember>
+                    <uid>{870a4d66-a0fa-4cec-9577-2fb5ca7b71fc}</uid>
+                    <type>2</type>
+                    <declaration>BumbleBeeCamera(int argc, char** argv)</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{eae18c86-bfcc-4795-878d-d64686fb17d2}</uid>
+                    <type>2</type>
+                    <declaration>~BumbleBeeCamera()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{42dbbacf-3ba1-42c3-93b6-5e498ed14f06}</uid>
+                    <type>2</type>
+                    <declaration>TriclopsInput16 getDisparityImage()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{07f02fd7-fe3e-4be7-8fae-3fb8680e9f47}</uid>
+                    <type>2</type>
+                    <declaration>TriclopsInput getLeftColorImage()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{6ef26230-43fb-4cc8-b444-0bf3337be111}</uid>
+                    <type>2</type>
+                    <declaration>TriclopsInput getRightColorImage()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{a06bc8a3-174d-4cd2-b27c-605b973338ca}</uid>
+                    <type>2</type>
+                    <declaration>TriclopsColorInput getRectifiedColorImage()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{54f57f2d-1309-445f-877f-ac7d7156ad2b}</uid>
+                    <type>1</type>
+                    <declaration>TriclopsInput16 disparityImage</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{839be5ec-dd06-4562-9701-3bbd1bed4870}</uid>
+                    <type>1</type>
+                    <declaration>TriclopsInput leftColorImage</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{d8acecfe-8a40-4e43-841d-2e82be4579a3}</uid>
+                    <type>1</type>
+                    <declaration>TriclopsInput rightColorImage</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{5226c719-a334-4cac-97e8-1b31ace05e20}</uid>
+                    <type>1</type>
+                    <declaration>TriclopsColorInput rectifiedColorImage</declaration>
+                   </MClassMember>
+                  </item>
+                 </qlist>
+                </members>
+               </MClass>
+              </instance>
+             </target>
+            </handle>
+           </item>
+           <item>
+            <handle>
+             <uid>{60b30fe8-b775-4b08-b7bd-4e31aa793d5a}</uid>
+             <target>
+              <instance type="MPackage">
+               <MPackage>
+                <base-MObject>
+                 <MObject>
+                  <base-MElement>
+                   <MElement>
+                    <uid>{60b30fe8-b775-4b08-b7bd-4e31aa793d5a}</uid>
+                    <flags>1</flags>
+                   </MElement>
+                  </base-MElement>
+                  <name>Include</name>
+                  <children>
+                   <handles>
+                    <handles>
+                     <qlist>
+                      <item>
+                       <handle>
+                        <uid>{cbdcf120-420a-4775-bf7a-b7a7c7757745}</uid>
+                        <target>
+                         <instance type="MPackage">
+                          <MPackage>
+                           <base-MObject>
+                            <MObject>
+                             <base-MElement>
+                              <MElement>
+                               <uid>{cbdcf120-420a-4775-bf7a-b7a7c7757745}</uid>
+                               <flags>1</flags>
+                              </MElement>
+                             </base-MElement>
+                             <name>Usma Triclops</name>
+                             <children>
+                              <handles>
+                               <handles>
+                                <qlist>
+                                 <item>
+                                  <handle>
+                                   <uid>{9b92e91d-fd60-454b-8530-9e6057c9f26c}</uid>
+                                   <target>
+                                    <instance type="MClass">
+                                     <MClass>
+                                      <base-MObject>
+                                       <MObject>
+                                        <base-MElement>
+                                         <MElement>
+                                          <uid>{9b92e91d-fd60-454b-8530-9e6057c9f26c}</uid>
+                                          <flags>1</flags>
+                                         </MElement>
+                                        </base-MElement>
+                                        <name>LineFilter</name>
+                                       </MObject>
+                                      </base-MObject>
+                                      <members>
+                                       <qlist>
+                                        <item>
+                                         <MClassMember>
+                                          <uid>{c3afb7dc-8cd0-429b-ac10-87bde7eb9169}</uid>
+                                          <type>2</type>
+                                          <declaration>void displayOriginal()</declaration>
+                                         </MClassMember>
+                                        </item>
+                                       </qlist>
+                                      </members>
+                                     </MClass>
+                                    </instance>
+                                   </target>
+                                  </handle>
+                                 </item>
+                                </qlist>
+                               </handles>
+                              </handles>
+                             </children>
+                            </MObject>
+                           </base-MObject>
+                          </MPackage>
+                         </instance>
+                        </target>
+                       </handle>
+                      </item>
+                     </qlist>
+                    </handles>
+                   </handles>
+                  </children>
+                 </MObject>
+                </base-MObject>
+               </MPackage>
               </instance>
              </target>
             </handle>

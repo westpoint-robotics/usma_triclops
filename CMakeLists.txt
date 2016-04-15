@@ -63,17 +63,16 @@ catkin_package(
 ## Build ##
 ###########
 
-#MESSAGE("=-=-=- cmake ====: ${TRICLOPS_LIB}")
+#MESSAGE("=-=-=- cmake ====: ${CMAKE_SOURCE_DIR}/include")
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # The first argument "include" indicates that the include/ directory within the package is also part of the path.
 include_directories(
-  include/usma_triclops/
-  ${catkin_INCLUDE_DIRS}
-  /usr/include/triclops/
-  /usr/include/flycapture/
-  /usr/include/pcl-1.7/
-  /usr/include/eigen3/
+   # include/usma_triclops/
+  ${CMAKE_SOURCE_DIR}/include/
+  #${catkin_INCLUDE_DIRS}
+  #/usr/include/pcl-1.7/
+  #/usr/include/eigen3/
 )
 
 get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
@@ -81,7 +80,7 @@ foreach(dir ${dirs})
   message("IIIIIIIIIII " STATUS " dir='${dir}'")
 endforeach()
 
-MESSAGE("=-=-=- HEADER_SRC: ${HEADER_FILES}")
+##MESSAGE("=-=-=- HEADER_SRC: ${HEADER_FILES}")
 
 ## Declare a cpp executable
 add_executable(camera_system ${HEADER_FILES} src/camera_system.cpp src/triclops_opencv.cpp)
