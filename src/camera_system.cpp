@@ -34,8 +34,6 @@ CameraSystem::CameraSystem(int argc, char** argv)
     FC2::Error fc2Error;
 
     this->camera.Connect();
-    // configure camera - Identifies what camera is being used?
-
     if (configureCamera(this->camera)) {
         exit(-1);
     }

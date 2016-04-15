@@ -16,6 +16,9 @@ private:
     FC2T::TriclopsInput leftColorImage;
     FC2T::TriclopsInput rightColorImage;
     FC2T::TriclopsColorInput rectifiedColorImage;
+    FC2::Camera camera;
+    int configureCamera( FC2::Camera &camera );
+
 
 public:
     BumbleBeeCamera();
