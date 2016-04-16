@@ -1,1 +1,8 @@
 This code base relies heavily on the Pointgrey Robotics APIs (Triclops and Firefly). These APIs use function return values to handle errors. For consistency this code should do the same. Methods that return objects should do so using the right most paramters of the method.
+
+Preprocessing:
+1. Low-Pass Filtering: In order to rectify the images it is important to smooth them so we turn on the low pass filtering
+
+2. Rectification: Correct the distortions of the lenses and aligns the rows of images digitized from horizontally displaced cameras are aligned. Both left and right images are combined into one.
+
+3. Edge Detection: Allows matching on the changes in the brightness rather than the absolute values of the pixels in the images. This helps in environments where the lighting conditions change significantly. Validation is only available in the edge detection mode.

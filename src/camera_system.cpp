@@ -1,5 +1,7 @@
+#include <flycapture/FlyCapture2.h>
 #include <triclops/triclops.h>
 #include <triclops/fc2triclops.h>
+#include <triclops/flycapture2bridge.h>
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>

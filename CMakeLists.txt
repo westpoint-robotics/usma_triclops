@@ -30,13 +30,13 @@ IF((IS_DIRECTORY ${child}) AND (NOT "${child}" MATCHES "git"))
 ENDFOREACH()
 add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
 
-set(INC_DIR $ENV{PWD}/catkin_ws/src/usma_triclops/include/usma_triclops)
-set(HEADER_FILES ${INC_DIR}/camera_system.h
-    ${INC_DIR}/common.h
-    ${INC_DIR}/line_filter.h
-    ${INC_DIR}/triclops_opencv.h
-    ${INC_DIR}/typedefs.h
-    ${INC_DIR}/vision_3d.h)
+#set(INC_DIR $ENV{PWD}/catkin_ws/src/usma_triclops/include/usma_triclops)
+#set(HEADER_FILES ${INC_DIR}/camera_system.h
+#    ${INC_DIR}/common.h
+#    ${INC_DIR}/line_filter.h
+#    ${INC_DIR}/triclops_opencv.h
+#    ${INC_DIR}/typedefs.h
+#    ${INC_DIR}/vision_3d.h)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -87,6 +87,7 @@ endforeach()
 add_executable(camera_system ${HEADER_FILES} src/camera_system.cpp src/triclops_opencv.cpp include/usma_triclops/typedefs.h)
 add_executable(line_filter ${HEADER_FILES} src/line_filter.cpp)
 add_executable(vision3d ${HEADER_FILES} src/vision_3d.cpp)
+add_executable(bumblebee ${HEADER_FILES} src/bumblebeemain.cpp src/bumblebeecamera.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
@@ -107,4 +108,7 @@ target_link_libraries(vision3d
       ${triclops_LIBRARIES}
       ${catkin_LIBRARIES}
     )
-
+target_link_libraries(bumblebee
+      ${triclops_LIBRARIES}
+      ${catkin_LIBRARIES}
+    )

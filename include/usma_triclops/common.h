@@ -1,6 +1,9 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <triclops/triclops.h>
+#include <triclops/fc2triclops.h>
+
 //
 // Macro to check, report on, and handle Triclops API error codes.
 //
@@ -23,6 +26,7 @@
 namespace FC2 = FlyCapture2;
 namespace FC2T = Fc2Triclops;
 
+// Holds the FlyCapture images for processing
 struct ImageContainer
 {
     FC2::Image unprocessed[2];
