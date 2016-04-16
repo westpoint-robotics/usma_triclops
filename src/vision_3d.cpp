@@ -18,9 +18,9 @@
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include "typedefs.h"
-#include "vision_3d.h"
-#include "line_filter.h"
+#include "usma_triclops/typedefs.h"
+#include "usma_triclops/vision_3d.h"
+#include "usma_triclops/line_filter.h"
 
 Vision3D::Vision3D(int argc, char** argv)
 {

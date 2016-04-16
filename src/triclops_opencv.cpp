@@ -5,8 +5,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "typedefs.h"
-
+#include "usma_triclops/typedefs.h"
 
 // aliases namespaces
 namespace FC2 = FlyCapture2;

@@ -4,8 +4,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
-#include "line_filter.h"
-#include "triclops_opencv.h"
+#include "usma_triclops/line_filter.h"
+#include "usma_triclops/triclops_opencv.h"
 
 /**
  * @brief LineFilter::LineFilter Used to find white lines in OpenCv Images.

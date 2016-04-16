@@ -30,13 +30,13 @@ IF((IS_DIRECTORY ${child}) AND (NOT "${child}" MATCHES "git"))
 ENDFOREACH()
 add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
 
-set(INC_DIR $ENV{PWD}/catkin_ws/src/usma_triclops/include/usma_triclops)
-set(HEADER_FILES ${INC_DIR}/camera_system.h
-    ${INC_DIR}/common.h
-    ${INC_DIR}/line_filter.h
-    ${INC_DIR}/triclops_opencv.h
-    ${INC_DIR}/typedefs.h
-    ${INC_DIR}/vision_3d.h)
+#set(INC_DIR $ENV{PWD}/catkin_ws/src/usma_triclops/include/usma_triclops)
+#set(HEADER_FILES ${INC_DIR}/camera_system.h
+#    ${INC_DIR}/common.h
+#    ${INC_DIR}/line_filter.h
+#    ${INC_DIR}/triclops_opencv.h
+#    ${INC_DIR}/typedefs.h
+#    ${INC_DIR}/vision_3d.h)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -68,11 +68,12 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # The first argument "include" indicates that the include/ directory within the package is also part of the path.
 include_directories(
-   # include/usma_triclops/
-  ${CMAKE_SOURCE_DIR}/include/
-  #${catkin_INCLUDE_DIRS}
-  #/usr/include/pcl-1.7/
-  #/usr/include/eigen3/
+  include
+  ${catkin_INCLUDE_DIRS}
+  /usr/include/triclops/
+  /usr/include/flycapture/
+  /usr/include/pcl-1.7/
+  /usr/include/eigen3/
 )
 
 get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
@@ -83,7 +84,7 @@ endforeach()
 ##MESSAGE("=-=-=- HEADER_SRC: ${HEADER_FILES}")
 
 ## Declare a cpp executable
-add_executable(camera_system ${HEADER_FILES} src/camera_system.cpp src/triclops_opencv.cpp)
+add_executable(camera_system ${HEADER_FILES} src/camera_system.cpp src/triclops_opencv.cpp include/usma_triclops/typedefs.h)
 add_executable(line_filter ${HEADER_FILES} src/line_filter.cpp)
 add_executable(vision3d ${HEADER_FILES} src/vision_3d.cpp)
 
