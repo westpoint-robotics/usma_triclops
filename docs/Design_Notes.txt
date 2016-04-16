@@ -1,0 +1,1 @@
+This code base relies heavily on the Pointgrey Robotics APIs (Triclops and Firefly). These APIs use function return values to handle errors. For consistency this code should do the same. Methods that return objects should do so using the right most paramters of the method.

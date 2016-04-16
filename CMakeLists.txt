@@ -30,13 +30,13 @@ IF((IS_DIRECTORY ${child}) AND (NOT "${child}" MATCHES "git"))
 ENDFOREACH()
 add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
 
-#set(INC_DIR $ENV{PWD}/catkin_ws/src/usma_triclops/include/usma_triclops)
-#set(HEADER_FILES ${INC_DIR}/camera_system.h
-#    ${INC_DIR}/common.h
-#    ${INC_DIR}/line_filter.h
-#    ${INC_DIR}/triclops_opencv.h
-#    ${INC_DIR}/typedefs.h
-#    ${INC_DIR}/vision_3d.h)
+set(INC_DIR $ENV{PWD}/catkin_ws/src/usma_triclops/include/usma_triclops)
+set(HEADER_FILES ${INC_DIR}/camera_system.h
+    ${INC_DIR}/common.h
+    ${INC_DIR}/line_filter.h
+    ${INC_DIR}/triclops_opencv.h
+    ${INC_DIR}/typedefs.h
+    ${INC_DIR}/vision_3d.h)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)

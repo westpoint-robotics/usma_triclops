@@ -3,13 +3,13 @@
 #include <triclops/fc2triclops.h>
 #include <triclops/flycapture2bridge.h>
 #include "usma_triclops/bumblebeecamera.h"
+#include "usma_triclops/common.h"
 
 BumbleBeeCamera::BumbleBeeCamera(){
     startCamera();
 }
 
-BumbleBeeCamera::~BumbleBeeCamera() { shutdown(); }
-
+//BumbleBeeCamera::~BumbleBeeCamera() { shutdown(); }
 
 int BumbleBeeCamera::startCamera()
 {
@@ -21,14 +21,15 @@ int BumbleBeeCamera::startCamera()
         exit(-1);
     }
 
+    FC2T::StereoCameraMode mode = FC2T::TWO_CAMERA;
     // Set the camera to stereo mode with cameras arranged horizontally
-    FC2T::ErrorType fc2TriclopsError = FC2T::setStereoMode(this->camera, FC2T::TWO_CAMERA);
+    FC2T::ErrorType fc2TriclopsError = FC2T::setStereoMode(this->camera, mode);
     if (fc2TriclopsError) {
         return FC2T::handleFc2TriclopsError(fc2TriclopsError, "setStereoMode");
     }
 
     // generate the Triclops context. This contains camera information needed to do stereo processing.
-    if (generateTriclopsContext(this->camera, this->triclops)) {
+    if (generateTriclopsContext()) {
         exit(-1);
     }
 
@@ -53,24 +54,24 @@ int BumbleBeeCamera::shutdown()
     return 0;
 }
 
-// TODO make this return the information in a data structure
-FC2::Format7ImageSettings BumbleBeeCamera::retreiveImageFormat()
+// Retreive the image format setting from the camera to include:
+// mode,offX,offY,width,height,pixFormat
+int BumbleBeeCamera::retreiveImageFormat(FC2::Format7ImageSettings formatSettings)
 {
     FC2::Error fc2Error;
-    FC2::Format7ImageSettings formatSettings;
     unsigned int packetSize;
+    float percent;
+
     fc2Error = this->camera.GetFormat7Configuration(&formatSettings, &packetSize, &percent);
-//    printf("mode,offX,offY,width,height,pixFormat,percent: %d,%d,%d,%d,%d,%x,%f\n",
-//        formatSettings.mode, formatSettings.offsetX, formatSettings.offsetY,
-//        formatSettings.width, formatSettings.height,
-//        formatSettings.pixelFormat);
-    return formatSettings;
+    if (fc2Error != FlyCapture2::PGRERROR_OK) {
+        return Fc2Triclops::handleFc2Error(fc2Error);
+    }
+    return 0;
 }
 
 // Generates the triclopsContext from the camera.
-TriclopsContext BumbleBeeCamera::generateTriclopsContext()
+int BumbleBeeCamera::generateTriclopsContext(TriclopsContext triclopsCon)
 {
-    TriclopsContext triclopsCon;
     FC2::CameraInfo camInfo;
     FC2::Error fc2Error = this->camera.GetCameraInfo(&camInfo);
     if (fc2Error != FC2::PGRERROR_OK) {
@@ -84,6 +85,5 @@ TriclopsContext BumbleBeeCamera::generateTriclopsContext()
             "getContextFromCamera");
     }
 
-    return triclopsCon;
+    return 0;
 }
-

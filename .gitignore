@@ -2,7 +2,6 @@ cmake_install.cmake
 build/
 bin/
 lib/
-docs/
 msg_gen/
 srv_gen/
 *.*~

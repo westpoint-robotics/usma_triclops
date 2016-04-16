@@ -20,12 +20,9 @@ private:
     int configureCamera( FC2::Camera &camera );
     TriclopsContext triclops;
     int startCamera();
-    FC2::Format7ImageSettings retreiveImageFormat();
-
-
-
     int shutdown();
-    TriclopsContext generateTriclopsContext();
+    int generateTriclopsContext(TriclopsContext triclopsCon);
+    int retreiveImageFormat(FC2::Format7ImageSettings formatSettings);
 public:
     BumbleBeeCamera();
     ~BumbleBeeCamera();
