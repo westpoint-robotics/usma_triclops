@@ -15,22 +15,31 @@ class BumbleBeeCamera
 {
 
 private:
+    TriclopsInput triclopsColorInput;
+    TriclopsInput triclopsMonoInput;
 
     ImageContainer imageContainer;
     TriclopsImage16 disparityImage;
     TriclopsColorImage rectifiedColorImage;
     FC2::Camera camera;
     TriclopsContext triclops;
-    int startCamera();
-    int shutdown();
-    int generateTriclopsContext(TriclopsContext triclopsCon);
+    int disp_max;
+    int disp_min;
+    u_char disp_map_max;
+    u_char disp_map_min;
+    int disp_map_on;
+    int stereo_mask;
+    int generateTriclopsContext();
     int retreiveImageFormat(FC2::Format7ImageSettings formatSettings);
     int preProcessing(const FC2::Image &grabbedImage);
     int convertToBGR(FC2::Image &image, FC2::Image &convertedImage);
     int convertToBGRU(FC2::Image &image, FC2::Image &convertedImage);
+
+    int doStereo();
 public:
     BumbleBeeCamera();
-    ~BumbleBeeCamera()  { shutdown(); };
+    int startCamera();
+    int shutdown();
     TriclopsImage16 getDisparityImage();
     TriclopsColorImage getRectifiedColorImage();
 

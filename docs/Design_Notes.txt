@@ -6,3 +6,59 @@ Preprocessing:
 2. Rectification: Correct the distortions of the lenses and aligns the rows of images digitized from horizontally displaced cameras are aligned. Both left and right images are combined into one.
 
 3. Edge Detection: Allows matching on the changes in the brightness rather than the absolute values of the pixels in the images. This helps in environments where the lighting conditions change significantly. Validation is only available in the edge detection mode.
+
+START CAMERA:
+    1. connect
+    2. setStereoMode
+    3. generateTriclopsContext
+    4. StartCapture
+    5. Display camera Info
+    
+retrieveImages:
+    1. RetrieveBuffer
+    2. preProcessing
+        1. unpackUnprocessedRawOrMono16Image
+        2. convertToBGRU
+        3. packTwoSideBySideRgbImage
+        4. triclopsBuildPackedTriclopsInput
+        5. packedColorImage.SetDimensions
+        6. Convert to monoImage
+        7. triclopsBuildRGBTriclopsInput
+        
+        
+1. camera.Connect
+2. configureCamera
+    1. setStereoMode
+3. generateTriclopsContext
+    1. GetCameraInfo
+    2. getContextFromCamera
+4. grabImage
+    1. StartCapture
+    2. RetrieveBuffer
+5. generateTriclopsInput
+    1. unpackUnprocessedRawOrMono16Image
+    2. convertToBGRU
+    3. packTwoSideBySideRgbImage
+    4. triclopsBuildPackedTriclopsInput
+    5. SetDimensions
+    6. Convert mono8
+    7. triclopsBuildRGBTriclopsInput
+6. doStereo
+    1. triclopsSetSubpixelInterpolation
+    2. triclopsRectify
+    3. triclopsStereo
+    4. triclopsGetImage16
+    5. triclopsSaveImage16
+7. save3dPoints
+    1. triclopsRectifyColorImage
+    2. increment
+8. StopCapture
+9. Disconnect
+10. triclopsDestroyContext
+     
+     
+     
+     
+     
+     
+     

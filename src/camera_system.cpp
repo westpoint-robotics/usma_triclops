@@ -72,7 +72,7 @@ CameraSystem::CameraSystem(int argc, char** argv)
     }
     else {
         ROS_INFO(
-            ">>>>> CAMERA INFO  Vendor: %s     Model: %s     Serail#: %d  "
+            "CONNECTED TO CAMERA Vendor: %s     Model: %s     Serail#: %d  "
             "Resolution: %s",
             camInfo.vendorName, camInfo.modelName, camInfo.serialNumber,
             camInfo.sensorResolution);
