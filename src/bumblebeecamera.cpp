@@ -56,7 +56,8 @@ int BumbleBeeCamera::startCamera()
     return 0;
 }
 
-// Clean shutdown of the bumbleBee camera and triclops API
+// Clean shutdown of the bumbleBee camera and triclops APIsave
+
 int BumbleBeeCamera::shutdown()
 {
     this->camera.StopCapture();
@@ -153,8 +154,8 @@ int BumbleBeeCamera::preProcessing(FC2::Image const& grabbedImage)
 
     FC2::PGMOption pgmOpt;
     pgmOpt.binaryFile = true;
-    unprocessedImage[RIGHT].Save("rawRightImage.pgm", &pgmOpt);
-    unprocessedImage[LEFT].Save("rawLeftImage.pgm", &pgmOpt);
+//    unprocessedImage[RIGHT].Save("rawRightImage.pgm", &pgmOpt);
+//    unprocessedImage[LEFT].Save("rawLeftImage.pgm", &pgmOpt);
 
 
     FC2::Image* monoImage = imageContainer.mono;
@@ -171,8 +172,8 @@ int BumbleBeeCamera::preProcessing(FC2::Image const& grabbedImage)
         FC2::PNGOption pngOpt;
         pngOpt.interlaced = false;
         pngOpt.compressionLevel = 9;
-        bgruImage[RIGHT].Save("colorImageRight.png", &pngOpt);
-        bgruImage[LEFT].Save("colorImageLeft.png", &pngOpt);
+//        bgruImage[RIGHT].Save("colorImageRight.png", &pngOpt);
+//        bgruImage[LEFT].Save("colorImageLeft.png", &pngOpt);
 
         // Pack BGRU right and left image into one image
         fc2TriclopsError = FC2T::packTwoSideBySideRgbImage(
@@ -207,8 +208,8 @@ int BumbleBeeCamera::preProcessing(FC2::Image const& grabbedImage)
             }
         }
 
-        monoImage[RIGHT].Save("monoImageRight.pgm", &pgmOpt);
-        monoImage[LEFT].Save("monoImageLeft.pgm", &pgmOpt);
+//        monoImage[RIGHT].Save("monoImageRight.pgm", &pgmOpt);
+//        monoImage[LEFT].Save("monoImageLeft.pgm", &pgmOpt);
 
     // Use the row interleaved images to build up an RGB TriclopsInput.
     // An RGB triclops input will contain the 3 raw images (1 from each camera).
@@ -274,8 +275,8 @@ int BumbleBeeCamera::doStereo()
 
     // Save the interpolated depth image
     char const * pDispFilename = "disparity16.pgm";
-    te = triclopsSaveImage16( &disparityImage, const_cast<char *>(pDispFilename) );
-    _HANDLE_TRICLOPS_ERROR( "triclopsSaveImage()", te );
+//    te = triclopsSaveImage16( &disparityImage, const_cast<char *>(pDispFilename) );
+//    _HANDLE_TRICLOPS_ERROR( "triclopsSaveImage()", te );
 
     return 0;
 }

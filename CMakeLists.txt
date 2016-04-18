@@ -87,7 +87,7 @@ endforeach()
 add_executable(camera_system ${HEADER_FILES} src/camera_system.cpp src/triclops_opencv.cpp include/usma_triclops/typedefs.h)
 add_executable(line_filter ${HEADER_FILES} src/line_filter.cpp)
 add_executable(vision3d ${HEADER_FILES} src/vision_3d.cpp)
-add_executable(bumblebee ${HEADER_FILES} src/bumblebeecamera.cpp src/bumblebeemain.cpp)
+add_executable(bumblebee ${HEADER_FILES} src/bumblebeecamera.cpp src/bumblebeemain.cpp src/triclops_opencv.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes

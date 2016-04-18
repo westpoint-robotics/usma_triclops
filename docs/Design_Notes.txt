@@ -25,7 +25,7 @@ retrieveImages:
         6. Convert to monoImage
         7. triclopsBuildRGBTriclopsInput
         
-        
+ORIGINAL ALGORITHM FROM POINTGREY        
 1. camera.Connect
 2. configureCamera
     1. setStereoMode
