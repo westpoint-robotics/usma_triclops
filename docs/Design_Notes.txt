@@ -1,3 +1,14 @@
+-------- Short Description ---------------
+
+The bumblebee camera streams stereo images from the camera to memory on the computer using DMA with the Firefly API. The images are processed using the Triclops API from raw images into a disparity image and a recitified color image. The rectified image is used for object detection such as white lines, red flags, and blue flags. From the rectified image a mask is built that marks pixels that contain the identified objects. This mask is appllied to the disparity image in order to find the 3d coordinates of the object in reference to the camera. The 3d Coordinates are then added to a pointcloud for that object.
+
+-------- Responsibility -------------------
+Bumblebee Class:
+Start the camera and provide the diparity image, the rectified color image, and calibration information (triclopsContext) needed to extract 3d coordinates from the disparity image.
+
+White Line Filter:
+Accept a rectified color image and find pixels that contain a white line. Return a mask ol
+ --------------------------------------------------------
 This code base relies heavily on the Pointgrey Robotics APIs (Triclops and Firefly). These APIs use function return values to handle errors. For consistency this code should do the same. Methods that return objects should do so using the right most paramters of the method.
 
 Preprocessing:
