@@ -14,6 +14,7 @@ BumbleBeeCamera::BumbleBeeCamera(){
     stereo_mask = 11;
 }
 
+// Connec to the camera and prepare it to start streaming images.
 int BumbleBeeCamera::startCamera()
 {
     FC2::Error fc2Error;
@@ -55,15 +56,15 @@ int BumbleBeeCamera::startCamera()
     return 0;
 }
 
+// Clean shutdown of the bumbleBee camera and triclops API
 int BumbleBeeCamera::shutdown()
 {
-
     this->camera.StopCapture();
     this->camera.Disconnect();
     // Destroy the Triclops context
-    //TriclopsError te;
-    //te = triclopsDestroyContext(triclops);
-    //_HANDLE_TRICLOPS_ERROR("triclopsDestroyContext()", te);
+    TriclopsError te;
+    te = triclopsDestroyContext(triclops);
+    _HANDLE_TRICLOPS_ERROR("triclopsDestroyContext()", te);
     return 0;
 }
 
@@ -101,6 +102,8 @@ int BumbleBeeCamera::generateTriclopsContext()
     return 0;
 }
 
+// Retreives raw images from the BumbleBee Cameras for
+// pre-processing prior to stereo processing.
 int BumbleBeeCamera::retrieveImages(){
     FC2::Error fc2Error;
     FC2::Image grabbedImage;
@@ -121,14 +124,14 @@ int BumbleBeeCamera::retrieveImages(){
         exit(EXIT_FAILURE);
     }
 
-
     //TODO get the disparity and rectified images
     return 0;
 }
 
-// Checked against PGR Code OK. RR
-//Low-pass filtering, Rectification, Edge detection. This method is
-// going to update triclopsColorInput and triclopsMonoInput.
+// Low-pass filtering, Rectification, Edge detection. This method is
+// going to update triclopsColorInput and triclopsMonoInput as part
+// of pre-processing. The triclops inputs are then used by the
+// doStereo method.
 int BumbleBeeCamera::preProcessing(FC2::Image const& grabbedImage)
 {
     FC2::Error fc2Error;
@@ -220,27 +223,13 @@ int BumbleBeeCamera::preProcessing(FC2::Image const& grabbedImage)
         monoImage[LEFT].GetData(), &triclopsMonoInput);
     _HANDLE_TRICLOPS_ERROR("triclopsBuildRGBTriclopsInput()", te);
 
-    //TODO what needs to come out of here.
+    // This method updates triclopsMonoInput and triclopColorInput state variables
     return 0;
 }
 
-// Copied over from older files.RR
-int BumbleBeeCamera::convertToBGRU(FC2::Image& image, FC2::Image& convertedImage)
-{
-    FC2::Error fc2Error;
-    fc2Error = image.SetColorProcessing(FC2::HQ_LINEAR);
-    if (fc2Error != FC2::PGRERROR_OK) {
-        return FC2T::handleFc2Error(fc2Error);
-    }
-
-    fc2Error = image.Convert(FC2::PIXEL_FORMAT_BGRU, &convertedImage);
-    if (fc2Error != FC2::PGRERROR_OK) {
-        return FC2T::handleFc2Error(fc2Error);
-    }
-
-    return 0;
-}
-
+// Conducts post processing of the images. Recieves triclopsColorInput,
+// triclopsMonoInput, and triclops context. Produces the disparity image
+// and the color rectified images.
 int BumbleBeeCamera::doStereo()
 {
     TriclopsError te;
@@ -250,21 +239,21 @@ int BumbleBeeCamera::doStereo()
     te = triclopsSetSubpixelInterpolation(triclops, 1);
     _HANDLE_TRICLOPS_ERROR("triclopsSetSubpixelInterpolation()", te);
 
-//    te = triclopsSetDisparity(triclops, disp_min, disp_max);
-//    _HANDLE_TRICLOPS_ERROR("triclopsSetSubpixelInterpolation()", te);
+    te = triclopsSetDisparity(triclops, disp_min, disp_max);
+    _HANDLE_TRICLOPS_ERROR("triclopsSetSubpixelInterpolation()", te);
 
-//    te = triclopsSetDisparityMapping(triclops, disp_map_min, disp_map_max);
-//    _HANDLE_TRICLOPS_ERROR("triclopsSetDisparityMapping()", te);
+    te = triclopsSetDisparityMapping(triclops, disp_map_min, disp_map_max);
+    _HANDLE_TRICLOPS_ERROR("triclopsSetDisparityMapping()", te);
 
-//    te = triclopsSetDisparityMappingOn(triclops, disp_map_on);
-//    _HANDLE_TRICLOPS_ERROR("triclopsSetDisparityMappingOn()", te);
+    te = triclopsSetDisparityMappingOn(triclops, disp_map_on);
+    _HANDLE_TRICLOPS_ERROR("triclopsSetDisparityMappingOn()", te);
 
-//    te = triclopsSetStereoMask(triclops, stereo_mask);
-//    _HANDLE_TRICLOPS_ERROR("triclopsSetDisparityMappingOn()", te);
+    te = triclopsSetStereoMask(triclops, stereo_mask);
+    _HANDLE_TRICLOPS_ERROR("triclopsSetDisparityMappingOn()", te);
 
-//    // ROS_INFO("stereoData x,y: %d,%d",stereoData.nrows, stereoData.ncols);
-//    te = triclopsSetResolution(triclops, triclopsMonoInput.nrows, triclopsMonoInput.ncols);
-//    _HANDLE_TRICLOPS_ERROR("triclopsSetResolution()", te);
+    // ROS_INFO("stereoData x,y: %d,%d",stereoData.nrows, stereoData.ncols);
+    te = triclopsSetResolution(triclops, triclopsMonoInput.nrows, triclopsMonoInput.ncols);
+    _HANDLE_TRICLOPS_ERROR("triclopsSetResolution()", te);
 
     // Rectify the images
     te = triclopsRectify(triclops, const_cast<TriclopsInput*>(&triclopsMonoInput));
@@ -289,12 +278,10 @@ int BumbleBeeCamera::doStereo()
     _HANDLE_TRICLOPS_ERROR( "triclopsSaveImage()", te );
 
     return 0;
-
 }
 
-
-// Copied over from older files.
-int BumbleBeeCamera::convertToBGR(FC2::Image& image, FC2::Image& convertedImage)
+// Convert a Flycapture raw image into BGRU format for processing for stereo vision
+int BumbleBeeCamera::convertToBGRU(FC2::Image& image, FC2::Image& convertedImage)
 {
     FC2::Error fc2Error;
     fc2Error = image.SetColorProcessing(FC2::HQ_LINEAR);
@@ -302,7 +289,7 @@ int BumbleBeeCamera::convertToBGR(FC2::Image& image, FC2::Image& convertedImage)
         return FC2T::handleFc2Error(fc2Error);
     }
 
-    fc2Error = image.Convert(FC2::PIXEL_FORMAT_BGR, &convertedImage);
+    fc2Error = image.Convert(FC2::PIXEL_FORMAT_BGRU, &convertedImage);
     if (fc2Error != FC2::PGRERROR_OK) {
         return FC2T::handleFc2Error(fc2Error);
     }
