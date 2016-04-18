@@ -18,19 +18,15 @@ BumbleBeeCamera::BumbleBeeCamera(){
 int BumbleBeeCamera::startCamera()
 {
     FC2::Error fc2Error;
+    FC2T::ErrorType fc2TriclopsError;
     // Connect to the camera
     this->camera.Connect();
 
     FC2T::StereoCameraMode mode = FC2T::TWO_CAMERA;
     // Set the camera to stereo mode with cameras arranged horizontally
-    FC2T::ErrorType fc2TriclopsError = FC2T::setStereoMode(this->camera, mode);
+    fc2TriclopsError = FC2T::setStereoMode(this->camera, mode);
     if (fc2TriclopsError) {
         return FC2T::handleFc2TriclopsError(fc2TriclopsError, "setStereoMode");
-    }
-
-    // generate the Triclops context. This contains camera information needed to do stereo processing.
-    if (generateTriclopsContext()) {
-        exit(-1);
     }
 
     // Starts isochronous image capture with DROP_FRAMES enabled. Only the most recent image is kept in the buffer.
@@ -51,6 +47,13 @@ int BumbleBeeCamera::startCamera()
             "Resolution: %s\n",
             camInfo.vendorName, camInfo.modelName, camInfo.serialNumber,
             camInfo.sensorResolution);
+    }
+
+    // generate the Triclops context. This contains camera information needed to do stereo processing.
+    fc2TriclopsError = FC2T::getContextFromCamera(camInfo.serialNumber, &triclops);
+    if (fc2TriclopsError != FC2T::ERRORTYPE_OK) {
+        return FC2T::handleFc2TriclopsError(fc2TriclopsError,
+            "getContextFromCamera");
     }
 
     return 0;
@@ -81,25 +84,6 @@ int BumbleBeeCamera::retreiveImageFormat(FC2::Format7ImageSettings formatSetting
     if (fc2Error != FlyCapture2::PGRERROR_OK) {
         return Fc2Triclops::handleFc2Error(fc2Error);
     }
-    return 0;
-}
-
-// Generates the triclopsContext from the camera.
-int BumbleBeeCamera::generateTriclopsContext()
-{
-    FC2::CameraInfo camInfo;
-    FC2::Error fc2Error = this->camera.GetCameraInfo(&camInfo);
-    if (fc2Error != FC2::PGRERROR_OK) {
-        return FC2T::handleFc2Error(fc2Error);
-    }
-
-    FC2T::ErrorType fc2TriclopsError;
-    fc2TriclopsError = FC2T::getContextFromCamera(camInfo.serialNumber, &triclops);
-    if (fc2TriclopsError != FC2T::ERRORTYPE_OK) {
-        return FC2T::handleFc2TriclopsError(fc2TriclopsError,
-            "getContextFromCamera");
-    }
-
     return 0;
 }
 

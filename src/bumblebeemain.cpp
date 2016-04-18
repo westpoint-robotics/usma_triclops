@@ -20,17 +20,17 @@ int main(int argc, char *argv[])
       bb2.retrieveImages();  // This uses 95% of cpu at 5hz
       TriclopsImage16 tri_disparityImage =bb2.getDisparityImage();
       TriclopsColorImage tri_rectifiedColorImage;
-      cv::Mat cv_rectifiedColorImage;
-      cv::Mat cv_disparityImage;
       tri_rectifiedColorImage=bb2.getRectifiedColorImage();
       tri_disparityImage=bb2.getDisparityImage();
+
+      cv::Mat cv_rectifiedColorImage;
+      cv::Mat cv_disparityImage;
       convertTriclops2Opencv(tri_rectifiedColorImage,cv_rectifiedColorImage);
       convertTriclops2Opencv(tri_disparityImage,cv_disparityImage);
       cv::imshow("RectifiedImage", cv_rectifiedColorImage);
       cv::imshow("DisparityImage", cv_disparityImage);
       cv::waitKey(3);
       //TODO take the opencv images and return a filtered image mask.
-
 
       ros::spinOnce();
       loop_rate.sleep();

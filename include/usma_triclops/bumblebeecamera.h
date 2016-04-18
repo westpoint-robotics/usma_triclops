@@ -26,7 +26,6 @@ private:
     int disp_map_on;
     u_char disp_map_max;
     u_char disp_map_min;
-    int generateTriclopsContext();
     int retreiveImageFormat(FC2::Format7ImageSettings formatSettings);
     int preProcessing(const FC2::Image &grabbedImage);
     int convertToBGR(FC2::Image &image, FC2::Image &convertedImage);
