@@ -5,9 +5,8 @@
 class WhitelineFilter{
 public:
     WhitelineFilter();
-private:
-    void findLines(const cv::Mat &src_image);
-    void findPointsOnLines( const cv::Mat &cImage);
+    void filterControl();
+    cv::Mat findLines(const cv::Mat &src_image);
     void displayOriginal();
     void displayGrayScale();
     void displayBlurred();
@@ -16,7 +15,8 @@ private:
     void displayCanny();
     void displayHough();
     void displayCyan();
-
+private:
+    void findPointsOnLines( const cv::Mat &cImage);
     cv::vector<cv::Vec4i> lines;
      std::vector<cv::Point2i> pixels;
     int thresh_val;           // The threshold value used to identify white in the image
