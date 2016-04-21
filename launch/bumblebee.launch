@@ -7,7 +7,7 @@
 
 
 
-  <node pkg="usma_triclops" type="bumblebee" name="bumblebee2" output="screen"/>  
+  <node pkg="usma_triclops" type="triclops_vision" name="bumblebee2" output="screen"/>
   
 <!--  <node pkg="image_view" type="image_view" name="Left_line_image" output="screen" args="image:=/camera/left/linefiltered" />
   <node pkg="image_view" type="image_view" name="Left_rgb_image" output="screen" args="image:=/camera/left/rgb" />

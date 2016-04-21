@@ -6,12 +6,11 @@
 #include "usma_triclops/typedefs.h"
 #include "usma_triclops/vision3d.h"
 
-Images3d::Images3d()
+Vision3d::Vision3d()
 {
-
 }
 
-int Images3d::producePointCloud(cv::Mat const& disparityImage,
+int Vision3d::producePointCloud(cv::Mat const& disparityImage,
     cv::Mat const& maskImage,
     TriclopsContext const& triclops,
     PointCloud& returnedPoints)
