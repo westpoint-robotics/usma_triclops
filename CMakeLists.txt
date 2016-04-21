@@ -9,13 +9,13 @@ project(usma_triclops)
 #set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
 #set(CMAKE_CXX_FLAGS_RELEASE "-O0 -ggdb")
 
-set(CMAKE_BUILD_TYPE DEBUG)
-set(CMAKE_C_FLAGS "-O3 -ggdb")
-set(CMAKE_C_FLAGS_DEBUG "-O3 -ggdb")
-set(CMAKE_C_FLAGS_RELEASE "-O3 -ggdb")
-set(CMAKE_CXX_FLAGS "-O3 -ggdb")
-set(CMAKE_CXX_FLAGS_DEBUG "-O3 -ggdb")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ggdb")
+#set(CMAKE_BUILD_TYPE DEBUG)
+#set(CMAKE_C_FLAGS "-O3 -ggdb")
+#set(CMAKE_C_FLAGS_DEBUG "-O3 -ggdb")
+#set(CMAKE_C_FLAGS_RELEASE "-O3 -ggdb")
+#set(CMAKE_CXX_FLAGS "-O3 -ggdb")
+#set(CMAKE_CXX_FLAGS_DEBUG "-O3 -ggdb")
+#set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ggdb")
 
 #NEEDED FOR QTCREATOR: Add all files in subdirectories of the project in
 # a dummy_target so qtcreator have access to all files
@@ -41,6 +41,13 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
 )
 
+# Specify package build info export
+catkin_package(
+#  INCLUDE_DIRS include # This indicates that the folder "include" within the package folder is where exported headers go.
+#  LIBRARIES usma_triclops
+#  CATKIN_DEPENDS roscpp rospy
+#  DEPENDS system_lib
+)
 ###########
 ## Build ##
 ###########

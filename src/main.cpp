@@ -3,6 +3,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "ros/ros.h"
+#include <stereo_msgs/DisparityImage.h>
+
 #include "usma_triclops/bumblebeecamera.h"
 #include "usma_triclops/triclops_opencv.h"
 #include "usma_triclops/whiteline_filter.h"
@@ -22,9 +24,12 @@ int main(int argc, char* argv[])
     ros::Publisher whiteLinePcPublisher = nh.advertise<sensor_msgs::PointCloud2>("/vision3D/points", 0);
     ros::Publisher redflagPcPublisher = nh.advertise<sensor_msgs::PointCloud2>("/redflag/points", 0);
     ros::Publisher blueflagPcPublisher = nh.advertise<sensor_msgs::PointCloud2>("/blueflag/points", 0);
+    // TODO use the ROS stereo_msgs::disparity message instead of an image message
+    ros::Publisher disparityPublisher = nh.advertise<sensor_msgs::Image>("/triclops/disparity", 1);
+    ros::Publisher rectifiedPublisher = nh.advertise<sensor_msgs::Image>("/triclops/rectified", 1);
 
     WhitelineFilter wl_filter; // The white line filter
-    Vision3d i3d; // The pointcloud creator
+    Vision3d i3d; // The pointcloud creatorImage
     Color_Filter cf; // The color filter for red and blue
     BumbleBeeCamera bb2; // The camera driver
 
@@ -43,6 +48,17 @@ int main(int argc, char* argv[])
         cv::Mat cv_disparityImage;
         convertTriclops2Opencv(tri_rectifiedColorImage, cv_rectifiedColorImage);
         convertTriclops2Opencv(tri_disparityImage, cv_disparityImage);
+
+        //Publish the images to ros
+        sensor_msgs::ImagePtr outmsg = cv_bridge::CvImage(std_msgs::Header(), sensor_msgs::image_encodings::TYPE_8UC3, cv_rectifiedColorImage).toImageMsg();
+        outmsg->header.frame_id = "bumblebee2";
+        outmsg->header.stamp = ros::Time::now();
+        rectifiedPublisher.publish(outmsg);
+
+        outmsg = cv_bridge::CvImage(std_msgs::Header(), sensor_msgs::image_encodings::TYPE_16UC1, cv_disparityImage).toImageMsg();
+        outmsg->header.frame_id = "bumblebee2";
+        outmsg->header.stamp = ros::Time::now();
+        disparityPublisher.publish(outmsg);
 
         if (debug) {
             cv::imshow("RectifiedImage", cv_rectifiedColorImage);
