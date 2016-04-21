@@ -1,4 +1,4 @@
-# usma_triclops
+# usma_triclops --TODO THIS NEEDS REWRITING TO REFLECT THE NEW CODE
 This package uses the Point Grey BumbleBee camera to generate a pointcloud. It is capable of producing a pointcloud with pixels organized in 3d space and with their original color. It also can produce a filtered point cloud that produces only points allowed thru a filter, such as white line filter. The code is still in need of added functionality, documentation, and is still very much a work in progress.
 
 This package creates three nodes:
