@@ -1,4 +1,10 @@
-#include "vision3d.h"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <triclops/triclops.h>
+
+#include "usma_triclops/typedefs.h"
+#include "usma_triclops/vision3d.h"
 
 Images3d::Images3d()
 {

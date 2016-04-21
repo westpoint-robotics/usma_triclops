@@ -7,16 +7,21 @@
 #include "usma_triclops/triclops_opencv.h"
 #include "usma_triclops/whiteline_filter.h"
 #include "usma_triclops/vision3d.h"
+#include "usma_triclops/color_filter.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
   ros::init(argc, argv, "bumbleBee");
-  ros::NodeHandle n;
+  ros::NodeHandle nh;
+
+  ros::Publisher pointCloudPublisher = nh.advertise<sensor_msgs::PointCloud2>("/vision3D/points", 0);
   ros::Rate loop_rate(5);
   BumbleBeeCamera bb2;
   WhitelineFilter wl_filter;
   Images3d i3d;
+  Color_Filter cf;
+
   bb2.startCamera();
   while (ros::ok()) {
     bb2.retrieveImages(); // This uses 95% of cpu at 5hz
@@ -33,11 +38,29 @@ int main(int argc, char *argv[]) {
     cv::imshow("DisparityImage", cv_disparityImage);
     cv::waitKey(3);
     // TODO take the opencv images and return a filtered image mask.
-    wl_filter.filterControl();
-
+    //wl_filter.filterControl();
     cv::Mat mask = wl_filter.findLines(cv_rectifiedColorImage);
     PointCloud returnedPoints;
-    i3d.producePointCloud(cv_disparityImage,mask, bb2.getTriclopsContext(),&returnedPoints);
+    i3d.producePointCloud(cv_disparityImage,mask, bb2.getTriclopsContext(),returnedPoints);
+
+//    cv::Mat redMask = cf.findRed(cv_rectifiedColorImage);
+//    cv::Mat blueMask = cf.findBlue(cv_rectifiedColorImage);
+//    cv::imshow("RedImage", redMask);
+//    cv::imshow("BlueImage", blueMask);
+//    cv::waitKey(3);
+    cf.filterControl();
+    cv::Mat blueBlob =cf.findBlueHsv(cv_rectifiedColorImage);
+
+    // Show blobs
+    cv::imshow("keypoints", blueBlob );
+    cv::waitKey(3);
+
+
+    returnedPoints.header.frame_id = "bumblebee2";
+    //returnedPoints.header.stamp = ros::Time::now().toNSec();
+    pointCloudPublisher.publish(returnedPoints);
+    returnedPoints.clear();
+
 
     wl_filter.displayCyan();
     wl_filter.displayThreshold();
