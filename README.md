@@ -1,12 +1,17 @@
-# usma_triclops --TODO THIS NEEDS REWRITING TO REFLECT THE NEW CODE
-This package uses the Point Grey BumbleBee camera to generate a pointcloud. It is capable of producing a pointcloud with pixels organized in 3d space and with their original color. It also can produce a filtered point cloud that produces only points allowed thru a filter, such as white line filter. The code is still in need of added functionality, documentation, and is still very much a work in progress.
+# usma_triclops --Single Node version
+This package uses the Point Grey BumbleBee camera to generate pointclouds of red objects, blue objects, and white lines.
 
-This package creates three nodes:
-- camera_system: This node acts as the device driver for a Point Grey Bumblebee2 camera. It automatically detects the camera and displays the camera information upon start up. This node processes the raw images from the camera and produces several images that are then published as ROS topics. The images produced include: left camera BGR, right camera BGR, rectified color BGR, and disparity image.
+This version of the code uses a single ROS node to publish the point clouds for the red flags, blue falgs, and white lines. It also publish the color rectified image and the disparity image. Under the branch called threeNodeVersion is a version that uses a seperate nodes for the cmarea driver, filters, and point clouds. 
+ 
 
-- line_filter: This node detects white lines. It subscribes to a BGR Image and publishes a Mono8 image that is all black except the the white pixels that belong to the white lines. It opens a OpenCv highGui interface that allows you to tune the variables that are used in the white line detector.
+This node:
+1. Is the device driver for a Point Grey Bumblebee2 camera. It detects the camera and displays the camera information upon start up. This node processes the raw images from the camera using the PGR Flycapture API. It then produces these images into a rectified color image and a disparity image using the PGR Triclops API. These are then published as ROS topics. 
 
-- vision3d: This node turns a disparity image into a 3d point cloud. If it is provided the rectified color image this node can produce a complete point cloud with each point arranged in 3d space as well as the color of the pixel ( this done by changing method calls and recompiling. The method that does this is called: doPointCloud). This node can also subscribe to a mono8 image and use it as a mask to display only certian pixels in the pointcloud, such as a white line ( this done by changing method calls and recompiling. The method that does this is called: maskToPointCloud).
+2. Conducts line_filtering: This node detects white lines and prodcues a white line mask (mono8) for consumption by the pointcloud producing code. 
+
+3. Conducts red and blue pixel filtering: The node detects red and blue pixels using HSV and produces a mask (mono8) for consumption by the pointcloud producing code. TODO: Integrate blog detection to filter out noise, currently it does not appear needed, but would improve accuracy in noisy environments.
+
+4. Vision3d produces point clouds based on image masks provided: This node turns a disparity image into a 3d point cloud. Provided a mask, the disparity image and triclops context it produces a point cloud with each point arranged in 3d space.
 
 ## To Install
 1. Download the latest libraries from Point Grey Website. Currently (March2016) they are called:
@@ -28,5 +33,5 @@ once you have extracted the files.
 
 5. Test the code.
     
-   - `roslaunch usma_triclops triclops_camera2.launch` 
+   - `roslaunch usma_triclops bumblebee.launch` 
 
