@@ -45,7 +45,7 @@ Vision3D::Vision3D(int argc, char** argv)
         exit(-1);
     }
 
-    this->pointCloudPublisher = nh.advertise<sensor_msgs::PointCloud2>("/vision3D/points", 1);
+    this->pointCloudPublisher = nh.advertise<sensor_msgs::PointCloud2>("/vision3D/lines", 1);
     this->subcamdisp = it.subscribe("/camera/disparity", 1,
         &Vision3D::visionCallBackDisparity, this);
     // TODO Stop using left image and use a rectified grayscale image for line

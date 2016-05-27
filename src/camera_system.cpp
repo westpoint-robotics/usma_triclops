@@ -394,12 +394,6 @@ void CameraSystem::run()
         this->rectifiedColorImage);
     publishImages();
 
-    cv::Mat img(cv::Mat(5, 300, CV_8U));
-    img = cv::Scalar(50);
-    if (guiview){
-    cv::imshow("DisparityView", img);
-    cv::waitKey(3);
-    }
     ros::spinOnce();
 }
 
