@@ -250,7 +250,7 @@ void Vision3D::run()
                 this->triclops, cloud);
         }
         // ROS_INFO("<><><><><><><><> After has Disparity image and filtered
-        // image\n");
+        // image");
 
         cloud.header.frame_id = "bumblebee2";
         //cloud.header.stamp = ros::Time::now().toNSec();
@@ -258,7 +258,7 @@ void Vision3D::run()
         cloud.clear();
     }
     else {
-        ROS_INFO("<><><><><><><><> Missing Disparity image or filtered image\n");
+        ROS_INFO("<><><><><><><><> Missing Disparity image or filtered image");
     }
 
     ros::spinOnce();
