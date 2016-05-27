@@ -29,6 +29,7 @@ class LineFilter
 
         void displayOriginal();
 private:
+        bool guiview;
         void imageCallbackL( const sensor_msgs::ImageConstPtr& msgL );
         void imageCallbackR( const sensor_msgs::ImageConstPtr& msgR );
         void imageCallbackRectified( const sensor_msgs::ImageConstPtr& msgR );

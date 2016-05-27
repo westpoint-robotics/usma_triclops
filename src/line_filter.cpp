@@ -21,7 +21,9 @@ LineFilter::LineFilter( int argc, char** argv )
     this->h_thresh = 30; // 40
     this->h_minLineLen = 20; // 20
     this->h_maxLineGap = 7; // 30
+    guiview=false;
 
+        if (guiview){
     // Create control sliders that allow tunning of the parameters for line detection
     cv::namedWindow( "ControlView", CV_WINDOW_AUTOSIZE );
     cv::createTrackbar( "Threshold Value", "ControlView", &thresh_val, 255 );
@@ -31,7 +33,7 @@ LineFilter::LineFilter( int argc, char** argv )
     cv::createTrackbar( "h_thresh", "ControlView", &h_thresh, 255 );
     cv::createTrackbar( "minLineLen", "ControlView", &h_minLineLen, 250 );
     cv::createTrackbar( "maxLineGap", "ControlView", &h_maxLineGap, 250 );
-
+        }
     //Start ROS
     image_transport::ImageTransport it( nh );
 
@@ -50,8 +52,9 @@ void LineFilter::run()
 
     cv::Mat img(cv::Mat(5,300, CV_8U));
     img = cv::Scalar(50);
+    if (guiview){
     cv::imshow("ControlView",img);
-    cv::waitKey(3);
+    cv::waitKey(3);}
 }
 
 void LineFilter::imageCallbackRectified( const sensor_msgs::ImageConstPtr& msg )
@@ -70,6 +73,7 @@ void LineFilter::imageCallbackRectified( const sensor_msgs::ImageConstPtr& msg )
     outmsg->header.frame_id = "bumblebee2";
     outmsg->header.stamp = ros::Time::now();
     this->image_pub_filtered_rectified.publish( outmsg );
+    guiview=false;
 
     /*DEBUG
     cv::imshow("Filter Right", filtered_imageR);

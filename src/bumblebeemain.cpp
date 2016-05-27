@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     PointCloud redPoints;
     i3d.producePointCloud(cv_disparityImage,redBlob, bb2.getTriclopsContext(),redPoints);
 
-    cf.filterControl();
+    //cf.filterControl();
     cv::Mat hsvBlob =cf.findContorllerHsv(cv_rectifiedColorImage);
 
     // Show blobs

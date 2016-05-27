@@ -8,8 +8,8 @@
   <node pkg="usma_triclops" type="camera_system" name="camera_system" output="screen"/>
   <node pkg="usma_triclops" type="line_filter" name="line_filter" output="screen"/>
   <node pkg="usma_triclops" type="vision3d" name="vision3d" output="screen">
-  <param name="triclopsMode" value="3" type="int"/>
-</node>
+    <param name="triclopsMode" value="3" type="int"/>
+  </node>
   
   
 <!--  <node pkg="image_view" type="image_view" name="Left_line_image" output="screen" args="image:=/camera/left/linefiltered" />

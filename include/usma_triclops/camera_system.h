@@ -99,6 +99,7 @@ class CameraSystem
         int disp_map_min;
         int disp_map_on;
         int stereo_mask;
+        bool guiview;
 };
 
 #endif // CAMERA_SYSTEM_H

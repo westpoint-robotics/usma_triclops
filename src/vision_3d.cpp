@@ -45,14 +45,14 @@ Vision3D::Vision3D(int argc, char** argv)
         exit(-1);
     }
 
-    this->pointCloudPublisher = nh.advertise<sensor_msgs::PointCloud2>("/vision3D/points", 0);
+    this->pointCloudPublisher = nh.advertise<sensor_msgs::PointCloud2>("/vision3D/points", 1);
     this->subcamdisp = it.subscribe("/camera/disparity", 1,
         &Vision3D::visionCallBackDisparity, this);
     // TODO Stop using left image and use a rectified grayscale image for line
     // filtering.
-    this->subcamfilteredrectified = it.subscribe("/camera/rectified/linefiltered", 0,
+    this->subcamfilteredrectified = it.subscribe("/camera/rectified/linefiltered", 1,
         &Vision3D::visionCallBackFilteredRectified, this);
-    this->subRectColor = it.subscribe("/camera/color_rectified", 0,
+    this->subRectColor = it.subscribe("/camera/color_rectified", 1,
         &Vision3D::visionCallBackRectColor, this);
     ros::Duration(1).sleep(); // sleep for a second
 }
@@ -253,7 +253,7 @@ void Vision3D::run()
         // image\n");
 
         cloud.header.frame_id = "bumblebee2";
-        cloud.header.stamp = ros::Time::now().toNSec();
+        //cloud.header.stamp = ros::Time::now().toNSec();
         this->pointCloudPublisher.publish(cloud);
         cloud.clear();
     }

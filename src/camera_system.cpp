@@ -22,9 +22,11 @@ CameraSystem::CameraSystem(int argc, char** argv)
     disp_map_min = 0;
     disp_map_on = 0;
     stereo_mask = 11;
+    guiview=false;
 
     // Create control sliders that allow tunning of the parameters for line
     // detection
+    if (guiview){
     cv::namedWindow("DisparityView", CV_WINDOW_AUTOSIZE);
     cv::createTrackbar("disp_max", "DisparityView", &disp_max, 240);
     cv::createTrackbar("disp_min", "DisparityView", &disp_min, 239);
@@ -32,7 +34,7 @@ CameraSystem::CameraSystem(int argc, char** argv)
     cv::createTrackbar("disp_map_min", "DisparityView", &disp_map_min, 254);
     cv::createTrackbar("disp_map_on", "DisparityView", &disp_map_on, 1);
     cv::createTrackbar("stereo_mask", "DisparityView", &stereo_mask, 15);
-
+    }
     FC2::Error fc2Error;
 
     this->camera.Connect();
@@ -394,8 +396,10 @@ void CameraSystem::run()
 
     cv::Mat img(cv::Mat(5, 300, CV_8U));
     img = cv::Scalar(50);
+    if (guiview){
     cv::imshow("DisparityView", img);
     cv::waitKey(3);
+    }
     ros::spinOnce();
 }
 
