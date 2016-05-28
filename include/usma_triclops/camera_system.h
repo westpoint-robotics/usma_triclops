@@ -3,9 +3,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "cv.h"
-#include "opencv/cv.h"
-#include "highgui.h"
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
 #include <triclops/triclops.h>
 #include <triclops/fc2triclops.h>
 #include <image_transport/image_transport.h>

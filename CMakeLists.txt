@@ -17,18 +17,9 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O0 -ggdb")
 #set(CMAKE_CXX_FLAGS_DEBUG "-O3 -ggdb")
 #set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ggdb")
 
-#NEEDED FOR QTCREATOR: Add all files in subdirectories of the project in
-# a dummy_target so qtcreator have access to all files
-FILE(GLOB children ${CMAKE_SOURCE_DIR}/*)
-FOREACH(child ${children})
-MESSAGE("=-=-=- cmake ====: ${child}")
-IF((IS_DIRECTORY ${child}) AND (NOT "${child}" MATCHES "git"))
-            file(GLOB_RECURSE dir_files "${child}/*")
-            LIST(APPEND extra_files ${dir_files})
-        ENDIF()
-
-ENDFOREACH()
-add_custom_target(dummy_${PROJECT_NAME} SOURCES ${extra_files})
+#Add custom (non compiling) targets so launch scripts and python files show up in QT Creator's project view.
+file(GLOB_RECURSE EXTRA_FILES */*)
+add_custom_target(${PROJECT_NAME}_OTHER_FILES ALL WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} SOURCES ${EXTRA_FILES})
 
 #set(INC_DIR $ENV{PWD}/catkin_ws/src/usma_triclops/include/usma_triclops)
 #set(HEADER_FILES ${INC_DIR}/camera_system.h
@@ -76,10 +67,10 @@ include_directories(
   /usr/include/eigen3/
 )
 
-get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-foreach(dir ${dirs})
-  message("IIIIIIIIIII " STATUS " dir='${dir}'")
-endforeach()
+#get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+#foreach(dir ${dirs})
+#  message("IIIIIIIIIII " STATUS " dir='${dir}'")
+#endforeach()
 
 ##MESSAGE("=-=-=- HEADER_SRC: ${HEADER_FILES}")
 
@@ -87,7 +78,6 @@ endforeach()
 add_executable(camera_system ${HEADER_FILES} src/camera_system.cpp src/triclops_opencv.cpp include/usma_triclops/typedefs.h)
 add_executable(line_filter ${HEADER_FILES} src/line_filter.cpp)
 add_executable(vision3d ${HEADER_FILES} src/vision_3d.cpp)
-add_executable(bumblebee ${HEADER_FILES} src/bumblebeecamera.cpp src/bumblebeemain.cpp src/triclops_opencv.cpp src/color_filter.cpp src/whiteline_filter.cpp src/vision3d.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
@@ -105,10 +95,6 @@ target_link_libraries(line_filter
       ${catkin_LIBRARIES}
     )
 target_link_libraries(vision3d
-      ${triclops_LIBRARIES}
-      ${catkin_LIBRARIES}
-    )
-target_link_libraries(bumblebee
       ${triclops_LIBRARIES}
       ${catkin_LIBRARIES}
     )
