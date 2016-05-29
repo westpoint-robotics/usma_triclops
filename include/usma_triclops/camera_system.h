@@ -13,6 +13,10 @@
 #include "typedefs.h"
 #include "common.h"
 #include "line_filter.h"
+// Dynamic reconfigure includes.
+#include <dynamic_reconfigure/server.h>
+// Auto-generated from cfg/ directory.
+#include <usma_triclops/usma_triclops_paramsConfig.h>
 
 namespace FC2 = FlyCapture2;
 namespace FC2T = Fc2Triclops;
@@ -30,6 +34,10 @@ class CameraSystem
         int convertToBGR( FC2::Image & image, FC2::Image & convertedImage );
         TriclopsContext triclops;
         int shutdown();
+
+        //! Callback function for dynamic reconfigure server.
+        void configCallback(usma_triclops::usma_triclops_paramsConfig &config, uint32_t level);
+
         int setDispMax( int disp ) {
             disp_max = disp;
             return 0;
@@ -57,6 +65,9 @@ class CameraSystem
 
 
     private:
+        //! Dynamic reconfigure server.
+        dynamic_reconfigure::Server<usma_triclops::usma_triclops_paramsConfig> dr_srv_;
+
         // carry out stereo processing pipeline
         int doStereo( TriclopsContext const & triclops,
                       TriclopsInput  const & stereoData,

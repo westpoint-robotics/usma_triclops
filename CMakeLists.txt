@@ -45,6 +45,7 @@ find_package(catkin REQUIRED COMPONENTS
 #find_package(catkin REQUIRED dynamic_reconfigure)
 generate_dynamic_reconfigure_options(
   cfg/triclops.cfg
+  cfg/line_filter.cfg
   #...
 )
 

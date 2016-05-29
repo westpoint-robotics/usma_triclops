@@ -12,8 +12,6 @@
  *
  */
 
-namespace linefilter{
-
 LineFilter::LineFilter( int argc, char** argv )
 {
     this->thresh_val = 243; // 203
@@ -31,7 +29,7 @@ LineFilter::LineFilter( int argc, char** argv )
     this->image_pub_filtered_rectified = it.advertise( "/camera/rectified/linefiltered", 1 );
     this->subrectified = it.subscribe( "/camera/color_rectified", 0, &LineFilter::imageCallbackRectified, this );
 
-    dynamic_reconfigure::Server<usma_triclops::usma_triclops_paramsConfig>::CallbackType cb;
+    dynamic_reconfigure::Server<usma_triclops::line_filter_paramsConfig>::CallbackType cb;
     cb = boost::bind(&LineFilter::configCallback, this, _1, _2);
     dr_srv_.setCallback(cb);
 }
@@ -346,31 +344,25 @@ void LineFilter::displayCyan()
  * Callback function for dynamic reconfigure server.
  *------------------------------------------------------------------*/
 
-void LineFilter::configCallback(usma_triclops::usma_triclops_paramsConfig &config, uint32_t level)
+void LineFilter::configCallback(usma_triclops::line_filter_paramsConfig &config, uint32_t level)
 {
   // Set class variables to new values. They should match what is input at the dynamic reconfigure GUI.
-    thresh_val=config.groups.linefilter.filter.thresh_val_param;
-    erosion_size=config.groups.linefilter.filter.erosion_size_param;
-    h_rho=config.groups.linefilter.hough.h_rho_param;
-    h_theta=config.groups.linefilter.hough.h_theta_param;
-    h_thresh=config.groups.linefilter.hough.h_thresh_param;
-    h_minLineLen=config.groups.linefilter.hough.h_minLineLen_param;
-    h_maxLineGap=config.groups.linefilter.hough.h_maxLineGap_param;
+    thresh_val=config.groups.filter.thresh_val_param;
+    erosion_size=config.groups.filter.erosion_size_param;
+    h_rho=config.groups.hough.h_rho_param;
+    h_theta=config.groups.hough.h_theta_param;
+    h_thresh=config.groups.hough.h_thresh_param;
+    h_minLineLen=config.groups.hough.h_minLineLen_param;
+    h_maxLineGap=config.groups.hough.h_maxLineGap_param;
 } // end configCallback()
 
-}
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 int main( int argc, char **argv )
 {
     ros::init( argc, argv, "linefilter" );
-    linefilter::LineFilter linefilter( argc, argv );
-
-    // Set up a dynamic reconfigure server.
-    // This should be done before reading parameter server values.
-    //dynamic_reconfigure::Server<linefilter::usma_triclops_paramsConfig> dr_srv;
-
+    LineFilter linefilter( argc, argv );
 
     ros::Rate loop_rate( 10 );
 

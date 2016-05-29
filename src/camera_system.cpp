@@ -89,6 +89,10 @@ CameraSystem::CameraSystem(int argc, char** argv)
     this->image_pub_rectifiedColor = it.advertise("/camera/color_rectified", 1);
     char fileName[] = "/home/user1/triclopsContextCurrent.txt";
 
+    dynamic_reconfigure::Server<usma_triclops::usma_triclops_paramsConfig>::CallbackType cb;
+    cb = boost::bind(&CameraSystem::configCallback, this, _1, _2);
+    dr_srv_.setCallback(cb);
+
     if (triclopsWriteCurrentContextToFile(this->triclops, fileName)) {
         exit(-1);
     }
@@ -396,6 +400,34 @@ void CameraSystem::run()
 
     ros::spinOnce();
 }
+
+/*--------------------------------------------------------------------
+ * configCallback()
+ * Callback function for dynamic reconfigure server.
+ *------------------------------------------------------------------*/
+
+void CameraSystem::configCallback(usma_triclops::usma_triclops_paramsConfig &config, uint32_t level)
+{
+  // Set class variables to new values. They should match what is input at the dynamic reconfigure GUI.
+    if (config.disp_max_param<config.disp_min_param){
+        disp_max=config.disp_min_param+1;
+        config.disp_max_param=disp_max;
+    }
+    else{
+        disp_max=config.disp_max_param;
+    }
+
+    if (config.disp_min_param>config.disp_max_param){
+        disp_min=config.disp_max_param-1;
+    }
+    else{
+        disp_min=config.disp_min_param;
+    }
+    disp_map_on=config.disp_map_on_param;
+    disp_map_max=config.disp_map_max_param;
+    disp_map_min=config.disp_map_min_param;
+    stereo_mask=config.stereo_mask_param;
+} // end configCallback()
 
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------

@@ -11,9 +11,8 @@
 // Dynamic reconfigure includes.
 #include <dynamic_reconfigure/server.h>
 // Auto-generated from cfg/ directory.
-#include <usma_triclops/usma_triclops_paramsConfig.h>
+#include <usma_triclops/line_filter_paramsConfig.h>
 
-namespace linefilter{
 /**
  * @brief The LineFilter class. This class identifies white lines in a OpenCv image
  *
@@ -25,7 +24,7 @@ class LineFilter
         virtual ~LineFilter();
 
         //! Callback function for dynamic reconfigure server.
-        void configCallback(usma_triclops::usma_triclops_paramsConfig &config, uint32_t level);
+        void configCallback(usma_triclops::line_filter_paramsConfig &config, uint32_t level);
 
         void run();
 
@@ -41,7 +40,7 @@ class LineFilter
 private:
 
         //! Dynamic reconfigure server.
-        dynamic_reconfigure::Server<usma_triclops::usma_triclops_paramsConfig> dr_srv_;
+        dynamic_reconfigure::Server<usma_triclops::line_filter_paramsConfig> dr_srv_;
 
         bool guiview;
         void imageCallbackL( const sensor_msgs::ImageConstPtr& msgL );
@@ -75,9 +74,6 @@ private:
         image_transport::Subscriber subrectified;
         ros::NodeHandle nh;
         cv::Mat blank;
-
-
-
 };
-}
+
 #endif // LINE_FILTER_H
