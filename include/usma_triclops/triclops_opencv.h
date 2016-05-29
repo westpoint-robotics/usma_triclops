@@ -14,25 +14,25 @@
 #include "common.h"
 
 // convert a triclops color image to opencv mat
-int convertTriclops2Opencv( FC2::Image & bgrImage,
-                            cv::Mat & cvImage );
-int convertTriclops2Opencv( TriclopsInput & bgrImage,
-                            cv::Mat & cvImage );
-int convertTriclops2Opencv( TriclopsImage & bgrImage,
-                            cv::Mat & cvImage );
+int convertTriclops2Opencv(FC2::Image& bgrImage,
+    cv::Mat& cvImage);
+int convertTriclops2Opencv(TriclopsInput& bgrImage,
+    cv::Mat& cvImage);
+int convertTriclops2Opencv(TriclopsImage& bgrImage,
+    cv::Mat& cvImage);
 
-int convertTriclops2Opencv( TriclopsColorImage & bgrImage,
-                            cv::Mat & cvImage );
+int convertTriclops2Opencv(TriclopsColorImage& bgrImage,
+    cv::Mat& cvImage);
 
-int convertTriclops2Opencv( TriclopsImage16 & bgrImage,
-                            cv::Mat & cvImage );
+int convertTriclops2Opencv(TriclopsImage16& bgrImage,
+    cv::Mat& cvImage);
 
-int convertOpencv2Triclops( cv::Mat & cvImage,
-                            TriclopsColorImage & bgrImage );
+int convertOpencv2Triclops(cv::Mat& cvImage,
+    TriclopsColorImage& bgrImage);
 
 // convert an Opencv into a triclops color image
-int convertOpencv2Triclops( cv::Mat & cvImage,
-                            FC2::Image & bgrImage );
+int convertOpencv2Triclops(cv::Mat& cvImage,
+    FC2::Image& bgrImage);
 #endif // TRICLOPS_OPENCV_H
 
 /*FC2::Image

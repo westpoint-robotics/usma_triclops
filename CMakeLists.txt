@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(usma_triclops)
 
-set(CMAKE_BUILD_TYPE DEBUG)
-set(CMAKE_C_FLAGS "-O0 -ggdb")
-set(CMAKE_C_FLAGS_DEBUG "-O0 -ggdb")
-set(CMAKE_C_FLAGS_RELEASE "-O0 -ggdb")
-set(CMAKE_CXX_FLAGS "-O0 -ggdb")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
-set(CMAKE_CXX_FLAGS_RELEASE "-O0 -ggdb")
+#set(CMAKE_BUILD_TYPE DEBUG)
+#set(CMAKE_C_FLAGS "-O0 -ggdb")
+#set(CMAKE_C_FLAGS_DEBUG "-O0 -ggdb")
+#set(CMAKE_C_FLAGS_RELEASE "-O0 -ggdb")
+#set(CMAKE_CXX_FLAGS "-O0 -ggdb")
+#set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
+#set(CMAKE_CXX_FLAGS_RELEASE "-O0 -ggdb")
 
 #set(CMAKE_BUILD_TYPE DEBUG)
 #set(CMAKE_C_FLAGS "-O3 -ggdb")
@@ -40,6 +40,12 @@ find_package(catkin REQUIRED COMPONENTS
   image_transport
   cv_bridge
   sensor_msgs
+)
+#add dynamic reconfigure api
+#find_package(catkin REQUIRED dynamic_reconfigure)
+generate_dynamic_reconfigure_options(
+  cfg/triclops.cfg
+  #...
 )
 
 # Specify package build info export

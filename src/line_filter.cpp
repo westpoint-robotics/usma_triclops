@@ -12,6 +12,8 @@
  *
  */
 
+namespace linefilter{
+
 LineFilter::LineFilter( int argc, char** argv )
 {
     this->thresh_val = 243; // 203
@@ -21,25 +23,17 @@ LineFilter::LineFilter( int argc, char** argv )
     this->h_thresh = 30; // 40
     this->h_minLineLen = 20; // 20
     this->h_maxLineGap = 7; // 30
-    guiview=false;
 
-        if (guiview){
-    // Create control sliders that allow tunning of the parameters for line detection
-    cv::namedWindow( "ControlView", CV_WINDOW_AUTOSIZE );
-    cv::createTrackbar( "Threshold Value", "ControlView", &thresh_val, 255 );
-    cv::createTrackbar( "Erosion Size", "ControlView", &erosion_size, 25 );
-    cv::createTrackbar( "h_rho", "ControlView", &h_rho, 25 );
-    cv::createTrackbar( "h_theta", "ControlView", &h_theta, 360 );
-    cv::createTrackbar( "h_thresh", "ControlView", &h_thresh, 255 );
-    cv::createTrackbar( "minLineLen", "ControlView", &h_minLineLen, 250 );
-    cv::createTrackbar( "maxLineGap", "ControlView", &h_maxLineGap, 250 );
-        }
     //Start ROS
     image_transport::ImageTransport it( nh );
 
     // Setup the publisher and subscribers for the node
     this->image_pub_filtered_rectified = it.advertise( "/camera/rectified/linefiltered", 1 );
     this->subrectified = it.subscribe( "/camera/color_rectified", 0, &LineFilter::imageCallbackRectified, this );
+
+    dynamic_reconfigure::Server<usma_triclops::usma_triclops_paramsConfig>::CallbackType cb;
+    cb = boost::bind(&LineFilter::configCallback, this, _1, _2);
+    dr_srv_.setCallback(cb);
 }
 
 LineFilter::~LineFilter()
@@ -347,13 +341,37 @@ void LineFilter::displayCyan()
     }
 }
 
+/*--------------------------------------------------------------------
+ * configCallback()
+ * Callback function for dynamic reconfigure server.
+ *------------------------------------------------------------------*/
+
+void LineFilter::configCallback(usma_triclops::usma_triclops_paramsConfig &config, uint32_t level)
+{
+  // Set class variables to new values. They should match what is input at the dynamic reconfigure GUI.
+    thresh_val=config.groups.linefilter.filter.thresh_val_param;
+    erosion_size=config.groups.linefilter.filter.erosion_size_param;
+    h_rho=config.groups.linefilter.hough.h_rho_param;
+    h_theta=config.groups.linefilter.hough.h_theta_param;
+    h_thresh=config.groups.linefilter.hough.h_thresh_param;
+    h_minLineLen=config.groups.linefilter.hough.h_minLineLen_param;
+    h_maxLineGap=config.groups.linefilter.hough.h_maxLineGap_param;
+} // end configCallback()
+
+}
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 int main( int argc, char **argv )
 {
     ros::init( argc, argv, "linefilter" );
-    LineFilter linefilter( argc, argv );
+    linefilter::LineFilter linefilter( argc, argv );
+
+    // Set up a dynamic reconfigure server.
+    // This should be done before reading parameter server values.
+    //dynamic_reconfigure::Server<linefilter::usma_triclops_paramsConfig> dr_srv;
+
+
     ros::Rate loop_rate( 10 );
 
     while ( ros::ok() )

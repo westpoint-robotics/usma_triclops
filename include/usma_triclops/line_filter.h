@@ -8,6 +8,12 @@
 #include "triclops_opencv.h"
 #include "common.h"
 
+// Dynamic reconfigure includes.
+#include <dynamic_reconfigure/server.h>
+// Auto-generated from cfg/ directory.
+#include <usma_triclops/usma_triclops_paramsConfig.h>
+
+namespace linefilter{
 /**
  * @brief The LineFilter class. This class identifies white lines in a OpenCv image
  *
@@ -17,6 +23,10 @@ class LineFilter
     public:
         LineFilter( int argc, char** argv );
         virtual ~LineFilter();
+
+        //! Callback function for dynamic reconfigure server.
+        void configCallback(usma_triclops::usma_triclops_paramsConfig &config, uint32_t level);
+
         void run();
 
         void displayGrayScale();
@@ -29,6 +39,10 @@ class LineFilter
 
         void displayOriginal();
 private:
+
+        //! Dynamic reconfigure server.
+        dynamic_reconfigure::Server<usma_triclops::usma_triclops_paramsConfig> dr_srv_;
+
         bool guiview;
         void imageCallbackL( const sensor_msgs::ImageConstPtr& msgL );
         void imageCallbackR( const sensor_msgs::ImageConstPtr& msgR );
@@ -65,5 +79,5 @@ private:
 
 
 };
-
+}
 #endif // LINE_FILTER_H

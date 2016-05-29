@@ -63,9 +63,6 @@ class Vision3D
                                PointCloud      & returnedPoints );
 
         cv::Mat disparityImageIn;
-
-        int numDisp;
-        int blockSize;
         cv::Mat filteredRectified;
         cv::Mat filteredRight;
         cv::Mat rectifiedColor;
