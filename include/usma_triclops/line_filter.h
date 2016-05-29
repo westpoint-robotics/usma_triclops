@@ -41,8 +41,6 @@ private:
 
         //! Dynamic reconfigure server.
         dynamic_reconfigure::Server<usma_triclops::line_filter_paramsConfig> dr_srv_;
-
-        bool guiview;
         void imageCallbackL( const sensor_msgs::ImageConstPtr& msgL );
         void imageCallbackR( const sensor_msgs::ImageConstPtr& msgR );
         void imageCallbackRectified( const sensor_msgs::ImageConstPtr& msgR );

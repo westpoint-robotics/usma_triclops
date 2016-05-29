@@ -44,8 +44,8 @@ void LineFilter::run()
 
     cv::Mat img(cv::Mat(5,300, CV_8U));
     img = cv::Scalar(50);
-    if (guiview){
-    cv::imshow("ControlView",img);
+    if (false){
+    cv::imshow("Control View",img);
     cv::waitKey(3);}
 }
 
@@ -65,11 +65,6 @@ void LineFilter::imageCallbackRectified( const sensor_msgs::ImageConstPtr& msg )
     outmsg->header.frame_id = "bumblebee2";
     outmsg->header.stamp = ros::Time::now();
     this->image_pub_filtered_rectified.publish( outmsg );
-    guiview=false;
-
-    /*DEBUG
-    cv::imshow("Filter Right", filtered_imageR);
-    cv::waitKey(10);*/
 }
 
 /**

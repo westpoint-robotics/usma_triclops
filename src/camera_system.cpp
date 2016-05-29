@@ -22,11 +22,10 @@ CameraSystem::CameraSystem(int argc, char** argv)
     disp_map_min = 0;
     disp_map_on = 0;
     stereo_mask = 11;
-    guiview=false;
 
     // Create control sliders that allow tunning of the parameters for line
     // detection
-    if (guiview){
+    if (false){
     cv::namedWindow("DisparityView", CV_WINDOW_AUTOSIZE);
     cv::createTrackbar("disp_max", "DisparityView", &disp_max, 240);
     cv::createTrackbar("disp_min", "DisparityView", &disp_min, 239);
@@ -409,23 +408,40 @@ void CameraSystem::run()
 void CameraSystem::configCallback(usma_triclops::usma_triclops_paramsConfig &config, uint32_t level)
 {
   // Set class variables to new values. They should match what is input at the dynamic reconfigure GUI.
-    if (config.disp_max_param<config.disp_min_param){
+
+    // Check to make sure the max disparity is allways greater than the minimum
+    if (config.disp_max_param<=config.disp_min_param){
         disp_max=config.disp_min_param+1;
-        config.disp_max_param=disp_max;
+        config.disp_max_param=disp_max; //TODO find a way to push this back to the server
     }
     else{
         disp_max=config.disp_max_param;
     }
-
-    if (config.disp_min_param>config.disp_max_param){
+    if (config.disp_min_param>=config.disp_max_param){
         disp_min=config.disp_max_param-1;
+        config.disp_min_param=disp_min; //TODO find a way to push this back to the server
     }
     else{
         disp_min=config.disp_min_param;
     }
     disp_map_on=config.disp_map_on_param;
-    disp_map_max=config.disp_map_max_param;
-    disp_map_min=config.disp_map_min_param;
+
+    // Check to make sure the map_max disparity is allways greater than the minimum
+    if (config.disp_map_max_param<=config.disp_map_min_param){
+        disp_map_max=config.disp_map_min_param+1;
+        config.disp_map_max_param=disp_map_max; //TODO find a way to push this back to the server
+    }
+    else{
+        disp_map_max=config.disp_map_max_param;
+    }
+    if (config.disp_map_min_param>=config.disp_map_max_param){
+        disp_map_min=config.disp_map_max_param-1;
+        config.disp_map_min_param=disp_map_min; //TODO find a way to push this back to the server
+    }
+    else{
+        disp_map_min=config.disp_map_min_param;
+    }
+
     stereo_mask=config.stereo_mask_param;
 } // end configCallback()
 
