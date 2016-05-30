@@ -66,7 +66,14 @@ include_directories(
 )
 
 ## Declare a cpp executable
+# This is the single node version
 add_executable(triclops_vision ${HEADER_FILES} src/bumblebeecamera.cpp src/main.cpp src/triclops_opencv.cpp src/color_filter.cpp src/whiteline_filter.cpp src/vision3d.cpp)
+
+#These is a three node version
+add_executable(bumblebee_node ${HEADER_FILES} src/bumblebee_node.cpp src/bumblebeecamera.cpp src/triclops_opencv.cpp)
+add_executable(whiteline_node ${HEADER_FILES} src/whiteline_node.cpp src/whiteline_filter.cpp src/triclops_opencv.cpp)
+add_executable(vision3d_node ${HEADER_FILES} src/vision3d_node.cpp src/vision3d.cpp)
+
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
@@ -75,6 +82,18 @@ add_executable(triclops_vision ${HEADER_FILES} src/bumblebeecamera.cpp src/main.
 set (triclops_LIBRARIES triclops pnmutils flycapture flycapture2bridge pthread dl m)
 
 target_link_libraries(triclops_vision
+      ${triclops_LIBRARIES}
+      ${catkin_LIBRARIES}
+    )
+target_link_libraries(bumblebee_node
+      ${triclops_LIBRARIES}
+      ${catkin_LIBRARIES}
+    )
+target_link_libraries(whiteline_node
+      ${triclops_LIBRARIES}
+      ${catkin_LIBRARIES}
+    )
+target_link_libraries(vision3d_node
       ${triclops_LIBRARIES}
       ${catkin_LIBRARIES}
     )

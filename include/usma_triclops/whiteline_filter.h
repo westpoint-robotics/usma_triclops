@@ -1,6 +1,9 @@
 #ifndef WHITELINE_FILTER_H
 #define WHITELINE_FILTER_H
 
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
+
 class WhitelineFilter {
 public:
     WhitelineFilter();
