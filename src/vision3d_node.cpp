@@ -1,3 +1,11 @@
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
+#include <iostream>
+#include <string>
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 #include "triclops/triclops.h"
 #include "triclops/fc2triclops.h"
 #include <ros/ros.h>
@@ -7,6 +15,8 @@
 #include "usma_triclops/typedefs.h"
 
 #include "usma_triclops/vision3d.h"
+
+
 
 /**
 At 5mph the robot moves 0.0014 miles/sec or	2.2352 meters/sec.
@@ -31,21 +41,23 @@ public:
     image_sub = it.subscribe( "/camera/linefiltered", 1, &SubscribeAndPublish::imageCallback, this);
     disp_sub = it.subscribe( "/camera/disparity", 1, &SubscribeAndPublish::visionCallBackDisparity, this);
     this->hasDisparity = false;
+    ros::Duration(1).sleep(); // sleep for a second
 
     char fileName[] = "/home/user1/triclopsContextCurrent.txt";
-    ROS_INFO(">>>>> VISION3D GETTING CONTEXT FROM FILE");
-    if (triclopsGetDefaultContextFromFile(&this->triclops, fileName)) {
-        ROS_INFO(">>>>> FAILED GETTING CONTEXT FROM FILE");
-        exit(-1);
-    }
+
+        ROS_INFO(">>>>> VISION3D GETTING CONTEXT FROM FILE");
+        if (triclopsGetDefaultContextFromFile(&this->triclops, fileName)) {
+            ROS_INFO(">>>>> FAILED GETTING CONTEXT FROM FILE");
+            exit(-1);
+        }
   }
 
   void visionCallBackDisparity(const sensor_msgs::ImageConstPtr& msg)
   {
       this->disparityImageIn = cv_bridge::toCvCopy(msg, "mono16")->image;
       this->hasDisparity = true;
-      // ROS_INFO("INSIDE DISP CALLBACCK");
 
+      // ROS_INFO("INSIDE DISP CALLBACCK");
   }
 
   void imageCallback( const sensor_msgs::ImageConstPtr& msg )
@@ -53,6 +65,11 @@ public:
       if (this->hasDisparity){
       //Pull subscribed data inside this callback, formatting for linefilter
       cv::Mat cv_filteredImage = cv_bridge::toCvCopy( msg, "bgr8" )->image;
+
+      cv::Mat disImage;
+      cv::resize(cv_filteredImage, disImage, cv::Size(400,300));
+      cv::imshow("Threshold Image", disImage);
+      cv::waitKey(3);
 
       PointCloud whiteLinePoints;
       vision.producePointCloud(disparityImageIn, cv_filteredImage, triclops, whiteLinePoints);

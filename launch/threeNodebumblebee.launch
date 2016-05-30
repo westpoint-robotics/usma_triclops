@@ -9,10 +9,10 @@
 
 
 <node pkg="usma_triclops" type="bumblebee_node" name="bumblebee" output="screen"/>
-<node pkg="usma_triclops" type="whiteline_node" name="whiteline" output="screen"/>
+<node pkg="usma_triclops" type="whiteline_node" name="whiteline" output="screen"/>  <!--
 <node pkg="usma_triclops" type="vision3d_node" name="vision3d" output="screen"/>
   
-<!--  <node pkg="image_view" type="image_view" name="Left_line_image" output="screen" args="image:=/camera/left/linefiltered" />
+  <node pkg="image_view" type="image_view" name="Left_line_image" output="screen" args="image:=/camera/left/linefiltered" />
   <node pkg="image_view" type="image_view" name="Left_rgb_image" output="screen" args="image:=/camera/left/rgb" />
 
 rosrun tf static_transform_publisher 0 0 0.85 0 0.77 0 map bumblebee2 100

@@ -1,4 +1,8 @@
-
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <iostream>
+#include <string>
 #include <ros/ros.h>
 #include <stereo_msgs/DisparityImage.h>
 #include <opencv2/core/core.hpp>
@@ -12,6 +16,13 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+    char fileName[] = "/home/user1/triclopsContextCurrent.txt";
+//    if( remove( fileName ) != 0 )
+//      perror( "Error deleting file" );
+//    else
+//      puts( "File successfully deleted" );
+
+
     ros::init(argc, argv, "bumbleBee");
     ros::NodeHandle nh;
     image_transport::ImageTransport it( nh );
@@ -23,7 +34,11 @@ int main(int argc, char* argv[])
     BumbleBeeCamera bb2; // The camera driver
 
     bb2.startCamera();
-
+    bb2.retrieveImages();
+    //TODO Find a better way or place for to move triclops context
+    if (triclopsWriteCurrentContextToFile(bb2.getTriclopsContext(), fileName)) {
+        exit(-1);
+    }
     ros::Rate loop_rate(15);
     while (ros::ok()) {
 
@@ -37,6 +52,9 @@ int main(int argc, char* argv[])
         cv::Mat cv_disparityImage;
         convertTriclops2Opencv(tri_rectifiedColorImage, cv_rectifiedColorImage);
         convertTriclops2Opencv(tri_disparityImage, cv_disparityImage);
+
+
+
 
         //Publish the images to ros
         sensor_msgs::ImagePtr outmsg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", cv_rectifiedColorImage).toImageMsg();

@@ -57,11 +57,7 @@ int BumbleBeeCamera::startCamera()
         return FC2T::handleFc2TriclopsError(fc2TriclopsError,
             "getContextFromCamera");
     }
-    //TODO Find a better way or place for to move triclops context
-    char fileName[] = "/home/user1/triclopsContextCurrent.txt";
-    if (triclopsWriteCurrentContextToFile(this->triclops, fileName)) {
-        exit(-1);
-}
+
     return 0;
 }
 
