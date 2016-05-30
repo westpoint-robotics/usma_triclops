@@ -70,13 +70,13 @@ cv::Mat WhitelineFilter::findLines(const cv::Mat& src_image)
     cv::HoughLinesP(this->canny_image, lines, this->h_rho,
         (CV_PI / this->h_theta), this->h_thresh, this->h_minLineLen,
         this->h_maxLineGap);
-    this->hough_image = cv::Mat::zeros(canny_image.size(), canny_image.type());
+    this->hough_image = cv::Mat::zeros(canny_image.size(), CV_8UC1);
     this->cyan_image = src_image.clone();
 
     // Draw the Hough lines on the image
     for (int i = 0; i < lines.size(); i++) {
         line(this->hough_image, cv::Point(lines[i][0], lines[i][1]),
-            cv::Point(lines[i][2], lines[i][3]), cv::Scalar(255, 255, 255), 3, 8);
+            cv::Point(lines[i][2], lines[i][3]), 255, 3, 8);
         line(this->cyan_image, cv::Point(lines[i][0], lines[i][1]),
             cv::Point(lines[i][2], lines[i][3]), cv::Scalar(255, 255, 0), 5, 8);
     }

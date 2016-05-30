@@ -64,12 +64,12 @@ public:
   {
       if (this->hasDisparity){
       //Pull subscribed data inside this callback, formatting for linefilter
-      cv::Mat cv_filteredImage = cv_bridge::toCvCopy( msg, "bgr8" )->image;
+      cv::Mat cv_filteredImage = cv_bridge::toCvCopy( msg, "mono8" )->image;
 
-      cv::Mat disImage;
-      cv::resize(cv_filteredImage, disImage, cv::Size(400,300));
-      cv::imshow("Threshold Image", disImage);
-      cv::waitKey(3);
+//      cv::Mat disImage;
+//      cv::resize(cv_filteredImage, disImage, cv::Size(400,300));
+//      cv::imshow("Threshold Image", disImage);
+//      cv::waitKey(3);
 
       PointCloud whiteLinePoints;
       vision.producePointCloud(disparityImageIn, cv_filteredImage, triclops, whiteLinePoints);
