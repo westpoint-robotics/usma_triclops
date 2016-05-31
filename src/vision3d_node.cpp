@@ -33,9 +33,9 @@ public:
 
     //Topic you want to publish
     //image_pub = it.advertise( "/camera/linefiltered", 1 );
-    whiteLinePcPublisher= nh.advertise<sensor_msgs::PointCloud2>("/vision3D/points", 0);
-    redflagPcPublisher= nh.advertise<sensor_msgs::PointCloud2>("/redflag/points", 0);
-    blueflagPcPublisher= nh.advertise<sensor_msgs::PointCloud2>("/blueflag/points", 0);
+    whiteLinePcPublisher= nh.advertise<sensor_msgs::PointCloud2>("/vision3D/points", 1);
+    redflagPcPublisher= nh.advertise<sensor_msgs::PointCloud2>("/redflag/points", 1);
+    blueflagPcPublisher= nh.advertise<sensor_msgs::PointCloud2>("/blueflag/points", 1);
 
     //Topic you want to subscribe
     image_sub = it.subscribe( "/camera/linefiltered", 1, &SubscribeAndPublish::imageCallback, this);

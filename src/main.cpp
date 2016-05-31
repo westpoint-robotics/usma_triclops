@@ -21,9 +21,9 @@ int main(int argc, char* argv[])
     ros::NodeHandle nh;
 
     // Create the topic publishers for the pointclouds
-    ros::Publisher whiteLinePcPublisher = nh.advertise<sensor_msgs::PointCloud2>("/vision3D/points", 0);
-    ros::Publisher redflagPcPublisher = nh.advertise<sensor_msgs::PointCloud2>("/redflag/points", 0);
-    ros::Publisher blueflagPcPublisher = nh.advertise<sensor_msgs::PointCloud2>("/blueflag/points", 0);
+    ros::Publisher whiteLinePcPublisher = nh.advertise<sensor_msgs::PointCloud2>("/vision3D/points", 1);
+    ros::Publisher redflagPcPublisher = nh.advertise<sensor_msgs::PointCloud2>("/redflag/points", 1);
+    ros::Publisher blueflagPcPublisher = nh.advertise<sensor_msgs::PointCloud2>("/blueflag/points", 1);
     // TODO use the ROS stereo_msgs::disparity message instead of an image message
     ros::Publisher disparityPublisher = nh.advertise<sensor_msgs::Image>("/triclops/disparity", 1);
     ros::Publisher rectifiedPublisher = nh.advertise<sensor_msgs::Image>("/triclops/rectified", 1);
