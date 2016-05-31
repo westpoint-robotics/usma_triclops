@@ -6,6 +6,10 @@
 #include <triclops/triclops.h>
 #include <triclops/fc2triclops.h>
 #include "usma_triclops/common.h"
+// Dynamic reconfigure includes.
+#include <dynamic_reconfigure/server.h>
+// Auto-generated from cfg/ directory.
+#include <usma_triclops/bumblebee_paramsConfig.h>
 
 class BumbleBeeCamera {
 
@@ -30,6 +34,8 @@ private:
     int convertToBGR(FC2::Image& image, FC2::Image& convertedImage);
     int convertToBGRU(FC2::Image& image, FC2::Image& convertedImage);
     int doStereo();
+    //! Dynamic reconfigure server.
+    dynamic_reconfigure::Server<usma_triclops::bumblebee_paramsConfig> dr_srv_;
 
 public:
     BumbleBeeCamera();
@@ -39,6 +45,8 @@ public:
     TriclopsColorImage getRectifiedColorImage() { return rectifiedColorImage; }
     TriclopsContext getTriclopsContext() { return triclops; }
     int retrieveImages();
+    //! Callback function for dynamic reconfigure server.
+    void configCallback(usma_triclops::bumblebee_paramsConfig &config, uint32_t level);
 };
 
 #endif // BUMBLEBEECAMERA_H

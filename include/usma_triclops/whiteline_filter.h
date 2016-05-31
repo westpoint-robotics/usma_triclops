@@ -3,10 +3,17 @@
 
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
+// Dynamic reconfigure includes.
+#include <dynamic_reconfigure/server.h>
+// Auto-generated from cfg/ directory.
+#include <usma_triclops/line_filter_paramsConfig.h>
 
 class WhitelineFilter {
 public:
     WhitelineFilter();
+
+    //! Callback function for dynamic reconfigure server.
+    void configCallback(usma_triclops::line_filter_paramsConfig &config, uint32_t level);
     void filterControl();
     cv::Mat findLines(const cv::Mat& src_image);
     void displayOriginal();
@@ -19,6 +26,8 @@ public:
     void displayCyan();
 
 private:
+    //! Dynamic reconfigure server.
+    dynamic_reconfigure::Server<usma_triclops::line_filter_paramsConfig> dr_srv_;
     void findPointsOnLines(const cv::Mat& cImage);
     cv::vector<cv::Vec4i> lines;
     std::vector<cv::Point2i> pixels;

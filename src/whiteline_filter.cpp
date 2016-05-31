@@ -13,7 +13,23 @@ WhitelineFilter::WhitelineFilter()
     this->h_thresh = 5; // 40
     this->h_minLineLen = 10; // 20
     this->h_maxLineGap = 7; // 30
+
+    dynamic_reconfigure::Server<usma_triclops::line_filter_paramsConfig>::CallbackType cb;
+    cb = boost::bind(&WhitelineFilter::configCallback, this, _1, _2);
+    dr_srv_.setCallback(cb);
 }
+
+void WhitelineFilter::configCallback(usma_triclops::line_filter_paramsConfig &config, uint32_t level)
+{
+  // Set class variables to new values. They should match what is input at the dynamic reconfigure GUI.
+    thresh_val=config.groups.filter.thresh_val_param;
+    erosion_size=config.groups.filter.erosion_size_param;
+    h_rho=config.groups.hough.h_rho_param;
+    h_theta=config.groups.hough.h_theta_param;
+    h_thresh=config.groups.hough.h_thresh_param;
+    h_minLineLen=config.groups.hough.h_minLineLen_param;
+    h_maxLineGap=config.groups.hough.h_maxLineGap_param;
+} // end configCallback()
 
 /**
  * @brief WhitelineFilter::findLines This function finds the white lines in the

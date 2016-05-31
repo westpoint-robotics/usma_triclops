@@ -41,6 +41,14 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
 )
 
+#add dynamic reconfigure api
+#find_package(catkin REQUIRED dynamic_reconfigure)
+generate_dynamic_reconfigure_options(
+  cfg/bumblebee.cfg
+  cfg/line_filter.cfg
+  #...
+)
+
 # Specify package build info export
 catkin_package(
 #  INCLUDE_DIRS include # This indicates that the folder "include" within the package folder is where exported headers go.
