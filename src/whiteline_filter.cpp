@@ -13,6 +13,8 @@ WhitelineFilter::WhitelineFilter()
     this->h_thresh = 5; // 40
     this->h_minLineLen = 10; // 20
     this->h_maxLineGap = 7; // 30
+    this->lower_limit=0;
+    this->upper_limit=255;
 
     dynamic_reconfigure::Server<usma_triclops::line_filter_paramsConfig>::CallbackType cb;
     cb = boost::bind(&WhitelineFilter::configCallback, this, _1, _2);
@@ -29,6 +31,8 @@ void WhitelineFilter::configCallback(usma_triclops::line_filter_paramsConfig &co
     h_thresh=config.groups.hough.h_thresh_param;
     h_minLineLen=config.groups.hough.h_minLineLen_param;
     h_maxLineGap=config.groups.hough.h_maxLineGap_param;
+    lower_limit=config.groups.hough.lowerLimit_param;
+    upper_limit=config.groups.hough.upperLimit_param;
 } // end configCallback()
 
 /**
@@ -95,6 +99,16 @@ cv::Mat WhitelineFilter::findLines(const cv::Mat& src_image)
             cv::Point(lines[i][2], lines[i][3]), 255, 3, 8);
         line(this->cyan_image, cv::Point(lines[i][0], lines[i][1]),
             cv::Point(lines[i][2], lines[i][3]), cv::Scalar(255, 255, 0), 5, 8);
+    }
+    for (int i=0; i < hough_image.rows;i++){
+        for (int j=0; j<hough_image.cols;j++){
+            if (i <= this->upper_limit){
+                hough_image.at<unsigned char>(i,j)=0;
+            }
+            else if (i >= this->lower_limit){
+                hough_image.at<unsigned char>(i,j)=0;
+            }
+        }
     }
 
     return hough_image;

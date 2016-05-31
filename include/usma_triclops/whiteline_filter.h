@@ -46,6 +46,8 @@ private:
     cv::Mat canny_image; // The image after canny edge detection is complete
     cv::Mat hough_image; // The image with the hugh line transform is applied
     cv::Mat cyan_image; // The image after all detected white lines are drawn in cyan color
+    int lower_limit; // The image after all detected white lines are drawn in cyan color
+    int upper_limit; // The image after all detected white lines are drawn in cyan color
 };
 
 #endif // WHITELINE_FILTER_H
