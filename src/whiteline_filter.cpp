@@ -6,15 +6,15 @@
 
 WhitelineFilter::WhitelineFilter()
 {
-    this->thresh_val = 243; // 203
-    this->erosion_size = 1; // 2
-    this->h_rho = 1; // 1
-    this->h_theta = 180; // 180
-    this->h_thresh = 5; // 40
-    this->h_minLineLen = 10; // 20
-    this->h_maxLineGap = 7; // 30
-    this->lower_limit=0;
-    this->upper_limit=255;
+     this->thresh_val = 166; // 203
+this->erosion_size = 3; // 2
+this->h_rho = 1; // 1
+this->h_theta = 180; // 180
+this->h_thresh = 30; // 40
+this->h_minLineLen = 21; // 20
+this->h_maxLineGap = 20; // 30
+this->lower_limit=118;
+this->upper_limit=250;
 
     dynamic_reconfigure::Server<usma_triclops::line_filter_paramsConfig>::CallbackType cb;
     cb = boost::bind(&WhitelineFilter::configCallback, this, _1, _2);
